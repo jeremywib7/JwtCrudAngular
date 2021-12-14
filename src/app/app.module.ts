@@ -9,7 +9,9 @@ import {LoginComponent} from './login/login.component';
 import {ForbiddenComponent} from './forbidden/forbidden.component';
 import {HeaderComponent} from './header/header.component';
 import {UserComponent} from './user/user.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
+import {RouterModule} from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import {ReactiveFormsModule} from "@angular/forms";
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    FormsModule,
+    HttpClientModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

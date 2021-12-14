@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {NgForm} from "@angular/forms";
+import {UserService} from "../_services/user.service";
+import {UserAuthService} from "../_services/user-auth.service";
 
 @Component({
   selector: 'app-login',
@@ -6,17 +9,30 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  private loginForm: any;
 
-  constructor() {
+  constructor(
+    private userService: UserService,
+    private userAuthService: UserAuthService) {
   }
 
   ngOnInit(): void {
   }
 
-  login(loginForm: any) {
-    this.loginForm = loginForm;
-    console.log("Form is submited")
+  login(loginForm: NgForm) {
+    this.userService.login(loginForm.value).subscribe(
+      (response: any) => {
+        // all json data
+        // console.log(response);
+        console.log(response.jwtToken);
+        console.log(response.user.role);
+
+        this.userAuthService.setRoles(response.user.role);
+
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
 }
