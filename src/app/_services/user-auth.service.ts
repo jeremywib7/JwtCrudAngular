@@ -1,26 +1,27 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserAuthService {
 
-  constructor() { }
+  constructor() {
+  }
 
-  public setRoles(roles:[]) {
+  public setRoles(roles: []) {
     localStorage.setItem("roles", JSON.stringify(roles));
   }
 
-  public getRoles() : [] {
+  public getRoles(): [] {
     //return roles array
     return JSON.parse(<string>localStorage.getItem("roles"));
   }
 
-  public setToken(jwtToken : string) {
-    localStorage.setItem("jwtItem", jwtToken);
+  public setToken(jwtToken: string) {
+    localStorage.setItem("jwtToken", jwtToken);
   }
 
-  public getToken(){
+  public getToken(): string {
     return <string>localStorage.getItem("jwtToken");
   }
 
@@ -29,6 +30,7 @@ export class UserAuthService {
   }
 
   public isLoggedIn() {
-     return this.getRoles() && this.getToken();
+    return this.getRoles() && this.getToken();
   }
+
 }
