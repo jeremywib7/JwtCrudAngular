@@ -17,11 +17,21 @@ export class UserService {
   }
 
   public login(loginData: any) {
-    return this.httpClient.post(this.PATH_OF_API + "/authenticate", loginData, {headers: this.requestHeader});
+    return this.httpClient.post(this.PATH_OF_API + '/authenticate', loginData, {headers: this.requestHeader});
+  }
+
+  public forUser() {
+    return this.httpClient.get(this.PATH_OF_API + '/forUser', {
+      responseType: 'text',
+    });
+  }
+
+  public forAdmin() {
+    return this.httpClient.get(this.PATH_OF_API + '/forAdmin', {responseType: 'text'});
   }
 
   // @ts-ignore
-  public roleMatch(allowedRoles: any): boolean {
+  public roleMatch(allowedRoles): boolean {
     let isMatch = false;
     const userRoles: any = this.userAuthService.getRoles();
 

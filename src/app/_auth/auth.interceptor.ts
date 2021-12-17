@@ -1,16 +1,16 @@
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {catchError, Observable} from "rxjs";
+import {catchError, Observable, throwError} from "rxjs";
 import {UserAuthService} from "../_services/user-auth.service";
 import {Router} from "@angular/router";
+import {Injectable} from "@angular/core";
 
+@Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  // @ts-ignore
   constructor(private userAuthService: UserAuthService, private router: Router) {
   }
 
-  // @ts-ignore
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.headers.get("No-Auth") === "True") {
+    if (req.headers.get('No-Auth') === 'True') {
       return next.handle(req.clone());
     }
 
@@ -23,12 +23,14 @@ export class AuthInterceptor implements HttpInterceptor {
         (err: HttpErrorResponse) => {
           console.log(err.status);
           if (err.status === 401) {
-
+            this.router.navigate(['/login']);
+          } else if (err.status === 403) {
+            this.router.navigate(['/forbidden']);
           }
+          return throwError("Something is wrong");
         }
-      );
-  )
-    ;
+      )
+    );
   }
 
   private addToken(request: HttpRequest<any>, token: string) {
