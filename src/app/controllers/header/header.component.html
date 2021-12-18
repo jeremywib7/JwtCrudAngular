@@ -18,6 +18,10 @@
           <a *ngIf="userService.roleMatch(['User'])" class="nav-link active" aria-current="page"
              routerLink="/user">User Dashboard</a>
         </li>
+        <li class="nav-item">
+          <a *ngIf="userService.roleMatch(['Admin'])" class="nav-link active" aria-current="page"
+             routerLink="/member">Member</a>
+        </li>
       </ul>
       <button *ngIf="!isLoggedIn()" type="button" class="btn btn-success" routerLink="/login">Login</button>
       <button *ngIf="isLoggedIn()" type="button" class="btn btn-danger" (click)="logout()">Logout</button>

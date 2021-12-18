@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Member} from "./_services/member";
 
 @Component({
   selector: 'app-root',

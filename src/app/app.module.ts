@@ -3,18 +3,20 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {HomeComponent} from './home/home.component';
-import {AdminComponent} from './admin/admin.component';
-import {LoginComponent} from './login/login.component';
-import {ForbiddenComponent} from './forbidden/forbidden.component';
-import {HeaderComponent} from './header/header.component';
-import {UserComponent} from './user/user.component';
+import {HomeComponent} from './controllers/home/home.component';
+import {AdminComponent} from './controllers/admin/admin.component';
+import {LoginComponent} from './controllers/login/login.component';
+import {ForbiddenComponent} from './controllers/forbidden/forbidden.component';
+import {HeaderComponent} from './controllers/header/header.component';
+import {UserComponent} from './controllers/user/user.component';
 import {FormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
 import {AuthGuard} from "./_auth/auth.guard";
 import {AuthInterceptor} from "./_auth/auth.interceptor";
 import {UserService} from "./_services/user.service";
+import { MemberComponent } from './controllers/member/member.component';
+import {MemberService} from "./_services/member.service";
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import {UserService} from "./_services/user.service";
     LoginComponent,
     ForbiddenComponent,
     HeaderComponent,
-    UserComponent
+    UserComponent,
+    MemberComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,8 @@ import {UserService} from "./_services/user.service";
       useClass: AuthInterceptor,
       multi: true
     },
-    UserService
+    UserService,
+    MemberService
   ],
   bootstrap: [AppComponent]
 })
