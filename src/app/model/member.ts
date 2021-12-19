@@ -2,12 +2,12 @@ export interface Member {
   id: number;
   name: string;
   gender:string;
-  dateJoined:Date;
-  phoneNumber:bigint;
+  dateJoined:string;
+  phoneNumber:string;
   rank:string;
   nationality:string;
   address:string;
   imageUrl:string;
   memberCode:string;
-  bankAccount:bigint;
+  bankAccount:string;
 }

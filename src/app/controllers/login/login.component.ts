@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  login(loginForm: NgForm) {
+  public login(loginForm: NgForm) {
     this.userService.login(loginForm.value).subscribe(
       (response: any) => {
         // all json data

@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {Member} from "../../_services/member";
+import {Component, OnInit} from '@angular/core';
+import {Member} from "../../model/member";
 import {MemberService} from "../../_services/member.service";
 import {HttpErrorResponse} from "@angular/common/http";
+import {countries} from "../../data/CountryData";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-member',
@@ -10,15 +12,19 @@ import {HttpErrorResponse} from "@angular/common/http";
 })
 export class MemberComponent implements OnInit {
 
+  public countries:any = countries;
+
   ngOnInit(): void {
     this.getMembers();
   }
+
   // @ts-ignore
   public members: Member[];
 
-  constructor(private memberService: MemberService) {}
+  constructor(private memberService: MemberService) {
+  }
 
-  public getMembers() :void {
+  public getMembers(): void {
     this.memberService.getMembers().subscribe(
       (response: Member[]) => {
         this.members = response;
@@ -29,7 +35,7 @@ export class MemberComponent implements OnInit {
     );
   }
 
-  public onOpenModal(member: Member, mode: string): void {
+  public onOpenModal(member: Member | null, mode: string): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
     button.type = 'button';
@@ -39,14 +45,27 @@ export class MemberComponent implements OnInit {
       button.setAttribute('data-target', '#addMemberModal');
     }
     if (mode === 'edit') {
-      button.setAttribute('data-target', '#editMemberModal');
+      button.setAttribute('data-target', '#updateMemberModal');
     }
     if (mode === 'delete') {
       button.setAttribute('data-target', '#deleteMemberModal');
     }
     container!.appendChild(button);
-    button.click(
+    button.click();
+  }
 
+  public onAddMember(addForm: NgForm) :void {
+    const closeModal = document.getElementById('add-member-form');
+    closeModal!.click();
+
+    this.memberService.addMember(addForm.value).subscribe(
+      (response:Member) => {
+        console.log(response);
+        this.getMembers();
+      },
+      (error:HttpErrorResponse) => {
+        alert(error.message);
+      }
     );
   }
 
