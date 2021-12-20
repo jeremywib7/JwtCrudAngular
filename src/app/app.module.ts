@@ -17,6 +17,7 @@ import {AuthInterceptor} from "./_auth/auth.interceptor";
 import {UserService} from "./_services/user.service";
 import { MemberComponent } from './controllers/member/member.component';
 import {MemberService} from "./_services/member.service";
+import {DatePipe} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import {MemberService} from "./_services/member.service";
       useClass: AuthInterceptor,
       multi: true
     },
+    DatePipe,
     UserService,
     MemberService
   ],
