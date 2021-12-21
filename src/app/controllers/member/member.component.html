@@ -17,7 +17,7 @@
             <a href=""><img src="{{member.imageUrl}}" class="img-fluid rounded-circle w-60"></a>
           </div>
           <div class="col-6 card-title align-self-center mb-0">
-            <h5>{{member?.name}}</h5>
+            <h5>{{member?.firstName}}</h5>
             <p class="m-0">{{member?.rank}}</p>
           </div>
         </div>
@@ -28,7 +28,8 @@
         </ul>
         <div class="card-body">
           <div class="float-lg-start btn-group btn-group-sm">
-            <a class="btn btn-primary tooltips" (click)="onOpenModal(member, 'edit')" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i
+            <a class="btn btn-primary tooltips" (click)="onOpenModal(member, 'edit')" data-placement="top"
+               data-toggle="tooltip" data-original-title="Edit"><i
               class="fa fa-pencil" style="color: white"></i> </a>
             <a class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip"
                data-original-title="Delete"><i class="fa fa-times" style="color: white"></i></a>
@@ -47,27 +48,89 @@
                 </button>
               </div>
               <div class="modal-body">
-                <form #addForm="ngForm" (ngSubmit)="onAddMember(addForm)">
+                <!--                <form #addForm="ngForm" (ngSubmit)="onAddMember(addForm)">-->
+                <form [formGroup]="reactiveForm">
+                  <div class="row g-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text"  name="firstName" class="form-control" id="firstName"
+                               placeholder="First name"
+                               formControlName="firstName">
+                        <div *ngIf="reactiveForm.controls.firstName.errors && (reactiveForm.controls.firstName.touched ||
+                     reactiveForm.controls.firstName.dirty) " style="color: red">
+                          <div *ngIf="reactiveForm.hasError('required','firstName')">
+                            First Name is required
+                          </div>
+                          <div *ngIf="reactiveForm.hasError('pattern','firstName')">
+                            First Name format is invalid
+                          </div>
+                          <div *ngIf="reactiveForm.hasError('minlength','firstName')">
+                            First Name must be 3 characters or more
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text"  name="lastName" class="form-control" id="lastName"
+                               placeholder="Last name"
+                               formControlName="lastName">
+                        <div *ngIf="reactiveForm.controls.lastName.errors && (reactiveForm.controls.lastName.touched ||
+                     reactiveForm.controls.lastName.dirty) " style="color: red">
+                          <div *ngIf="reactiveForm.hasError('required','lastName')">
+                            Last Name is required
+                          </div>
+                          <div *ngIf="reactiveForm.hasError('pattern','lastName')">
+                            Last Name format is invalid
+                          </div>
+                          <div *ngIf="reactiveForm.hasError('minlength','lastName')">
+                            Last Name must be 3 characters or more
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" ngModel name="name" class="form-control" id="name" placeholder="Name" required>
+                    <label for="email">Email</label>
+                    <input type="text"  name="email" class="form-control" id="email" placeholder="Email"
+                           formControlName="email">
+                    <div *ngIf="reactiveForm.controls.email.errors && (reactiveForm.controls.email.touched ||
+                     reactiveForm.controls.email.dirty) " style="color: red">
+                      <div *ngIf="reactiveForm.hasError('required','email')">
+                        Email is required
+                      </div>
+                      <div *ngIf="reactiveForm.hasError('pattern','email')">
+                        Email format is invalid
+                      </div>
+                      <div *ngIf="reactiveForm.hasError('minlength','email')">
+                        Email must be 3 characters or more
+                      </div>
+                    </div>
                   </div>
                   <fieldset class="row mb-3">
                     <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
                     <div class="col-sm-10">
                       <div class="form-check">
-                        <input ngModel name="gender" class="form-check-input" type="radio" id="maleRadioButton"
-                               value="MALE">
+                        <input  name="gender" class="form-check-input" type="radio" id="maleRadioButton"
+                               value="MALE" formControlName="gender">
                         <label class="form-check-label" for="maleRadioButton">
                           Male
                         </label>
                       </div>
                       <div class="form-check">
-                        <input ngModel name="gender" class="form-check-input" type="radio" id="femaleRadioButton"
-                               value="FEMALE">
+                        <input  name="gender" class="form-check-input" type="radio" id="femaleRadioButton"
+                               value="FEMALE" formControlName="gender">
                         <label class="form-check-label" for="femaleRadioButton">
                           Female
                         </label>
+                      </div>
+                      <div *ngIf="reactiveForm.controls.gender.errors && (reactiveForm.controls.gender.touched ||
+                     reactiveForm.controls.gender.dirty) " style="color: red">
+                        <div *ngIf="reactiveForm.hasError('required','gender')">
+                          Gender is not selected
+                        </div>
                       </div>
                     </div>
                   </fieldset>
@@ -75,58 +138,117 @@
                     <div class="col">
                       <div class="form-group">
                         <label>Date Joined</label>
-                        <input ngModel type="date" name="dateJoined" max="3000-12-31"
-                               min="1000-01-01" class="form-control">
+                        <input  type="date" name="dateJoined" max="3000-12-31"
+                               min="1000-01-01" class="form-control" formControlName="dateJoined">
+                        <div *ngIf="reactiveForm.controls.dateJoined.errors && (reactiveForm.controls.dateJoined.touched ||
+                     reactiveForm.controls.dateJoined.dirty) " style="color: red">
+                          <div *ngIf="reactiveForm.hasError('required','dateJoined')">
+                            Date is required
+                          </div>
+                        </div>
                       </div>
                       <div class="form-group">
                         <label for="inputState" class="form-label">Rank</label>
-                        <select ngModel name="rank" id="inputState" class="form-select">
-                          <option selected>Select Rank</option>
+                        <select  name="rank" id="inputState" class="form-select" formControlName="rank">
+                          <option disabled selected>Select Rank</option>
                           <option value="Bronze">Bronze</option>
                           <option value="Silver">Silver</option>
                           <option value="Gold">Gold</option>
                           <option value="Platinum">Platinum</option>
                         </select>
+                        <div *ngIf="reactiveForm.controls.rank.errors && (reactiveForm.controls.rank.touched ||
+                     reactiveForm.controls.rank.dirty) " style="color: red">
+                          <div *ngIf="reactiveForm.hasError('required','rank')">
+                            Rank is required
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div class="col">
                       <div class="form-group">
                         <label for="country" class="form-label">Nationality</label>
-                        <select ngModel name="nationality" id="country" class="form-select">
+                        <select  name="nationality" id="country" class="form-select"
+                                formControlName="nationality">
                           <option disabled selected>Select Country</option>
                           <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>
                         </select>
+                        <div *ngIf="reactiveForm.controls.nationality.errors && (reactiveForm.controls.nationality.touched ||
+                     reactiveForm.controls.nationality.dirty) " style="color: red">
+                          <div *ngIf="reactiveForm.hasError('required','nationality')">
+                            Nationality is required
+                          </div>
+                        </div>
                       </div>
                       <div class="form-group">
-                        <label for="name">Phone</label>
-                        <input type="text" ngModel name="phoneNumber" class="form-control" id="phoneNumber"
-                               placeholder="Phone" required>
+                        <label for="phoneNumber">Phone</label>
+                        <input type="text"  name="phoneNumber" class="form-control" id="phoneNumber"
+                               placeholder="Phone" formControlName="phoneNumber">
+                        <div *ngIf="reactiveForm.controls.phoneNumber.errors && (reactiveForm.controls.phoneNumber.touched ||
+                     reactiveForm.controls.phoneNumber.dirty) " style="color: red">
+                          <div *ngIf="reactiveForm.hasError('required','phoneNumber')">
+                            Phone number is required
+                          </div>
+                          <div *ngIf="reactiveForm.hasError('pattern','phoneNumber')">
+                            Phone number format is invalid
+                          </div>
+                          <div *ngIf="reactiveForm.hasError('minlength','phoneNumber')">
+                            Phone number must be between 10 and 14 characters
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="address">Address</label>
-                    <input type="text" ngModel name="address" class="form-control" id="address" placeholder="Address"
-                           required>
+                    <input type="text"  name="address" class="form-control" id="address" placeholder="Address"
+                           formControlName="address">
+                    <div *ngIf="reactiveForm.controls.address.errors && (reactiveForm.controls.address.touched ||
+                     reactiveForm.controls.address.dirty) " style="color: red">
+                      <div *ngIf="reactiveForm.hasError('required','address')">
+                        Address is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="customFile">Profile Picture</label>
+                    <input name="profilePicture" type="file" accept="image/*" (change)="onSelectFile($event)" class="form-control" id="customFile"
+                           formControlName="imageUrl"/>
                   </div>
 <!--                  <div class="form-group">-->
-<!--                    <label class="form-label" for="customFile">Profile Picture</label>-->
-<!--                    <input ngModel name="profilePicture" type="file" accept="image/*" class="form-control" id="customFile"/>-->
+<!--                    <label for="imageUrl">Image URL</label>-->
+<!--                    <input type="text"  name="imageUrl" class="form-control" id="imageUrl"-->
+<!--                           placeholder="Image URL" formControlName="imageUrl">-->
+<!--                    <div *ngIf="reactiveForm.controls.imageUrl.errors && (reactiveForm.controls.imageUrl.touched ||-->
+<!--                     reactiveForm.controls.imageUrl.dirty) " style="color: red">-->
+<!--                      <div *ngIf="reactiveForm.hasError('required','imageUrl')">-->
+<!--                        Image URL is required-->
+<!--                      </div>-->
+<!--                    </div>-->
 <!--                  </div>-->
                   <div class="form-group">
-                    <label for="imageUrl">Image URL</label>
-                    <input type="text" ngModel name="imageUrl"  class="form-control" id="imageUrl"
-                           placeholder="Image URL" required>
-                  </div>
-                  <div class="form-group">
                     <label for="bankAccount">Bank Account</label>
-                    <input type="text" ngModel name="bankAccount" class="form-control" id="bankAccount"
-                           placeholder="Bank Account" required>
+                    <input type="text"  name="bankAccount" class="form-control" id="bankAccount"
+                           placeholder="Bank Account" formControlName="bankAccount">
+                    <div *ngIf="reactiveForm.controls.bankAccount.errors && (reactiveForm.controls.bankAccount.touched ||
+                     reactiveForm.controls.bankAccount.dirty) " style="color: red">
+                      <div *ngIf="reactiveForm.hasError('required','bankAccount')">
+                        Bank Account is required
+                      </div>
+                      <div *ngIf="reactiveForm.hasError('pattern','bankAccount')">
+                        Bank Account must be a number
+                      </div>
+                      <div *ngIf="reactiveForm.hasError('minlength','bankAccount')">
+                        Bank Account must be 3 characters or more
+                      </div>
+                    </div>
                   </div>
                   <div class="modal-footer">
                     <button type="button" id="add-member-form" class="btn btn-secondary" data-dismiss="modal">Close
                     </button>
-                    <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>
+                    <!--                    <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>-->
+                    <button (click)="onAddMember(reactiveForm)" type="submit"
+                            class="btn btn-primary">Save changes
+                    </button>
                   </div>
                 </form>
               </div>
@@ -149,28 +271,34 @@
                 <form #editForm="ngForm">
                   <div class="form-group">
                     <label for="editId">Id</label>
-                    <input disabled type="text" ngModel="{{editMember?.id}}" name="id" class="form-control" id="editId" placeholder="Id" required>
+                    <input disabled type="text" ngModel="{{editMember?.id}}" name="id" class="form-control" id="editId"
+                           placeholder="Id" required>
                   </div>
                   <div class="form-group">
                     <label for="editMemberCode">Member Code</label>
-                    <input disabled type="text" ngModel="{{editMember?.memberCode}}" name="editMemberCode" class="form-control" id="editMemberCode" placeholder="Id" required>
+                    <input disabled type="text" ngModel="{{editMember?.memberCode}}" name="editMemberCode"
+                           class="form-control" id="editMemberCode" placeholder="Id" required>
                   </div>
                   <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" ngModel="{{editMember?.name}}" name="name" class="form-control" id="editName" placeholder="Name" required>
+                    <label for="editName">Name</label>
+                    <input type="text" ngModel="{{editMember?.firstName}}" name="name" class="form-control"
+                           id="editName"
+                           placeholder="Name" required>
                   </div>
                   <fieldset class="row mb-3">
                     <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
                     <div class="col-sm-10">
                       <div class="form-check">
-                        <input ngModel="{{editMember?.gender}}" name="gender" class="form-check-input" type="radio" id="editMaleRadioButton"
+                        <input ngModel="{{editMember?.gender}}" name="gender" class="form-check-input" type="radio"
+                               id="editMaleRadioButton"
                                value="MALE">
                         <label class="form-check-label" for="editMaleRadioButton">
                           Male
                         </label>
                       </div>
                       <div class="form-check">
-                        <input ngModel="{{editMember?.gender}}"  name="gender" class="form-check-input" type="radio" id="editFemaleRadioButton"
+                        <input ngModel="{{editMember?.gender}}" name="gender" class="form-check-input" type="radio"
+                               id="editFemaleRadioButton"
                                value="FEMALE">
                         <label class="form-check-label" for="editFemaleRadioButton">
                           Female
@@ -188,7 +316,7 @@
                       <div class="form-group">
                         <label for="inputState" class="form-label">Rank</label>
                         <select ngModel="{{editMember?.rank}}" name="rank" id="editInputRank" class="form-select">
-                          <option selected>Select Rank</option>
+                          <option disabled>Select Rank</option>
                           <option value="Bronze">Bronze</option>
                           <option value="Silver">Silver</option>
                           <option value="Gold">Gold</option>
@@ -199,41 +327,48 @@
                     <div class="col">
                       <div class="form-group">
                         <label for="country" class="form-label">Nationality</label>
-                        <select ngModel="{{editMember?.nationality}}" name="nationality" id="editCountry" class="form-select">
+                        <select ngModel="{{editMember?.nationality}}" name="nationality" id="editCountry"
+                                class="form-select">
                           <option disabled selected>Select Country</option>
                           <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>
                         </select>
                       </div>
                       <div class="form-group">
                         <label for="editPhoneNumber">Phone</label>
-                        <input type="text" ngModel="{{editMember?.phoneNumber}}" name="phoneNumber" class="form-control" id="editPhoneNumber"
+                        <input type="text" ngModel="{{editMember?.phoneNumber}}" name="phoneNumber" class="form-control"
+                               id="editPhoneNumber"
                                placeholder="Phone" required>
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="editAddress">Address</label>
-                    <input type="text" ngModel="{{editMember?.address}}" name="address" class="form-control" id="editAddress" placeholder="Address"
+                    <input type="text" ngModel="{{editMember?.address}}" name="address" class="form-control"
+                           id="editAddress" placeholder="Address"
                            required>
                   </div>
-<!--                  <div class="form-group">-->
-<!--                    <label class="form-label" for="editCustomImage">Profile Picture</label>-->
-<!--                    <input ngModel="test.jpg" name="profilePicture" type="file" accept="image/*" class="form-control" id="editCustomImage"/>-->
-<!--                  </div>-->
+                  <!--                  <div class="form-group">-->
+                  <!--                    <label class="form-label" for="editCustomImage">Profile Picture</label>-->
+                  <!--                    <input ngModel="test.jpg" name="profilePicture" type="file" accept="image/*" class="form-control" id="editCustomImage"/>-->
+                  <!--                  </div>-->
                   <div class="form-group">
                     <label for="editImageUrl">Image URL</label>
-                    <input type="text" ngModel="{{editMember?.imageUrl}}" name="imageUrl"  class="form-control" id="editImageUrl"
+                    <input type="text" ngModel="{{editMember?.imageUrl}}" name="imageUrl" class="form-control"
+                           id="editImageUrl"
                            placeholder="Image URL" required>
                   </div>
                   <div class="form-group">
                     <label for="editBankAccount">Bank Account</label>
-                    <input type="text" ngModel="{{editMember?.bankAccount}}" name="bankAccount" class="form-control" id="editBankAccount"
+                    <input type="text" ngModel="{{editMember?.bankAccount}}" name="bankAccount" class="form-control"
+                           id="editBankAccount"
                            placeholder="Bank Account" required>
                   </div>
                   <div class="modal-footer">
                     <button type="button" id="edit-member-form" class="btn btn-secondary" data-dismiss="modal">Close
                     </button>
-                    <button [disabled]="editForm.invalid" (click)="onEditMember(editForm.value)" type="submit" class="btn btn-primary">Save changes</button>
+                    <button [disabled]="editForm.invalid" (click)="onEditMember(editForm.value)" type="submit"
+                            class="btn btn-primary">Save changes
+                    </button>
                   </div>
                 </form>
               </div>

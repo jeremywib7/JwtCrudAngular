@@ -1,6 +1,8 @@
 export interface Member {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
+  email: string;
   gender:string;
   dateJoined:string;
   phoneNumber:string;

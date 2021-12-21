@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Member} from "../../model/member";
-import {DatePipe} from '@angular/common';
 import {MemberService} from "../../_services/member.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {countries} from "../../data/CountryData";
-import {NgForm} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-member',
@@ -14,25 +13,44 @@ import {NgForm} from "@angular/forms";
 export class MemberComponent implements OnInit {
 
   public countries: any = countries;
+  reactiveForm: any = FormGroup;
+  selectedImage: File;
 
   ngOnInit(): void {
     this.getMembers();
+    this.initForm();
+  }
+
+  initForm() {
+    this.reactiveForm = new FormGroup({
+      firstName: new FormControl('', [Validators.required, Validators.compose(
+        [Validators.pattern('[a-zA-z]*'), Validators.minLength(3)])]),
+      lastName: new FormControl('', [Validators.required, Validators.compose(
+        [Validators.pattern('[a-zA-z]*'), Validators.minLength(2)])]),
+      email: new FormControl('', [Validators.required, Validators.compose(
+        [Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')])]),
+      gender: new FormControl('', [Validators.required]),
+      dateJoined: new FormControl('', [Validators.required]),
+      rank: new FormControl('', [Validators.required]),
+      nationality: new FormControl('', [Validators.required]),
+      phoneNumber: new FormControl('', [Validators.required, Validators.compose(
+        [Validators.pattern('[0-9+ ]*'), Validators.minLength(10), Validators.maxLength(14)])]),
+      address: new FormControl('', [Validators.required]),
+      imageUrl: new FormControl(null, [Validators.required]),
+      bankAccount: new FormControl('', [Validators.required, Validators.compose(
+        [Validators.pattern('[0-9+ ]*'), Validators.minLength(5), Validators.maxLength(20)])]),
+    })
   }
 
   public members: Member[] | undefined;
   public editMember: Member | null | undefined;
-  public formatDate1: any;
 
-  constructor(
-    private memberService: MemberService,
-    public datepipe: DatePipe,
-  ) {
+  constructor(private memberService: MemberService) {
   }
 
-  formatDate(date?: string | undefined) {
-    return this.datepipe.transform(date,'MM-dd-yyyy' );
+  public onSelectFile($event: Event) {
+    this.selectedImage = ($event.target as HTMLInputElement).files[0];
   }
-
 
   public getMembers(): void {
     this.memberService.getMembers().subscribe(
@@ -56,7 +74,6 @@ export class MemberComponent implements OnInit {
     }
     if (mode === 'edit') {
       this.editMember = member;
-      this.formatDate1 = this.formatDate(this.editMember?.dateJoined);
       button.setAttribute('data-target', '#editMemberModal');
     }
     if (mode === 'delete') {
@@ -66,19 +83,38 @@ export class MemberComponent implements OnInit {
     button.click();
   }
 
-  public onAddMember(addForm: NgForm): void {
-    const closeModal = document.getElementById('add-member-form');
-    closeModal!.click();
+  public onAddMember(addForm: FormGroup): void {
+    if (addForm.valid) {
+      console.log(addForm.value);
+      this.reactiveForm.reset();
+      const closeModal = document.getElementById('add-member-form');
+      closeModal!.click();
 
-    this.memberService.addMember(addForm.value).subscribe(
-      (response: Member) => {
-        console.log(response);
-        this.getMembers();
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
+      this.memberService.addMember(addForm.value).subscribe(
+        (response: Member) => {
+          console.log(response);
+          this.getMembers();
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }
+      );
+    } else {
+      this.validateFormFields(addForm);
+    }
+  }
+
+  public validateFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      let invalidFields = [].slice.call(document.getElementsByClassName('ng-invalid'));
+      invalidFields[1].focus();
+      if(control instanceof FormControl) {
+        control.markAsTouched({onlySelf:true});
+      } else if (control instanceof FormGroup) {
+        this.validateFormFields(control);
       }
-    );
+    })
   }
 
   public onEditMember(editForm: any) {

@@ -9,7 +9,7 @@ import {LoginComponent} from './controllers/login/login.component';
 import {ForbiddenComponent} from './controllers/forbidden/forbidden.component';
 import {HeaderComponent} from './controllers/header/header.component';
 import {UserComponent} from './controllers/user/user.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
 import {AuthGuard} from "./_auth/auth.guard";
@@ -33,6 +33,7 @@ import {DatePipe} from "@angular/common";
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
     RouterModule
