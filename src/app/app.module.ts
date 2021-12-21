@@ -18,6 +18,13 @@ import {UserService} from "./_services/user.service";
 import { MemberComponent } from './controllers/member/member.component';
 import {MemberService} from "./_services/member.service";
 import {DatePipe} from "@angular/common";
+import { SidenavComponent } from './controllers/sidenav/sidenav.component';
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatIconModule} from "@angular/material/icon";
+import {MatDividerModule} from "@angular/material/divider";
+import {MatListModule} from "@angular/material/list";
 
 @NgModule({
   declarations: [
@@ -28,15 +35,23 @@ import {DatePipe} from "@angular/common";
     ForbiddenComponent,
     HeaderComponent,
     UserComponent,
-    MemberComponent
+    MemberComponent,
+    SidenavComponent
   ],
   imports: [
+    // * MATERIAL IMPORTS
+    MatSidenavModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
   ],
   providers: [
     AuthGuard, {

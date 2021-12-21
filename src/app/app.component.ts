@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import {Member} from "./model/member";
+import {UserAuthService} from "./_services/user-auth.service";
+import {Router} from "@angular/router";
+import {UserService} from "./_services/user.service";
 
 @Component({
   selector: 'app-root',
@@ -7,5 +10,11 @@ import {Member} from "./model/member";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'JwtAngular';
+
+  constructor(private userAuthService: UserAuthService) {
+  }
+
+  public isLoggedIn() {
+    return this.userAuthService.isLoggedIn();
+  }
 }
