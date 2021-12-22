@@ -1,1 +1,27 @@
-<p>sidenav works!</p>
+<mat-nav-list>
+  <div class="logo py-4">
+    <img src="../../assets/image/google.svg" alt="Company Logo">
+  </div>
+  <mat-divider></mat-divider>
+  <h2 matSubheader class="mt-2"> APPLICATION </h2>
+  <a mat-list-item routerLink="/home" routerLinkActive="list-item-active">
+    <mat-icon>home</mat-icon>
+    Home </a>
+  <a mat-list-item routerLink="/admin" routerLinkActive="list-item-active">
+    <mat-icon>key</mat-icon>
+    Admin </a>
+  <a mat-list-item routerLink="/member" routerLinkActive="list-item-active">
+    <mat-icon>people</mat-icon>
+    Member </a>
+  <a mat-list-item mat-button
+     [matMenuTriggerFor]="menu">
+    <mat-icon>dashboard</mat-icon>
+    Dashboard </a>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item routerLink="/member">
+      <mat-icon>exit_to_app</mat-icon>
+      Logout
+    </button>
+  </mat-menu>
+
+</mat-nav-list>

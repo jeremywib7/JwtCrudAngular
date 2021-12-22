@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {UserAuthService} from "../../_services/user-auth.service";
 import {Router} from "@angular/router";
 import {UserService} from "../../_services/user.service";
@@ -6,14 +6,19 @@ import {UserService} from "../../_services/user.service";
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  @Output() toggleSidebarForMe: EventEmitter<any> = new EventEmitter();
 
   constructor(private userAuthService: UserAuthService, private router: Router, public userService: UserService) {
   }
 
   ngOnInit(): void {
+  }
+
+  toggleSidebar() {
+    this.toggleSidebarForMe.emit();
   }
 
   public isLoggedIn() {

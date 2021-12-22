@@ -25,6 +25,8 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatListModule} from "@angular/material/list";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { MemberFormComponent } from './controllers/member/member-form/member-form.component';
 
 @NgModule({
   declarations: [
@@ -35,10 +37,18 @@ import {MatListModule} from "@angular/material/list";
     ForbiddenComponent,
     HeaderComponent,
     UserComponent,
-    MemberComponent,
-    SidenavComponent
+    SidenavComponent,
+    MemberFormComponent,
   ],
   imports: [
+
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule,
+    RouterModule,
     // * MATERIAL IMPORTS
     MatSidenavModule,
     MatToolbarModule,
@@ -46,12 +56,6 @@ import {MatListModule} from "@angular/material/list";
     MatIconModule,
     MatDividerModule,
     MatListModule,
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    FormsModule,
-    HttpClientModule,
-    RouterModule,
   ],
   providers: [
     AuthGuard, {

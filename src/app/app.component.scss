@@ -1,0 +1,19 @@
+:host {
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  top: 0px;
+}
+mat-drawer {
+  width: 260px;
+}
+mat-drawer-container {
+  flex: 1 1 auto;
+  height: 100%;
+}
+
+mat-drawer {
+  background: #0f172a;
+}
+

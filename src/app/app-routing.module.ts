@@ -7,14 +7,21 @@ import {LoginComponent} from "./controllers/login/login.component";
 import {ForbiddenComponent} from "./controllers/forbidden/forbidden.component";
 import {AuthGuard} from "./_auth/auth.guard";
 import {MemberComponent} from "./controllers/member/member.component";
+import {MemberFormComponent} from "./controllers/member/member-form/member-form.component";
 
+// @ts-ignore
 const routes: Routes = [
+  {path: '', redirectTo: '/member', pathMatch: 'full'},
   {path: 'home', component: HomeComponent},
   {path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
-  {path: 'member', component: MemberComponent},
+  {
+    path: 'member',
+    loadChildren: () => import('./controllers/member/member.module').then(x => x.MemberModule)
+  },
   {path: 'user', component: UserComponent, canActivate: [AuthGuard], data: {roles: ['User']}},
   {path: 'login', component: LoginComponent},
-  {path: 'forbidden', component: ForbiddenComponent}
+  {path: 'forbidden', component: ForbiddenComponent},
+
 ];
 
 @NgModule({
