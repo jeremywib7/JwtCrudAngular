@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build:components": "concurrently --kill others \"ng build @components/button --watch\""
   },
   "private": true,
   "dependencies": {
@@ -25,6 +26,7 @@
     "jquery": "^3.6.0",
     "materialize-css": "^1.0.0-rc.2",
     "ng-bootstrap": "^1.6.3",
+    "ngx-toastr": "^14.2.1",
     "popper.js": "^1.16.1",
     "require.js": "^1.0.0",
     "rxjs": "~7.4.0",
@@ -43,6 +45,7 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "ng-packagr": "^13.0.0",
     "typescript": "~4.5.2"
   }
 }

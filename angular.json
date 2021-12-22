@@ -108,6 +108,37 @@
           }
         }
       }
+    },
+    "@components/button": {
+      "projectType": "library",
+      "root": "projects/components/button",
+      "sourceRoot": "projects/components/button/src",
+      "prefix": "ngid",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/components/button/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/components/button/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/components/button/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/components/button/src/test.ts",
+            "tsConfig": "projects/components/button/tsconfig.spec.json",
+            "karmaConfig": "projects/components/button/karma.conf.js"
+          }
+        }
+      }
     }
   },
   "defaultProject": "JwtAngular"
