@@ -1,5 +1,11 @@
 <div class="container-fluid page">
-  <div class="d-flex page__box p-3 mt-2 justify-content-center">{{ editMode ? 'Edit' : 'Add'}} Member</div>
+  <nav aria-label="breadcrumb" class="main-breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/member">Member</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ editMode ? 'Edit' : 'Add'}} Member</li>
+    </ol>
+  </nav>
+  <div class="d-flex page__box p-3 mt-2 ">{{ editMode ? 'Edit' : 'Add'}} Member</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="modal-body">
       <!--                <form #addForm="ngForm" (ngSubmit)="onAddMember(addForm)">-->
@@ -68,14 +74,14 @@
           <div class="col-sm-10">
             <div class="form-check">
               <input name="gender" class="form-check-input" type="radio" id="maleRadioButton"
-                     value="MALE" formControlName="gender">
+                     value="Male" formControlName="gender">
               <label class="form-check-label" for="maleRadioButton">
                 Male
               </label>
             </div>
             <div class="form-check">
               <input name="gender" class="form-check-input" type="radio" id="femaleRadioButton"
-                     value="FEMALE" formControlName="gender">
+                     value="Female" formControlName="gender">
               <label class="form-check-label" for="femaleRadioButton">
                 Female
               </label>
@@ -167,7 +173,7 @@
           <label class="form-label" for="customFile">Profile Picture</label>
           <input name="profilePicture" type="file" accept="image/*" (change)="onSelectFile($event)"
                  class="form-control" id="customFile"
-                 formControlName="imageUrl"/>
+                 />
         </div>
         <!--                  <div class="form-group">-->
         <!--                    <label for="imageUrl">Image URL</label>-->
@@ -198,12 +204,16 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" id="add-member-form" class="btn btn-secondary" data-dismiss="modal" routerLink="/member">Close
+          <button type="button" id="add-member-form" class="btn btn-secondary" data-dismiss="modal"
+                  routerLink="/member">Close
           </button>
           <!--                    <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>-->
-          <button (click)="onAddMember(reactiveForm)" type="submit"
-                  class="btn btn-primary">{{ editMode ? 'Save Changes' : 'Add Member'}}
-          </button>
+          <ngid-button
+            color="PRIMARY"
+            size="MD"
+            [disabled]="false"
+            (click)="onAddMember(reactiveForm)" type="submit"> {{ editMode ? 'Save Changes' : 'Add Member'}}
+          </ngid-button>
         </div>
       </form>
     </div>

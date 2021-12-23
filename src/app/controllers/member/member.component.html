@@ -4,7 +4,7 @@
     <div class="container" id="main-container">
       <nav class="navbar navbar-expand navbar-light bg-light">
         <div class="container-fluid">
-          <button routerLink="/member/new" class="btn btn-primary">Add</button>
+          <button routerLink="/member/add" class="btn btn-primary">Add</button>
           <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
@@ -31,14 +31,13 @@
             </ul>
             <div class="card-body">
               <div class="float-lg-start btn-group btn-group-sm">
-                <a class="btn btn-primary tooltips" (click)="onOpenModal(member, 'edit')" data-placement="top"
+                <a class="btn btn-primary tooltips" routerLink="/member/{{member.id}}" data-placement="top"
                    data-toggle="tooltip" data-original-title="Edit"><i
                   class="fa fa-pencil" style="color: white"></i> </a>
                 <a class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip"
                    data-original-title="Delete"><i class="fa fa-times" style="color: white"></i></a>
               </div>
             </div>
-
 
             <!-- Edit Employee Modal -->
             <div class="modal fade" id="editMemberModal" data-bs-backdrop="static" data-bs-keyboard="false"

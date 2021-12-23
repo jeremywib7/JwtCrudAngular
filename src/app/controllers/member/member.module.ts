@@ -5,13 +5,16 @@ import {MemberComponent} from "./member.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MemberFormComponent} from "./member-form/member-form.component";
+import {AuthGuard} from "../../_auth/auth.guard";
 
 const routes: Routes = [
-  {path: '', component: MemberComponent},
+  {path: '', component: MemberComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
   {
-    path: 'new',
-    component: MemberFormComponent
-  },
+    path: 'add',
+    component: MemberFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
+  {
+    path: ':id',
+    component: MemberFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
 ];
 
 @NgModule({

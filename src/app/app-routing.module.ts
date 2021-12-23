@@ -12,11 +12,13 @@ import {MemberFormComponent} from "./controllers/member/member-form/member-form.
 // @ts-ignore
 const routes: Routes = [
   {path: '', redirectTo: '/member', pathMatch: 'full'},
-  {path: 'home', component: HomeComponent},
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   {path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
   {
     path: 'member',
-    loadChildren: () => import('./controllers/member/member.module').then(x => x.MemberModule)
+    loadChildren: () => import('./controllers/member/member.module').then(x => x.MemberModule),
+    canActivate: [AuthGuard],
+    data: {roles: ['Admin']}
   },
   {path: 'user', component: UserComponent, canActivate: [AuthGuard], data: {roles: ['User']}},
   {path: 'login', component: LoginComponent},

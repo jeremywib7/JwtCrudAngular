@@ -39,8 +39,7 @@ export class MemberComponent implements OnInit {
       imageUrl: new FormControl(null, [Validators.required]),
       bankAccount: new FormControl('', [Validators.required, Validators.compose(
         [Validators.pattern('[0-9+ ]*'), Validators.minLength(5), Validators.maxLength(20)])]),
-    })
-  }
+    })}
 
   public members: Member[] | undefined;
   public editMember: Member | null | undefined;
@@ -120,4 +119,5 @@ export class MemberComponent implements OnInit {
   public onEditMember(editForm: any) {
 
   }
+
 }

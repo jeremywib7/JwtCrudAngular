@@ -15,10 +15,9 @@ import {RouterModule} from "@angular/router";
 import {AuthGuard} from "./_auth/auth.guard";
 import {AuthInterceptor} from "./_auth/auth.interceptor";
 import {UserService} from "./_services/user.service";
-import { MemberComponent } from './controllers/member/member.component';
 import {MemberService} from "./_services/member.service";
 import {DatePipe} from "@angular/common";
-import { SidenavComponent } from './controllers/sidenav/sidenav.component';
+import {SidenavComponent} from './controllers/sidenav/sidenav.component';
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatMenuModule} from "@angular/material/menu";
@@ -26,7 +25,11 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatListModule} from "@angular/material/list";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import { MemberFormComponent } from './controllers/member/member-form/member-form.component';
+import {MemberFormComponent} from './controllers/member/member-form/member-form.component';
+
+//library section
+import {ButtonModule} from "../../projects/components/button/src/lib/button.module";
+
 
 @NgModule({
   declarations: [
@@ -41,7 +44,6 @@ import { MemberFormComponent } from './controllers/member/member-form/member-for
     MemberFormComponent,
   ],
   imports: [
-
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -56,6 +58,8 @@ import { MemberFormComponent } from './controllers/member/member-form/member-for
     MatIconModule,
     MatDividerModule,
     MatListModule,
+    // Components
+    ButtonModule
   ],
   providers: [
     AuthGuard, {

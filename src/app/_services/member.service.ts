@@ -25,6 +25,10 @@ export class MemberService implements OnInit{
     return this.httpClient.get<Member[]>(`${this.apiServerUrl}/member/all`);
   }
 
+  public getMemberById(id: string): Observable<Member> {
+    return this.httpClient.get<Member>(`${this.apiServerUrl}/member/find/${id}`);
+  }
+
   public addMember(member: Member): Observable<Member> {
     return this.httpClient.post<Member>(`${this.apiServerUrl}/member/add`, member, {headers: this.requestHeader} );
   }
