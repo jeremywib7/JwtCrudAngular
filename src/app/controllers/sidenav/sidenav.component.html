@@ -13,15 +13,23 @@
   <a mat-list-item routerLink="/member" routerLinkActive="list-item-active">
     <mat-icon>people</mat-icon>
     Member </a>
-  <a mat-list-item mat-button
-     [matMenuTriggerFor]="menu">
-    <mat-icon>dashboard</mat-icon>
-    Dashboard </a>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item routerLink="/member">
-      <mat-icon>exit_to_app</mat-icon>
-      Logout
-    </button>
-  </mat-menu>
+  <a mat-list-item routerLinkActive="list-item-active" data-toggle="collapse"
+     data-target="#collapseExample"
+     aria-expanded="false" aria-controls="collapseExample">
+    <mat-icon>key</mat-icon>
+    Main Button </a>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body" style="background-color: #151c2f">
+      <a mat-list-item routerLink="/member" routerLinkActive="list-item-active">
+        <mat-icon>people</mat-icon>
+        Member </a>
+      <a mat-list-item routerLinkActive="list-item-active">
+        <mat-icon>people</mat-icon>
+        Member </a>
+      <a mat-list-item  routerLinkActive="list-item-active">
+        <mat-icon>people</mat-icon>
+        Member </a>
+    </div>
+  </div>
 
 </mat-nav-list>
