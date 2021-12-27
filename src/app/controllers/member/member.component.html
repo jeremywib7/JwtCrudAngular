@@ -13,8 +13,8 @@
       </nav>
 
       <div class="row justify-content-center mt-5">
-        <div *ngFor="let member of members" class="col-md-6 col-xl-3">
-          <div class="card m-b-30">
+        <div *ngFor="let member of members | paginate: { itemsPerPage: 10, currentPage: p }" class="col-md-6 col-xl-3">
+          <div class="card m-b-30 shadow-sm">
             <div class="card-body row">
               <div class="col-6">
                 <a href=""><img src="{{member.imageUrl}}" class="img-fluid rounded-circle w-60"></a>
@@ -185,6 +185,19 @@
           </div>
         </div>
       </div>
+      <div class="text-center">
+        <style>
+          .my-pagination /deep/ .ngx-pagination .current {
+            background: red;
+          }
+        </style>
+
+        <pagination-controls
+          (pageChange)="p = $event"
+          class="my-pagination"
+        ></pagination-controls>
+      </div>
+
     </div>
   </div>
 </div>

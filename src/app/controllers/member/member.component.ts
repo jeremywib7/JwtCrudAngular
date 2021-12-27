@@ -11,6 +11,7 @@ import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from "@angular/
   styleUrls: ['./member.component.scss']
 })
 export class MemberComponent implements OnInit {
+  p: number = 1;
 
   public countries: any = countries;
   reactiveForm: any = FormGroup;

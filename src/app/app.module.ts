@@ -29,6 +29,7 @@ import {MemberFormComponent} from './controllers/member/member-form/member-form.
 
 //library section
 import {ButtonModule} from "../../projects/components/button/src/lib/button.module";
+import {NgxPaginationModule} from "ngx-pagination";
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import {ButtonModule} from "../../projects/components/button/src/lib/button.modu
     FormsModule,
     HttpClientModule,
     RouterModule,
+    NgxPaginationModule,
     // * MATERIAL IMPORTS
     MatSidenavModule,
     MatToolbarModule,

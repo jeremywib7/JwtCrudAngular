@@ -6,6 +6,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MemberFormComponent} from "./member-form/member-form.component";
 import {AuthGuard} from "../../_auth/auth.guard";
+import {NgxPaginationModule} from "ngx-pagination";
 
 const routes: Routes = [
   {path: '', component: MemberComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
@@ -19,12 +20,14 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [MemberComponent,],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    ReactiveFormsModule,
-    FormsModule,
-    HttpClientModule]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        ReactiveFormsModule,
+        FormsModule,
+        HttpClientModule,
+        NgxPaginationModule
+    ]
 })
 export class MemberModule {
 }
