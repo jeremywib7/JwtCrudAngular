@@ -44,8 +44,8 @@ export class UserComponent implements OnInit {
         [Validators.pattern('[0-9+ ]*'), Validators.minLength(5), Validators.maxLength(20)])]),
     })}
 
-  public members: User[] | undefined;
-  public editMember: User | null | undefined;
+  public users: User[] | undefined;
+  public editUsers: User | null | undefined;
 
   constructor(private memberService: MemberService) {
   }
@@ -57,7 +57,7 @@ export class UserComponent implements OnInit {
   public getMembers(): void {
     this.memberService.getMembers().subscribe(
       (response: User[]) => {
-        this.members = response;
+        this.users = response;
       },
       (error: HttpErrorResponse) => {
         console.log(error);
@@ -75,7 +75,7 @@ export class UserComponent implements OnInit {
       button.setAttribute('data-target', '#addMemberModal');
     }
     if (mode === 'edit') {
-      this.editMember = member;
+      this.editUsers = member;
       button.setAttribute('data-target', '#editMemberModal');
     }
     if (mode === 'delete') {
@@ -121,6 +121,12 @@ export class UserComponent implements OnInit {
 
   public onEditMember(editForm: any) {
 
+  }
+
+  public onDeleteUser(username: string) {
+    this.memberService.deleteMember(username).subscribe(res => {
+      this.users = this.users.filter(user => user.username !== res.username);
+    });
   }
 
 }

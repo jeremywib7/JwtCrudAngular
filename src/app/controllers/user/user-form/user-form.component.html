@@ -12,8 +12,8 @@
       <form [formGroup]="reactiveForm">
         <div class="form-group">
           <label  for="username">Username</label>
-          <input  type="text" name="email" class="form-control" id="username" placeholder="Email"
-                 formControlName="username" [disabled]="true">
+          <input  type="text" name="username" class="form-control" id="username" placeholder="Username"
+                 formControlName="username">
           <div *ngIf="reactiveForm.controls.username.errors && (reactiveForm.controls.username.touched ||
                            reactiveForm.controls.username.dirty) " style="color: red">
             <div *ngIf="reactiveForm.hasError('required','username')">

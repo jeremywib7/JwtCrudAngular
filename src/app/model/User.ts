@@ -5,7 +5,8 @@ export interface User {
   lastName: string;
   email: string;
   role: {
-    [key: string]: Role
+    roleName: string;
+    roleDescription: string;
   }
   gender: string;
   dateJoined: string;
@@ -15,10 +16,3 @@ export interface User {
   userCode: string;
   bankAccount: string;
 }
-
-interface Role {
-  roleName?: string;
-  roleDescription?: string;
-  role: User[];
-}
-

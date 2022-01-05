@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {countries} from "src/app/data/CountryData";
 import {ActivatedRoute} from "@angular/router";
-import {User, Role} from "../../../model/User";
+import {User} from "../../../model/User";
 import {MemberService} from "../../../_services/member.service";
 import {HttpErrorResponse} from "@angular/common/http";
 
@@ -19,8 +19,6 @@ export class UserFormComponent implements OnInit {
 
   public countries: any = countries;
   public user: User | undefined;
-  public role: Role | undefined;
-
 
   constructor(
     private route: ActivatedRoute,
@@ -72,7 +70,7 @@ export class UserFormComponent implements OnInit {
         validators: [Validators.required, Validators.compose(
           [Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')])]
       }),
-      roleName: new FormControl(this.role === null ? null : this.user?.role["roleName"], {
+      roleName: new FormControl(this.user === null ? null : this.user?.role[0].roleName, {
         updateOn: 'blur',
         validators: [Validators.required]
       }),
@@ -118,7 +116,11 @@ export class UserFormComponent implements OnInit {
   }
 
   public onAddMember(addForm: FormGroup): void {
-    console.log("clicked")
+
+  }
+
+  submit() {
+
   }
 
 }

@@ -37,8 +37,8 @@ export class MemberService implements OnInit{
     return this.httpClient.put<User>(`${this.apiServerUrl}/member/update`, member);
   }
 
-  public deleteMember(memberId: number): Observable<User> {
-    return this.httpClient.delete<User>(`${this.apiServerUrl}/member/delete/${memberId}`);
+  public deleteMember(username: string): Observable<User> {
+    return this.httpClient.delete<User>(`${this.apiServerUrl}/member/delete/${username}`);
   }
 
 }
