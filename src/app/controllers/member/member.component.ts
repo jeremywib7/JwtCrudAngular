@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Member} from "../../model/member";
+import {User} from "../../model/User";
 import {MemberService} from "../../_services/member.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {countries} from "../../data/CountryData";
@@ -42,8 +42,8 @@ export class MemberComponent implements OnInit {
         [Validators.pattern('[0-9+ ]*'), Validators.minLength(5), Validators.maxLength(20)])]),
     })}
 
-  public members: Member[] | undefined;
-  public editMember: Member | null | undefined;
+  public members: User[] | undefined;
+  public editMember: User | null | undefined;
 
   constructor(private memberService: MemberService) {
   }
@@ -54,7 +54,7 @@ export class MemberComponent implements OnInit {
 
   public getMembers(): void {
     this.memberService.getMembers().subscribe(
-      (response: Member[]) => {
+      (response: User[]) => {
         this.members = response;
       },
       (error: HttpErrorResponse) => {
@@ -63,7 +63,7 @@ export class MemberComponent implements OnInit {
     );
   }
 
-  public onOpenModal(member: Member | null, mode: string): void {
+  public onOpenModal(member: User | null, mode: string): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
     button.type = 'button';
@@ -91,7 +91,7 @@ export class MemberComponent implements OnInit {
       closeModal!.click();
 
       this.memberService.addMember(addForm.value).subscribe(
-        (response: Member) => {
+        (response: User) => {
           console.log(response);
           this.getMembers();
         },

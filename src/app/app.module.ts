@@ -30,6 +30,7 @@ import {MemberFormComponent} from './controllers/member/member-form/member-form.
 //library section
 import {ButtonModule} from "../../projects/components/button/src/lib/button.module";
 import {NgxPaginationModule} from "ngx-pagination";
+import {UserFormComponent} from "./controllers/user/user-form/user-form.component";
 
 
 @NgModule({
@@ -40,9 +41,9 @@ import {NgxPaginationModule} from "ngx-pagination";
     LoginComponent,
     ForbiddenComponent,
     HeaderComponent,
-    UserComponent,
     SidenavComponent,
     MemberFormComponent,
+    UserFormComponent
   ],
   imports: [
     BrowserModule,

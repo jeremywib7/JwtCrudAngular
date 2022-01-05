@@ -20,7 +20,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: {roles: ['Admin']}
   },
-  {path: 'user', component: UserComponent, canActivate: [AuthGuard], data: {roles: ['User']}},
+  {
+    path: 'user',
+    loadChildren: () => import('./controllers/user/user.module').then(x => x.UserModule),
+    canActivate: [AuthGuard],
+    data: {roles: ['Admin']}
+  },
   {path: 'login', component: LoginComponent},
   {path: 'forbidden', component: ForbiddenComponent},
 
