@@ -1,13 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserAuthService} from "./user-auth.service";
+import {environment} from "../../environments/environment";
+import {Observable} from "rxjs";
+import {User} from "../model/User";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  PATH_OF_API = "http://localhost:9090";
+  private apiServerUrl = environment.apiBaseUrl;
 
   requestHeader = new HttpHeaders(
     {"No-Auth": "True"}
@@ -17,17 +20,25 @@ export class UserService {
   }
 
   public login(loginData: any) {
-    return this.httpClient.post(this.PATH_OF_API + '/authenticate', loginData, {headers: this.requestHeader});
+    return this.httpClient.post(this.apiServerUrl + '/authenticate', loginData, {headers: this.requestHeader});
+  }
+
+  public getUsers(): Observable<User[]> {
+    return this.httpClient.get<User[]>(`${this.apiServerUrl}/user/all`);
+  }
+
+  public getUserByUsername(username: string): Observable<User> {
+    return this.httpClient.get<User>(`${this.apiServerUrl}/user/find/${username}`);
   }
 
   public forUser() {
-    return this.httpClient.get(this.PATH_OF_API + '/forUser', {
+    return this.httpClient.get(this.apiServerUrl + '/forUser', {
       responseType: 'text',
     });
   }
 
   public forAdmin() {
-    return this.httpClient.get(this.PATH_OF_API + '/forAdmin', {responseType: 'text'});
+    return this.httpClient.get(this.apiServerUrl + '/forAdmin', {responseType: 'text'});
   }
 
   // @ts-ignore

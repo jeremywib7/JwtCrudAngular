@@ -120,6 +120,9 @@ export class UserFormComponent implements OnInit {
   }
 
   submit() {
+    if (this.reactiveForm.invalid) {
+      return;
+    }
 
   }
 
