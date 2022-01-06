@@ -12,7 +12,7 @@ export class UserAuthService {
     localStorage.setItem("roles", JSON.stringify(roles));
   }
 
-  public getRoles(): [] {
+  public getRoles() {
     //return roles array
     return JSON.parse(<string>localStorage.getItem("roles"));
   }

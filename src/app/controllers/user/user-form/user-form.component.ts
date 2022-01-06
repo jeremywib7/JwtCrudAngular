@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {countries} from "src/app/data/CountryData";
 import {ActivatedRoute} from "@angular/router";
 import {User} from "../../../model/User";
 import {MemberService} from "../../../_services/member.service";
 import {HttpErrorResponse} from "@angular/common/http";
+import {UserService} from "../../../_services/user.service";
 
 @Component({
   selector: 'app-user-form',
@@ -22,7 +23,8 @@ export class UserFormComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private memberService: MemberService) {
+    private userService: UserService,
+    private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -30,7 +32,7 @@ export class UserFormComponent implements OnInit {
     this.route.paramMap.subscribe(paramMap => {
         if (paramMap.has('username')) {
           this.editMode = true;
-          this.memberService.getMemberByUsername(paramMap.get('username')).subscribe(
+          this.userService.getUserByUsername(paramMap.get('username')).subscribe(
             (user: User) => {
               this.user = user;
               this.initForm();
@@ -48,13 +50,13 @@ export class UserFormComponent implements OnInit {
   }
 
   initForm() {
-    this.reactiveForm = new FormGroup({
+    this.reactiveForm = this.fb.group({
       username: new FormControl(
-        {value: this.user === null ? null : this.user?.username, disabled: this.editMode},  {
-        updateOn: 'blur',
-        validators: [Validators.required, Validators.compose(
-          [Validators.minLength(3)])]
-      }),
+        {value: this.user === null ? null : this.user?.username, disabled: this.editMode}, {
+          updateOn: 'blur',
+          validators: [Validators.required, Validators.compose(
+            [Validators.minLength(3)])]
+        }),
       userFirstName: new FormControl(this.user === null ? null : this.user?.userFirstName, {
         updateOn: 'blur',
         validators: [Validators.required, Validators.compose(
@@ -70,9 +72,14 @@ export class UserFormComponent implements OnInit {
         validators: [Validators.required, Validators.compose(
           [Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')])]
       }),
-      roleName: new FormControl(this.user === null ? null : this.user?.role[0].roleName, {
-        updateOn: 'blur',
-        validators: [Validators.required]
+      role: this.fb.group({
+        roleName: new FormControl(this.user === null ? null : this.user?.role.roleName, {
+          updateOn: 'blur',
+          validators: [Validators.required]
+        }),
+        roleDescription: new FormControl(this.user?.role.roleDescription, {
+          updateOn: 'blur',
+        }),
       }),
       gender: new FormControl(this.user === null ? null : this.user?.gender, {
         updateOn: 'blur',
@@ -95,12 +102,12 @@ export class UserFormComponent implements OnInit {
           updateOn: 'blur',
           validators: [Validators.required]
         }),
-      imageUrl: new FormControl(this.user === null ? null : this.user?.imageUrl,
-        {
-          updateOn: 'blur',
-          validators: [Validators.required]
-        }
-      ),
+      // imageUrl: new FormControl(this.user === null ? null : this.user?.imageUrl,
+      //   {
+      //     updateOn: 'blur',
+      //     validators: [Validators.required]
+      //   }
+      // ),
       bankAccount: new FormControl(this.user === null ? null : this.user?.bankAccount,
         {
           updateOn: 'blur',
@@ -115,15 +122,39 @@ export class UserFormComponent implements OnInit {
     this.selectedImage = ($event.target as HTMLInputElement).files[0];
   }
 
-  public onAddMember(addForm: FormGroup): void {
+  submit() {
+
+    if (this.reactiveForm.valid) {
+      this.reactiveForm.patchValue({
+        role: {
+          roleDescription: this.reactiveForm.value.role.roleName + " role"
+        }
+      });
+
+      this.userService.addUser(this.reactiveForm.value).subscribe(
+        (response: User) => {
+          alert("success");
+          console.log(response);
+        },
+      );
+    } else {
+      this.validateFormFields(this.reactiveForm);
+    }
 
   }
 
-  submit() {
-    if (this.reactiveForm.invalid) {
-      return;
-    }
+  public validateFormFields(formGroup: FormGroup) {
 
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      let invalidFields = [].slice.call(document.getElementsByClassName('ng-invalid'));
+      invalidFields[1].focus();
+      if (control instanceof FormControl) {
+        control.markAsTouched({onlySelf: true});
+      } else if (control instanceof FormGroup) {
+        this.validateFormFields(control);
+      }
+    })
   }
 
 }

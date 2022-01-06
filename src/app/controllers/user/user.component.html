@@ -13,7 +13,7 @@
       </nav>
 
       <div class="row justify-content-center mt-5">
-        <div *ngFor="let member of members | paginate: { itemsPerPage: 10, currentPage: p }" class="col-md-6 col-xl-3">
+        <div *ngFor="let member of users | paginate: { itemsPerPage: 10, currentPage: p }" class="col-md-6 col-xl-3">
           <div class="card m-b-30 shadow-sm">
             <div class="card-body row">
               <div class="col-6">
@@ -60,7 +60,6 @@
 <!--                               placeholder="Id" required>-->
                       </div>
                       <div class="form-group">
-                        <label for="editMemberCode">User Code</label>
 <!--                        <input disabled type="text" ngModel="{{editMember?.memberCode}}" name="editMemberCode"-->
 <!--                               class="form-control" id="editMemberCode" placeholder="Id" required>-->
                       </div>
@@ -74,7 +73,7 @@
                         <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
                         <div class="col-sm-10">
                           <div class="form-check">
-                            <input ngModel="{{editMember?.gender}}" name="gender" class="form-check-input" type="radio"
+                            <input ngModel="{{editUsers?.gender}}" name="gender" class="form-check-input" type="radio"
                                    id="editMaleRadioButton"
                                    value="MALE">
                             <label class="form-check-label" for="editMaleRadioButton">
@@ -82,7 +81,7 @@
                             </label>
                           </div>
                           <div class="form-check">
-                            <input ngModel="{{editMember?.gender}}" name="gender" class="form-check-input" type="radio"
+                            <input ngModel="{{editUsers?.gender}}" name="gender" class="form-check-input" type="radio"
                                    id="editFemaleRadioButton"
                                    value="FEMALE">
                             <label class="form-check-label" for="editFemaleRadioButton">
@@ -95,7 +94,7 @@
                         <div class="col">
                           <div class="form-group">
                             <label>Date Joined</label>
-                            <input ngModel="{{editMember?.dateJoined}}" type="date" name="dateJoined" max="3000-12-31"
+                            <input ngModel="{{editUsers?.dateJoined}}" type="date" name="dateJoined" max="3000-12-31"
                                    min="1000-01-01" class="form-control">
                           </div>
 <!--                          <div class="form-group">-->
@@ -120,7 +119,7 @@
                           </div>
                           <div class="form-group">
                             <label for="editPhoneNumber">Phone</label>
-                            <input type="text" ngModel="{{editMember?.phoneNumber}}" name="phoneNumber"
+                            <input type="text" ngModel="{{editUsers?.phoneNumber}}" name="phoneNumber"
                                    class="form-control"
                                    id="editPhoneNumber"
                                    placeholder="Phone" required>
@@ -129,7 +128,7 @@
                       </div>
                       <div class="form-group">
                         <label for="editAddress">Address</label>
-                        <input type="text" ngModel="{{editMember?.address}}" name="address" class="form-control"
+                        <input type="text" ngModel="{{editUsers?.address}}" name="address" class="form-control"
                                id="editAddress" placeholder="Address"
                                required>
                       </div>
@@ -139,13 +138,13 @@
                       <!--                  </div>-->
                       <div class="form-group">
                         <label for="editImageUrl">Image URL</label>
-                        <input type="text" ngModel="{{editMember?.imageUrl}}" name="imageUrl" class="form-control"
+                        <input type="text" ngModel="{{editUsers?.imageUrl}}" name="imageUrl" class="form-control"
                                id="editImageUrl"
                                placeholder="Image URL" required>
                       </div>
                       <div class="form-group">
                         <label for="editBankAccount">Bank Account</label>
-                        <input type="text" ngModel="{{editMember?.bankAccount}}" name="bankAccount" class="form-control"
+                        <input type="text" ngModel="{{editUsers?.bankAccount}}" name="bankAccount" class="form-control"
                                id="editBankAccount"
                                placeholder="Bank Account" required>
                       </div>

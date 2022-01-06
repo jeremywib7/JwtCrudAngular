@@ -26,7 +26,7 @@ const routes: Routes = [
         ReactiveFormsModule,
         FormsModule,
         HttpClientModule,
-        NgxPaginationModule
+        NgxPaginationModule,
     ]
 })
 

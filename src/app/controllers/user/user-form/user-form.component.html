@@ -125,15 +125,15 @@
                 </div>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" formGroupName="role">
               <label for="editInputRank" class="form-label">Role</label>
               <select name="rank" id="editInputRank" class="form-select" formControlName="roleName">
                 <option disabled>Select Role</option>
                 <option value="Admin">Admin</option>
                 <option value="User">User</option>
               </select>
-              <div *ngIf="reactiveForm.controls.roleName.errors && (reactiveForm.controls.roleName.touched ||
-                           reactiveForm.controls.roleName.dirty) " style="color: red">
+              <div *ngIf="reactiveForm.controls.role['controls'].errors && (reactiveForm.controls.role['controls'].touched ||
+                           reactiveForm.controls.role['controls'].dirty) " style="color: red">
                 <div *ngIf="reactiveForm.hasError('required','roleName')">
                   Role is required
                 </div>
@@ -220,12 +220,12 @@
             </div>
           </div>
         </div>
-        <div class="form-group">
-          <label class="form-label" for="customFile">Profile Picture</label>
-          <input name="profilePicture" type="file" accept="image/*" (change)="onSelectFile($event)"
-                 class="form-control" id="customFile"
-          />
-        </div>
+<!--        <div class="form-group">-->
+<!--          <label class="form-label" for="customFile">Profile Picture</label>-->
+<!--          <input name="profilePicture" type="file" accept="image/*" (change)="onSelectFile($event)"-->
+<!--                 class="form-control" id="customFile"-->
+<!--          />-->
+<!--        </div>-->
         <!--                  <div class="form-group">-->
         <!--                    <label for="imageUrl">Image URL</label>-->
         <!--                    <input type="text"  name="imageUrl" class="form-control" id="imageUrl"-->
@@ -246,7 +246,7 @@
             color="PRIMARY"
             size="MD"
             [disabled]="false"
-            (click)="onAddMember(reactiveForm)" type="submit"> {{ editMode ? 'Save Changes' : 'Add User'}}
+            (click)="submit()" type="submit"> {{ editMode ? 'Save Changes' : 'Add User'}}
           </ngid-button>
         </div>
       </form>
