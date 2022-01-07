@@ -1,7 +1,7 @@
 <div class="container-fluid page">
   <nav aria-label="breadcrumb" class="main-breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a routerLink="/member">User</a></li>
+      <li class="breadcrumb-item"><a routerLink="/user">User</a></li>
       <li class="breadcrumb-item active" aria-current="page">{{ editMode ? 'Edit' : 'Add'}} User</li>
     </ol>
   </nav>
@@ -11,8 +11,8 @@
       <!--                <form #addForm="ngForm" (ngSubmit)="onAddMember(addForm)">-->
       <form [formGroup]="reactiveForm">
         <div class="form-group">
-          <label  for="username">Username</label>
-          <input  type="text" name="username" class="form-control" id="username" placeholder="Username"
+          <label for="username">Username</label>
+          <input type="text" name="username" class="form-control" id="username" placeholder="Username"
                  formControlName="username">
           <div *ngIf="reactiveForm.controls.username.errors && (reactiveForm.controls.username.touched ||
                            reactiveForm.controls.username.dirty) " style="color: red">
@@ -132,46 +132,47 @@
                 <option value="Admin">Admin</option>
                 <option value="User">User</option>
               </select>
-              <div *ngIf="reactiveForm.controls.role['controls'].errors && (reactiveForm.controls.role['controls'].touched ||
-                           reactiveForm.controls.role['controls'].dirty) " style="color: red">
-                <div *ngIf="reactiveForm.hasError('required','roleName')">
+              <div *ngIf="reactiveForm.get('role.roleName').errors && (reactiveForm.get('role.roleName').touched ||
+                           reactiveForm.get('role.roleName').dirty) " style="color: red">
+                <div *ngIf="reactiveForm.hasError('required', 'role.roleName')">
+                  <!--                <div *ngIf="reactiveForm.hasError('required','roleName')">-->
                   Role is required
                 </div>
               </div>
             </div>
 
             <!--            <div class="form-group">-->
-<!--              <label for="inputState" class="form-label">Rank</label>-->
-<!--              <select name="rank" id="inputState" class="form-select" formControlName="rank">-->
-<!--                <option disabled selected>Select Rank</option>-->
-<!--                <option value="Bronze">Bronze</option>-->
-<!--                <option value="Silver">Silver</option>-->
-<!--                <option value="Gold">Gold</option>-->
-<!--                <option value="Platinum">Platinum</option>-->
-<!--              </select>-->
-<!--              <div *ngIf="reactiveForm.controls.rank.errors && (reactiveForm.controls.rank.touched ||-->
-<!--                           reactiveForm.controls.rank.dirty) " style="color: red">-->
-<!--                <div *ngIf="reactiveForm.hasError('required','rank')">-->
-<!--                  Rank is required-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
+            <!--              <label for="inputState" class="form-label">Rank</label>-->
+            <!--              <select name="rank" id="inputState" class="form-select" formControlName="rank">-->
+            <!--                <option disabled selected>Select Rank</option>-->
+            <!--                <option value="Bronze">Bronze</option>-->
+            <!--                <option value="Silver">Silver</option>-->
+            <!--                <option value="Gold">Gold</option>-->
+            <!--                <option value="Platinum">Platinum</option>-->
+            <!--              </select>-->
+            <!--              <div *ngIf="reactiveForm.controls.rank.errors && (reactiveForm.controls.rank.touched ||-->
+            <!--                           reactiveForm.controls.rank.dirty) " style="color: red">-->
+            <!--                <div *ngIf="reactiveForm.hasError('required','rank')">-->
+            <!--                  Rank is required-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <!--            </div>-->
           </div>
           <div class="col">
-<!--            <div class="form-group">-->
-<!--              <label for="country" class="form-label">Nationality</label>-->
-<!--              <select name="nationality" id="country" class="form-select"-->
-<!--                      formControlName="nationality">-->
-<!--                <option disabled selected>Select Country</option>-->
-<!--                <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>-->
-<!--              </select>-->
-<!--              <div *ngIf="reactiveForm.controls.nationality.errors && (reactiveForm.controls.nationality.touched ||-->
-<!--                           reactiveForm.controls.nationality.dirty) " style="color: red">-->
-<!--                <div *ngIf="reactiveForm.hasError('required','nationality')">-->
-<!--                  Nationality is required-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
+            <!--            <div class="form-group">-->
+            <!--              <label for="country" class="form-label">Nationality</label>-->
+            <!--              <select name="nationality" id="country" class="form-select"-->
+            <!--                      formControlName="nationality">-->
+            <!--                <option disabled selected>Select Country</option>-->
+            <!--                <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>-->
+            <!--              </select>-->
+            <!--              <div *ngIf="reactiveForm.controls.nationality.errors && (reactiveForm.controls.nationality.touched ||-->
+            <!--                           reactiveForm.controls.nationality.dirty) " style="color: red">-->
+            <!--                <div *ngIf="reactiveForm.hasError('required','nationality')">-->
+            <!--                  Nationality is required-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <!--            </div>-->
             <div class="form-group">
               <label for="phoneNumber">Phone</label>
               <input type="text" name="phoneNumber" class="form-control" id="phoneNumber"
@@ -220,12 +221,12 @@
             </div>
           </div>
         </div>
-<!--        <div class="form-group">-->
-<!--          <label class="form-label" for="customFile">Profile Picture</label>-->
-<!--          <input name="profilePicture" type="file" accept="image/*" (change)="onSelectFile($event)"-->
-<!--                 class="form-control" id="customFile"-->
-<!--          />-->
-<!--        </div>-->
+        <!--        <div class="form-group">-->
+        <!--          <label class="form-label" for="customFile">Profile Picture</label>-->
+        <!--          <input name="profilePicture" type="file" accept="image/*" (change)="onSelectFile($event)"-->
+        <!--                 class="form-control" id="customFile"-->
+        <!--          />-->
+        <!--        </div>-->
         <!--                  <div class="form-group">-->
         <!--                    <label for="imageUrl">Image URL</label>-->
         <!--                    <input type="text"  name="imageUrl" class="form-control" id="imageUrl"-->
@@ -239,7 +240,7 @@
         <!--                  </div>-->
         <div class="modal-footer">
           <button type="button" id="add-member-form" class="btn btn-secondary" data-dismiss="modal"
-                  routerLink="/member">Close
+                  routerLink="/user">Close
           </button>
           <!--                    <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>-->
           <ngid-button

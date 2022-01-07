@@ -13,25 +13,25 @@
       </nav>
 
       <div class="row justify-content-center mt-5">
-        <div *ngFor="let member of users | paginate: { itemsPerPage: 10, currentPage: p }" class="col-md-6 col-xl-3">
+        <div *ngFor="let user of users | paginate: { itemsPerPage: 10, currentPage: p }" class="col-md-6 col-xl-3">
           <div class="card m-b-30 shadow-sm">
             <div class="card-body row">
               <div class="col-6">
-                <a href=""><img src="{{member.imageUrl}}" class="img-fluid rounded-circle w-60"></a>
+                <a href=""><img src="{{user.imageUrl}}" class="img-fluid rounded-circle w-60"></a>
               </div>
               <div class="col-6 card-title align-self-center mb-0">
-                <h5>{{member?.userFirstName}}</h5>
+                <h5>{{user?.userFirstName}}</h5>
 <!--                <h5 class="m-0">{{member?.rank}}</h5>-->
               </div>
             </div>
             <ul class="list-group list-group-flush">
               <h6 class="list-group-item"><i class="fa fa-home float-right"></i>Address : <a
-                href="#">{{member?.address}}</a></h6>
-              <h6 class="list-group-item"><i class="fa fa-phone float-right"></i>Phone : {{member?.phoneNumber}}</h6>
+                href="#">{{user?.address}}</a></h6>
+              <h6 class="list-group-item"><i class="fa fa-phone float-right"></i>Phone : {{user?.phoneNumber}}</h6>
             </ul>
             <div class="card-body">
               <div class="float-lg-start btn-group btn-group-sm">
-                <a class="btn btn-primary tooltips" routerLink="/user/{{member.username}}" data-placement="top"
+                <a class="btn btn-primary tooltips" routerLink="/user/{{user.username}}" data-placement="top"
                    data-toggle="tooltip" data-original-title="Edit"><i
                   class="fa fa-pencil" style="color: white"></i> </a>
                 <a class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip"

@@ -1,11 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {countries} from "src/app/data/CountryData";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../../model/User";
 import {MemberService} from "../../../_services/member.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {UserService} from "../../../_services/user.service";
+import {ToastService} from "angular-toastify";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-user-form',
@@ -24,7 +26,10 @@ export class UserFormComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private router: Router,
+    private toastr: ToastrService
+  ) {
   }
 
   ngOnInit(): void {
@@ -37,9 +42,6 @@ export class UserFormComponent implements OnInit {
               this.user = user;
               this.initForm();
             },
-            (error: HttpErrorResponse) => {
-              alert(error.message);
-            }
           );
         } else {
           this.editMode = false;
@@ -123,7 +125,6 @@ export class UserFormComponent implements OnInit {
   }
 
   submit() {
-
     if (this.reactiveForm.valid) {
       this.reactiveForm.patchValue({
         role: {
@@ -133,8 +134,8 @@ export class UserFormComponent implements OnInit {
 
       this.userService.addUser(this.reactiveForm.value).subscribe(
         (response: User) => {
-          alert("success");
-          console.log(response);
+          this.router.navigate(['/user']);
+          this.toastr.success('User successfully registered', 'Success');
         },
       );
     } else {

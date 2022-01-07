@@ -8,7 +8,6 @@ import {AdminComponent} from './controllers/admin/admin.component';
 import {LoginComponent} from './controllers/login/login.component';
 import {ForbiddenComponent} from './controllers/forbidden/forbidden.component';
 import {HeaderComponent} from './controllers/header/header.component';
-import {UserComponent} from './controllers/user/user.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
@@ -32,6 +31,8 @@ import {ButtonModule} from "../../projects/components/button/src/lib/button.modu
 import {NgxPaginationModule} from "ngx-pagination";
 import {UserFormComponent} from "./controllers/user/user-form/user-form.component";
 import {Ng2SearchPipeModule} from "ng2-search-filter";
+import {AngularToastifyModule} from "angular-toastify";
+import {ToastContainerModule, ToastrModule} from "ngx-toastr";
 
 
 @NgModule({
@@ -50,12 +51,17 @@ import {Ng2SearchPipeModule} from "ng2-search-filter";
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    AngularToastifyModule,
     ReactiveFormsModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      // positionClass: 'toast-bottom-left',
+    }),
+    ToastContainerModule,
     FormsModule,
     HttpClientModule,
     RouterModule,
     NgxPaginationModule,
-    Ng2SearchPipeModule,
     // * MATERIAL IMPORTS
     MatSidenavModule,
     MatToolbarModule,
