@@ -30,9 +30,11 @@ import {MemberFormComponent} from './controllers/member/member-form/member-form.
 import {ButtonModule} from "../../projects/components/button/src/lib/button.module";
 import {NgxPaginationModule} from "ngx-pagination";
 import {UserFormComponent} from "./controllers/user/user-form/user-form.component";
-import {Ng2SearchPipeModule} from "ng2-search-filter";
+import { FilterPipeModule } from 'ngx-filter-pipe';
 import {AngularToastifyModule} from "angular-toastify";
 import {ToastContainerModule, ToastrModule} from "ngx-toastr";
+import {OrderModule} from "ngx-order-pipe";
+
 
 
 @NgModule({
@@ -70,7 +72,9 @@ import {ToastContainerModule, ToastrModule} from "ngx-toastr";
     MatDividerModule,
     MatListModule,
     // Components
-    ButtonModule
+    OrderModule,
+    ButtonModule,
+    FilterPipeModule
   ],
   providers: [
     AuthGuard, {

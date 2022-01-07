@@ -6,28 +6,34 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AuthGuard} from "../../_auth/auth.guard";
 import {NgxPaginationModule} from "ngx-pagination";
-import { UserFormComponent } from './user-form/user-form.component';
+import {UserFormComponent} from './user-form/user-form.component';
+import {FilterPipeModule} from "ngx-filter-pipe";
+import {OrderModule} from "ngx-order-pipe";
 
 const routes: Routes = [
   {path: '', component: UserComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
   {
     path: 'add',
-    component: UserFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
+    component: UserFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}
+  },
   {
     path: ':username',
-    component: UserFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}}
+    component: UserFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}
+  }
 ];
 
 @NgModule({
   declarations: [UserComponent,],
-    imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        ReactiveFormsModule,
-        FormsModule,
-        HttpClientModule,
-        NgxPaginationModule,
-    ]
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule,
+    NgxPaginationModule,
+    OrderModule,
+    FilterPipeModule
+  ]
 })
 
 export class UserModule {

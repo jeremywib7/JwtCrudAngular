@@ -6,6 +6,10 @@
         <div class="container-fluid">
           <button routerLink="/user/add" class="btn btn-primary">Add User</button>
           <form class="d-flex">
+            <button (click)="sort('userFirstName')" class="btn btn-dark me-2">
+              <i *ngIf="!isDescOrder" class="fa fa-sort-alpha-desc"></i>
+              <i *ngIf="isDescOrder" class="fa fa-sort-alpha-asc"></i>
+            </button>
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
@@ -13,7 +17,7 @@
       </nav>
 
       <div class="row justify-content-center mt-5">
-        <div *ngFor="let user of users | paginate: { itemsPerPage: 10, currentPage: p }" class="col-md-6 col-xl-3">
+        <div *ngFor="let user of users | orderBy: orderHeader: isDescOrder | paginate: { itemsPerPage: 4, currentPage: p }" class="col-md-6 col-xl-3">
           <div class="card m-b-30 shadow-sm">
             <div class="card-body row">
               <div class="col-6">
@@ -110,7 +114,7 @@
                         </div>
                         <div class="col">
                           <div class="form-group">
-                            <label for="country" class="form-label">Nationality</label>
+                            <label class="form-label">Nationality</label>
 <!--                            <select ngModel="{{editMember?.nationality}}" name="nationality" id="editCountry"-->
 <!--                                    class="form-select">-->
 <!--                              <option disabled selected>Select Country</option>-->
@@ -151,7 +155,7 @@
                       <div class="modal-footer">
                         <button type="button" id="edit-member-form" class="btn btn-secondary" data-dismiss="modal">Close
                         </button>
-                        <button [disabled]="editForm.invalid" (click)="onEditMember(editForm.value)" type="submit"
+                        <button [disabled]="editForm.invalid"  type="submit"
                                 class="btn btn-primary">Save changes
                         </button>
                       </div>
@@ -215,224 +219,6 @@
       </div>
       <div class="modal-body">
         <!--                <form #addForm="ngForm" (ngSubmit)="onAddMember(addForm)">-->
-        <form [formGroup]="reactiveForm">
-          <div class="row g-3">
-            <div class="col">
-              <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input type="text" name="firstName" class="form-control" id="firstName"
-                       placeholder="First name"
-                       formControlName="firstName">
-                <div *ngIf="reactiveForm.controls.firstName.errors && (reactiveForm.controls.firstName.touched ||
-                       reactiveForm.controls.firstName.dirty) " style="color: red">
-                  <div *ngIf="reactiveForm.hasError('required','firstName')">
-                    First Name is required
-                  </div>
-                  <div *ngIf="reactiveForm.hasError('pattern','firstName')">
-                    First Name format is invalid
-                  </div>
-                  <div *ngIf="reactiveForm.hasError('minlength','firstName')">
-                    First Name must be 3 characters or more
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-group">
-                <label for="lastName">Last Name</label>
-                <input type="text" name="lastName" class="form-control" id="lastName"
-                       placeholder="Last name"
-                       formControlName="lastName">
-                <div *ngIf="reactiveForm.controls.lastName.errors && (reactiveForm.controls.lastName.touched ||
-                       reactiveForm.controls.lastName.dirty) " style="color: red">
-                  <div *ngIf="reactiveForm.hasError('required','lastName')">
-                    Last Name is required
-                  </div>
-                  <div *ngIf="reactiveForm.hasError('pattern','lastName')">
-                    Last Name format is invalid
-                  </div>
-                  <div *ngIf="reactiveForm.hasError('minlength','lastName')">
-                    Last Name must be 3 characters or more
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="email">Username</label>
-            <input type="text" name="email" class="form-control" id="username" placeholder="Username"
-                   formControlName="username">
-            <div *ngIf="reactiveForm.controls.username.errors && (reactiveForm.controls.username.touched ||
-                       reactiveForm.controls.username.dirty) " style="color: red">
-              <div *ngIf="reactiveForm.hasError('required','username')">
-                Username is required
-              </div>
-              <div *ngIf="reactiveForm.hasError('minlength','username')">
-                Username must be 3 characters or more
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" name="email" class="form-control" id="email" placeholder="Email"
-                   formControlName="email">
-            <div *ngIf="reactiveForm.controls.email.errors && (reactiveForm.controls.email.touched ||
-                       reactiveForm.controls.email.dirty) " style="color: red">
-              <div *ngIf="reactiveForm.hasError('required','email')">
-                Email is required
-              </div>
-              <div *ngIf="reactiveForm.hasError('pattern','email')">
-                Email format is invalid
-              </div>
-              <div *ngIf="reactiveForm.hasError('minlength','email')">
-                Email must be 3 characters or more
-              </div>
-            </div>
-          </div>
-          <fieldset class="row mb-3">
-            <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
-            <div class="col-sm-10">
-              <div class="form-check">
-                <input name="gender" class="form-check-input" type="radio" id="maleRadioButton"
-                       value="MALE" formControlName="gender">
-                <label class="form-check-label" for="maleRadioButton">
-                  Male
-                </label>
-              </div>
-              <div class="form-check">
-                <input name="gender" class="form-check-input" type="radio" id="femaleRadioButton"
-                       value="FEMALE" formControlName="gender">
-                <label class="form-check-label" for="femaleRadioButton">
-                  Female
-                </label>
-              </div>
-              <div *ngIf="reactiveForm.controls.gender.errors && (reactiveForm.controls.gender.touched ||
-                       reactiveForm.controls.gender.dirty) " style="color: red">
-                <div *ngIf="reactiveForm.hasError('required','gender')">
-                  Gender is not selected
-                </div>
-              </div>
-            </div>
-          </fieldset>
-          <div class="row g-3">
-            <div class="col">
-              <div class="form-group">
-                <label>Date Joined</label>
-                <input type="date" name="dateJoined" max="3000-12-31"
-                       min="1000-01-01" class="form-control" formControlName="dateJoined">
-                <div *ngIf="reactiveForm.controls.dateJoined.errors && (reactiveForm.controls.dateJoined.touched ||
-                       reactiveForm.controls.dateJoined.dirty) " style="color: red">
-                  <div *ngIf="reactiveForm.hasError('required','dateJoined')">
-                    Date is required
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputState" class="form-label">Rank</label>
-                <select name="rank" id="inputState" class="form-select" formControlName="rank">
-                  <option disabled selected>Select Rank</option>
-                  <option value="Bronze">Bronze</option>
-                  <option value="Silver">Silver</option>
-                  <option value="Gold">Gold</option>
-                  <option value="Platinum">Platinum</option>
-                </select>
-                <div *ngIf="reactiveForm.controls.rank.errors && (reactiveForm.controls.rank.touched ||
-                       reactiveForm.controls.rank.dirty) " style="color: red">
-                  <div *ngIf="reactiveForm.hasError('required','rank')">
-                    Rank is required
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-group">
-                <label for="country" class="form-label">Nationality</label>
-                <select name="nationality" id="country" class="form-select"
-                        formControlName="nationality">
-                  <option disabled selected>Select Country</option>
-                  <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>
-                </select>
-                <div *ngIf="reactiveForm.controls.nationality.errors && (reactiveForm.controls.nationality.touched ||
-                       reactiveForm.controls.nationality.dirty) " style="color: red">
-                  <div *ngIf="reactiveForm.hasError('required','nationality')">
-                    Nationality is required
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="phoneNumber">Phone</label>
-                <input type="text" name="phoneNumber" class="form-control" id="phoneNumber"
-                       placeholder="Phone" formControlName="phoneNumber">
-                <div *ngIf="reactiveForm.controls.phoneNumber.errors && (reactiveForm.controls.phoneNumber.touched ||
-                       reactiveForm.controls.phoneNumber.dirty) " style="color: red">
-                  <div *ngIf="reactiveForm.hasError('required','phoneNumber')">
-                    Phone number is required
-                  </div>
-                  <div *ngIf="reactiveForm.hasError('pattern','phoneNumber')">
-                    Phone number format is invalid
-                  </div>
-                  <div *ngIf="reactiveForm.hasError('minlength','phoneNumber')">
-                    Phone number must be between 10 and 14 characters
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="address">Address</label>
-            <input type="text" name="address" class="form-control" id="address" placeholder="Address"
-                   formControlName="address">
-            <div *ngIf="reactiveForm.controls.address.errors && (reactiveForm.controls.address.touched ||
-                       reactiveForm.controls.address.dirty) " style="color: red">
-              <div *ngIf="reactiveForm.hasError('required','address')">
-                Address is required
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="customFile">Profile Picture</label>
-            <input name="profilePicture" type="file" accept="image/*" (change)="onSelectFile($event)"
-                   class="form-control" id="customFile"
-                   formControlName="imageUrl"/>
-          </div>
-          <!--                  <div class="form-group">-->
-          <!--                    <label for="imageUrl">Image URL</label>-->
-          <!--                    <input type="text"  name="imageUrl" class="form-control" id="imageUrl"-->
-          <!--                           placeholder="Image URL" formControlName="imageUrl">-->
-          <!--                    <div *ngIf="reactiveForm.controls.imageUrl.errors && (reactiveForm.controls.imageUrl.touched ||-->
-          <!--                     reactiveForm.controls.imageUrl.dirty) " style="color: red">-->
-          <!--                      <div *ngIf="reactiveForm.hasError('required','imageUrl')">-->
-          <!--                        Image URL is required-->
-          <!--                      </div>-->
-          <!--                    </div>-->
-          <!--                  </div>-->
-          <div class="form-group">
-            <label for="bankAccount">Bank Account</label>
-            <input type="text" name="bankAccount" class="form-control" id="bankAccount"
-                   placeholder="Bank Account" formControlName="bankAccount">
-            <div *ngIf="reactiveForm.controls.bankAccount.errors && (reactiveForm.controls.bankAccount.touched ||
-                       reactiveForm.controls.bankAccount.dirty) " style="color: red">
-              <div *ngIf="reactiveForm.hasError('required','bankAccount')">
-                Bank Account is required
-              </div>
-              <div *ngIf="reactiveForm.hasError('pattern','bankAccount')">
-                Bank Account must be a number
-              </div>
-              <div *ngIf="reactiveForm.hasError('minlength','bankAccount')">
-                Bank Account must be 3 characters or more
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" id="add-member-form" class="btn btn-secondary" data-dismiss="modal">Close
-            </button>
-            <!--                    <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>-->
-            <button (click)="onAddMember(reactiveForm)" type="submit"
-                    class="btn btn-primary">Save changes
-            </button>
-          </div>
-        </form>
       </div>
     </div>
   </div>
