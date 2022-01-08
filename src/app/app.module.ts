@@ -34,6 +34,7 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
 import {AngularToastifyModule} from "angular-toastify";
 import {ToastContainerModule, ToastrModule} from "ngx-toastr";
 import {OrderModule} from "ngx-order-pipe";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -64,6 +65,7 @@ import {OrderModule} from "ngx-order-pipe";
     HttpClientModule,
     RouterModule,
     NgxPaginationModule,
+    NgbModule,
     // * MATERIAL IMPORTS
     MatSidenavModule,
     MatToolbarModule,
@@ -74,7 +76,8 @@ import {OrderModule} from "ngx-order-pipe";
     // Components
     OrderModule,
     ButtonModule,
-    FilterPipeModule
+    FilterPipeModule,
+    NgbModule
   ],
   providers: [
     AuthGuard, {

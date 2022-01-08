@@ -27,6 +27,10 @@ export class UserService {
     return this.httpClient.post<User>(`${this.apiServerUrl}/user/register`, user );
   }
 
+  public deleteUser(username: string): Observable<User> {
+    return this.httpClient.delete<User>(`${this.apiServerUrl}/user/delete/${username}`);
+  }
+
   public getUsers(): Observable<User[]> {
     return this.httpClient.get<User[]>(`${this.apiServerUrl}/user/all`);
   }

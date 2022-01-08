@@ -1,23 +1,24 @@
 <div class="container-fluid page">
   <div class="d-flex page__box p-3 mt-2 justify-content-center" style="font-size: 25px">User List</div>
-  <div class="page__content shadow p-3 position-relative">
+  <div class="page__content shadow p-3 card-body d-flex flex-column">
     <div class="container" id="main-container">
       <nav class="navbar navbar-expand navbar-light bg-light">
         <div class="container-fluid">
           <button routerLink="/user/add" class="btn btn-primary">Add User</button>
-          <form class="d-flex">
+          <div class="d-flex">
             <button (click)="sort('userFirstName')" class="btn btn-dark me-2">
               <i *ngIf="!isDescOrder" class="fa fa-sort-alpha-desc"></i>
               <i *ngIf="isDescOrder" class="fa fa-sort-alpha-asc"></i>
             </button>
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
+            <input [(ngModel)]="searchInput.userFirstName" class="form-control me-2" type="search" placeholder="Search"
+                   aria-label="Search">
+          </div>
         </div>
       </nav>
 
       <div class="row justify-content-center mt-5">
-        <div *ngFor="let user of users | orderBy: orderHeader: isDescOrder | paginate: { itemsPerPage: 4, currentPage: p }" class="col-md-6 col-xl-3">
+        <div *ngFor="let user of users | orderBy: orderHeader: isDescOrder | filterBy: searchInput |
+         paginate: { itemsPerPage: 4, currentPage: p }" class="col-md-6 col-xl-3">
           <div class="card m-b-30 shadow-sm">
             <div class="card-body row">
               <div class="col-6">
@@ -25,7 +26,6 @@
               </div>
               <div class="col-6 card-title align-self-center mb-0">
                 <h5>{{user?.userFirstName}}</h5>
-<!--                <h5 class="m-0">{{member?.rank}}</h5>-->
               </div>
             </div>
             <ul class="list-group list-group-flush">
@@ -38,593 +38,68 @@
                 <a class="btn btn-primary tooltips" routerLink="/user/{{user.username}}" data-placement="top"
                    data-toggle="tooltip" data-original-title="Edit"><i
                   class="fa fa-pencil" style="color: white"></i> </a>
-                <a class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip"
+
+                <a (click)="open(content)" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip"
                    data-original-title="Delete"><i class="fa fa-times" style="color: white"></i></a>
               </div>
             </div>
-
-            <!-- Edit Employee Modal -->
-            <div class="modal fade" id="editMemberModal" data-bs-backdrop="static" data-bs-keyboard="false"
-                 tabindex="-1"
-                 aria-labelledby="editMemberModalLabel" aria-hidden="true">
-              <div class="modal-dialog  modal-lg  modal-dialog-scrollable" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="editMemberModalLabel">Edit User</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <form #editForm="ngForm">
-                      <div class="form-group">
-<!--                        <label for="editId">Id</label>-->
-<!--                        <input disabled type="text" ngModel="{{editMember?.id}}" name="id" class="form-control"-->
-<!--                               id="editId"-->
-<!--                               placeholder="Id" required>-->
-                      </div>
-                      <div class="form-group">
-<!--                        <input disabled type="text" ngModel="{{editMember?.memberCode}}" name="editMemberCode"-->
-<!--                               class="form-control" id="editMemberCode" placeholder="Id" required>-->
-                      </div>
-                      <div class="form-group">
-                        <label for="editName">Name</label>
-                        <input type="text" name="name" class="form-control"
-                               id="editName"
-                               placeholder="Name" required>
-                      </div>
-                      <fieldset class="row mb-3">
-                        <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
-                        <div class="col-sm-10">
-                          <div class="form-check">
-                            <input ngModel="{{editUsers?.gender}}" name="gender" class="form-check-input" type="radio"
-                                   id="editMaleRadioButton"
-                                   value="MALE">
-                            <label class="form-check-label" for="editMaleRadioButton">
-                              Male
-                            </label>
-                          </div>
-                          <div class="form-check">
-                            <input ngModel="{{editUsers?.gender}}" name="gender" class="form-check-input" type="radio"
-                                   id="editFemaleRadioButton"
-                                   value="FEMALE">
-                            <label class="form-check-label" for="editFemaleRadioButton">
-                              Female
-                            </label>
-                          </div>
-                        </div>
-                      </fieldset>
-                      <div class="row g-3">
-                        <div class="col">
-                          <div class="form-group">
-                            <label>Date Joined</label>
-                            <input ngModel="{{editUsers?.dateJoined}}" type="date" name="dateJoined" max="3000-12-31"
-                                   min="1000-01-01" class="form-control">
-                          </div>
-<!--                          <div class="form-group">-->
-<!--                            <label for="inputState" class="form-label">Rank</label>-->
-<!--                            <select ngModel="{{editMember?.rank}}" name="rank" id="editInputRank" class="form-select">-->
-<!--                              <option disabled>Select Rank</option>-->
-<!--                              <option value="Bronze">Bronze</option>-->
-<!--                              <option value="Silver">Silver</option>-->
-<!--                              <option value="Gold">Gold</option>-->
-<!--                              <option value="Platinum">Platinum</option>-->
-<!--                            </select>-->
-<!--                          </div>-->
-                        </div>
-                        <div class="col">
-                          <div class="form-group">
-                            <label class="form-label">Nationality</label>
-<!--                            <select ngModel="{{editMember?.nationality}}" name="nationality" id="editCountry"-->
-<!--                                    class="form-select">-->
-<!--                              <option disabled selected>Select Country</option>-->
-<!--                              <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>-->
-<!--                            </select>-->
-                          </div>
-                          <div class="form-group">
-                            <label for="editPhoneNumber">Phone</label>
-                            <input type="text" ngModel="{{editUsers?.phoneNumber}}" name="phoneNumber"
-                                   class="form-control"
-                                   id="editPhoneNumber"
-                                   placeholder="Phone" required>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label for="editAddress">Address</label>
-                        <input type="text" ngModel="{{editUsers?.address}}" name="address" class="form-control"
-                               id="editAddress" placeholder="Address"
-                               required>
-                      </div>
-                      <!--                  <div class="form-group">-->
-                      <!--                    <label class="form-label" for="editCustomImage">Profile Picture</label>-->
-                      <!--                    <input ngModel="test.jpg" name="profilePicture" type="file" accept="image/*" class="form-control" id="editCustomImage"/>-->
-                      <!--                  </div>-->
-                      <div class="form-group">
-                        <label for="editImageUrl">Image URL</label>
-                        <input type="text" ngModel="{{editUsers?.imageUrl}}" name="imageUrl" class="form-control"
-                               id="editImageUrl"
-                               placeholder="Image URL" required>
-                      </div>
-                      <div class="form-group">
-                        <label for="editBankAccount">Bank Account</label>
-                        <input type="text" ngModel="{{editUsers?.bankAccount}}" name="bankAccount" class="form-control"
-                               id="editBankAccount"
-                               placeholder="Bank Account" required>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" id="edit-member-form" class="btn btn-secondary" data-dismiss="modal">Close
-                        </button>
-                        <button [disabled]="editForm.invalid"  type="submit"
-                                class="btn btn-primary">Save changes
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Delete Modal -->
-            <div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-labelledby="deleteMemberModalLabel"
-                 aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="deleteMemberModalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    delete
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
+
+          <!-- Modal Delete User -->
+          <ng-template #content let-modal>
+            <div class="modal-header">
+              <h4 class="modal-title" id="modal-basic-title">Delete User ?</h4>
+              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  Delete user {{user?.username}} ?
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
+              <button type="button" class="btn btn-outline-primary" (click)="onDeleteUser(user?.username)">Delete
+              </button>
+
+            </div>
+          </ng-template>
+
+        </div>
+
+        <div *ngIf="( users | filterBy: searchInput).length === 0 && ( users ).length != 0 "
+             class="d-flex align-items-center justify-content-center"
+             style="width: 200px; height: 200px">
+          <div class="text-center mt-2">No Data</div>
+        </div>
+
+        <div *ngIf="( users).length === 0"
+             class="d-flex align-items-center justify-content-center"
+             style="width: 200px; height: 200px">
+          <div class="text-center mt-2">No Data</div>
         </div>
       </div>
-      <div class="text-center">
-        <style>
-          .my-pagination /deep/ .ngx-pagination .current {
-            background: red;
-          }
-        </style>
-
-        <pagination-controls
-          (pageChange)="p = $event"
-          class="my-pagination"
-        ></pagination-controls>
-      </div>
-
     </div>
-  </div>
-</div>
+    <div class="text-center mt-auto">
+      <style>
+        .my-pagination /deep/ .ngx-pagination .current {
+          background: red;
+        }
+      </style>
 
-<!-- Add Employee Modal -->
-<div class="modal fade" id="addMemberModal" data-bs-backdrop="static" data-backdrop="false" data-bs-keyboard="false"
-     tabindex="-1"
-     aria-labelledby="addMemberModalLabel" aria-hidden="true" style="z-index: 1000000000">
-  <div class="modal-dialog  modal-lg  modal-dialog-scrollable" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addMemberModalLabel">Add User</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!--                <form #addForm="ngForm" (ngSubmit)="onAddMember(addForm)">-->
-      </div>
+      <pagination-controls
+        (pageChange)="p = $event"
+        class="my-pagination"
+      ></pagination-controls>
     </div>
+
   </div>
 </div>
 
 
-<!--<div class="container" id="main-container">-->
-<!--  <nav class="navbar navbar-expand navbar-light bg-light">-->
-<!--    <div class="container-fluid">-->
-<!--      <button (click)="onOpenModal(null, 'add')" class="btn btn-primary">Add</button>-->
-<!--      <form class="d-flex">-->
-<!--        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
-<!--        <button class="btn btn-outline-success" type="submit">Search</button>-->
-<!--      </form>-->
-<!--    </div>-->
-<!--  </nav>-->
 
-<!--  <div class="row justify-content-center mt-5">-->
-<!--    <div *ngFor="let member of members" class="col-md-6 col-xl-3">-->
-<!--      <div class="card m-b-30">-->
-<!--        <div class="card-body row">-->
-<!--          <div class="col-6">-->
-<!--            <a href=""><img src="{{member.imageUrl}}" class="img-fluid rounded-circle w-60"></a>-->
-<!--          </div>-->
-<!--          <div class="col-6 card-title align-self-center mb-0">-->
-<!--            <h5>{{member?.firstName}}</h5>-->
-<!--            <p class="m-0">{{member?.rank}}</p>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <ul class="list-group list-group-flush">-->
-<!--          <li class="list-group-item"><i class="fa fa-home float-right"></i>Address : <a-->
-<!--            href="#">{{member?.address}}</a></li>-->
-<!--          <li class="list-group-item"><i class="fa fa-phone float-right"></i>Phone : {{member?.phoneNumber}}</li>-->
-<!--        </ul>-->
-<!--        <div class="card-body">-->
-<!--          <div class="float-lg-start btn-group btn-group-sm">-->
-<!--            <a class="btn btn-primary tooltips" (click)="onOpenModal(member, 'edit')" data-placement="top"-->
-<!--               data-toggle="tooltip" data-original-title="Edit"><i-->
-<!--              class="fa fa-pencil" style="color: white"></i> </a>-->
-<!--            <a class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip"-->
-<!--               data-original-title="Delete"><i class="fa fa-times" style="color: white"></i></a>-->
-<!--          </div>-->
-<!--        </div>-->
 
-<!--        &lt;!&ndash; Add Employee Modal &ndash;&gt;-->
-<!--        <div class="modal fade" id="addMemberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"-->
-<!--             aria-labelledby="addMemberModalLabel" aria-hidden="true" style="">-->
-<!--          <div class="modal-dialog  modal-lg  modal-dialog-scrollable" role="document">-->
-<!--            <div class="modal-content">-->
-<!--              <div class="modal-header">-->
-<!--                <h5 class="modal-title" id="addMemberModalLabel">Add User</h5>-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                  <span aria-hidden="true">&times;</span>-->
-<!--                </button>-->
-<!--              </div>-->
-<!--              <div class="modal-body">-->
-<!--                &lt;!&ndash;                <form #addForm="ngForm" (ngSubmit)="onAddMember(addForm)">&ndash;&gt;-->
-<!--                <form [formGroup]="reactiveForm">-->
-<!--                  <div class="row g-3">-->
-<!--                    <div class="col">-->
-<!--                      <div class="form-group">-->
-<!--                        <label for="firstName">First Name</label>-->
-<!--                        <input type="text"  name="firstName" class="form-control" id="firstName"-->
-<!--                               placeholder="First name"-->
-<!--                               formControlName="firstName">-->
-<!--                        <div *ngIf="reactiveForm.controls.firstName.errors && (reactiveForm.controls.firstName.touched ||-->
-<!--                     reactiveForm.controls.firstName.dirty) " style="color: red">-->
-<!--                          <div *ngIf="reactiveForm.hasError('required','firstName')">-->
-<!--                            First Name is required-->
-<!--                          </div>-->
-<!--                          <div *ngIf="reactiveForm.hasError('pattern','firstName')">-->
-<!--                            First Name format is invalid-->
-<!--                          </div>-->
-<!--                          <div *ngIf="reactiveForm.hasError('minlength','firstName')">-->
-<!--                            First Name must be 3 characters or more-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                    <div class="col">-->
-<!--                      <div class="form-group">-->
-<!--                        <label for="lastName">Last Name</label>-->
-<!--                        <input type="text"  name="lastName" class="form-control" id="lastName"-->
-<!--                               placeholder="Last name"-->
-<!--                               formControlName="lastName">-->
-<!--                        <div *ngIf="reactiveForm.controls.lastName.errors && (reactiveForm.controls.lastName.touched ||-->
-<!--                     reactiveForm.controls.lastName.dirty) " style="color: red">-->
-<!--                          <div *ngIf="reactiveForm.hasError('required','lastName')">-->
-<!--                            Last Name is required-->
-<!--                          </div>-->
-<!--                          <div *ngIf="reactiveForm.hasError('pattern','lastName')">-->
-<!--                            Last Name format is invalid-->
-<!--                          </div>-->
-<!--                          <div *ngIf="reactiveForm.hasError('minlength','lastName')">-->
-<!--                            Last Name must be 3 characters or more-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="email">Email</label>-->
-<!--                    <input type="text"  name="email" class="form-control" id="email" placeholder="Email"-->
-<!--                           formControlName="email">-->
-<!--                    <div *ngIf="reactiveForm.controls.email.errors && (reactiveForm.controls.email.touched ||-->
-<!--                     reactiveForm.controls.email.dirty) " style="color: red">-->
-<!--                      <div *ngIf="reactiveForm.hasError('required','email')">-->
-<!--                        Email is required-->
-<!--                      </div>-->
-<!--                      <div *ngIf="reactiveForm.hasError('pattern','email')">-->
-<!--                        Email format is invalid-->
-<!--                      </div>-->
-<!--                      <div *ngIf="reactiveForm.hasError('minlength','email')">-->
-<!--                        Email must be 3 characters or more-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                  <fieldset class="row mb-3">-->
-<!--                    <legend class="col-form-label col-sm-2 pt-0">Gender</legend>-->
-<!--                    <div class="col-sm-10">-->
-<!--                      <div class="form-check">-->
-<!--                        <input  name="gender" class="form-check-input" type="radio" id="maleRadioButton"-->
-<!--                               value="MALE" formControlName="gender">-->
-<!--                        <label class="form-check-label" for="maleRadioButton">-->
-<!--                          Male-->
-<!--                        </label>-->
-<!--                      </div>-->
-<!--                      <div class="form-check">-->
-<!--                        <input  name="gender" class="form-check-input" type="radio" id="femaleRadioButton"-->
-<!--                               value="FEMALE" formControlName="gender">-->
-<!--                        <label class="form-check-label" for="femaleRadioButton">-->
-<!--                          Female-->
-<!--                        </label>-->
-<!--                      </div>-->
-<!--                      <div *ngIf="reactiveForm.controls.gender.errors && (reactiveForm.controls.gender.touched ||-->
-<!--                     reactiveForm.controls.gender.dirty) " style="color: red">-->
-<!--                        <div *ngIf="reactiveForm.hasError('required','gender')">-->
-<!--                          Gender is not selected-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </fieldset>-->
-<!--                  <div class="row g-3">-->
-<!--                    <div class="col">-->
-<!--                      <div class="form-group">-->
-<!--                        <label>Date Joined</label>-->
-<!--                        <input  type="date" name="dateJoined" max="3000-12-31"-->
-<!--                               min="1000-01-01" class="form-control" formControlName="dateJoined">-->
-<!--                        <div *ngIf="reactiveForm.controls.dateJoined.errors && (reactiveForm.controls.dateJoined.touched ||-->
-<!--                     reactiveForm.controls.dateJoined.dirty) " style="color: red">-->
-<!--                          <div *ngIf="reactiveForm.hasError('required','dateJoined')">-->
-<!--                            Date is required-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                      <div class="form-group">-->
-<!--                        <label for="inputState" class="form-label">Rank</label>-->
-<!--                        <select  name="rank" id="inputState" class="form-select" formControlName="rank">-->
-<!--                          <option disabled selected>Select Rank</option>-->
-<!--                          <option value="Bronze">Bronze</option>-->
-<!--                          <option value="Silver">Silver</option>-->
-<!--                          <option value="Gold">Gold</option>-->
-<!--                          <option value="Platinum">Platinum</option>-->
-<!--                        </select>-->
-<!--                        <div *ngIf="reactiveForm.controls.rank.errors && (reactiveForm.controls.rank.touched ||-->
-<!--                     reactiveForm.controls.rank.dirty) " style="color: red">-->
-<!--                          <div *ngIf="reactiveForm.hasError('required','rank')">-->
-<!--                            Rank is required-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                    <div class="col">-->
-<!--                      <div class="form-group">-->
-<!--                        <label for="country" class="form-label">Nationality</label>-->
-<!--                        <select  name="nationality" id="country" class="form-select"-->
-<!--                                formControlName="nationality">-->
-<!--                          <option disabled selected>Select Country</option>-->
-<!--                          <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>-->
-<!--                        </select>-->
-<!--                        <div *ngIf="reactiveForm.controls.nationality.errors && (reactiveForm.controls.nationality.touched ||-->
-<!--                     reactiveForm.controls.nationality.dirty) " style="color: red">-->
-<!--                          <div *ngIf="reactiveForm.hasError('required','nationality')">-->
-<!--                            Nationality is required-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                      <div class="form-group">-->
-<!--                        <label for="phoneNumber">Phone</label>-->
-<!--                        <input type="text"  name="phoneNumber" class="form-control" id="phoneNumber"-->
-<!--                               placeholder="Phone" formControlName="phoneNumber">-->
-<!--                        <div *ngIf="reactiveForm.controls.phoneNumber.errors && (reactiveForm.controls.phoneNumber.touched ||-->
-<!--                     reactiveForm.controls.phoneNumber.dirty) " style="color: red">-->
-<!--                          <div *ngIf="reactiveForm.hasError('required','phoneNumber')">-->
-<!--                            Phone number is required-->
-<!--                          </div>-->
-<!--                          <div *ngIf="reactiveForm.hasError('pattern','phoneNumber')">-->
-<!--                            Phone number format is invalid-->
-<!--                          </div>-->
-<!--                          <div *ngIf="reactiveForm.hasError('minlength','phoneNumber')">-->
-<!--                            Phone number must be between 10 and 14 characters-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="address">Address</label>-->
-<!--                    <input type="text"  name="address" class="form-control" id="address" placeholder="Address"-->
-<!--                           formControlName="address">-->
-<!--                    <div *ngIf="reactiveForm.controls.address.errors && (reactiveForm.controls.address.touched ||-->
-<!--                     reactiveForm.controls.address.dirty) " style="color: red">-->
-<!--                      <div *ngIf="reactiveForm.hasError('required','address')">-->
-<!--                        Address is required-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                  <div class="form-group">-->
-<!--                    <label class="form-label" for="customFile">Profile Picture</label>-->
-<!--                    <input name="profilePicture" type="file" accept="image/*" (change)="onSelectFile($event)" class="form-control" id="customFile"-->
-<!--                           formControlName="imageUrl"/>-->
-<!--                  </div>-->
-<!--&lt;!&ndash;                  <div class="form-group">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <label for="imageUrl">Image URL</label>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <input type="text"  name="imageUrl" class="form-control" id="imageUrl"&ndash;&gt;-->
-<!--&lt;!&ndash;                           placeholder="Image URL" formControlName="imageUrl">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div *ngIf="reactiveForm.controls.imageUrl.errors && (reactiveForm.controls.imageUrl.touched ||&ndash;&gt;-->
-<!--&lt;!&ndash;                     reactiveForm.controls.imageUrl.dirty) " style="color: red">&ndash;&gt;-->
-<!--&lt;!&ndash;                      <div *ngIf="reactiveForm.hasError('required','imageUrl')">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Image URL is required&ndash;&gt;-->
-<!--&lt;!&ndash;                      </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                  </div>&ndash;&gt;-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="bankAccount">Bank Account</label>-->
-<!--                    <input type="text"  name="bankAccount" class="form-control" id="bankAccount"-->
-<!--                           placeholder="Bank Account" formControlName="bankAccount">-->
-<!--                    <div *ngIf="reactiveForm.controls.bankAccount.errors && (reactiveForm.controls.bankAccount.touched ||-->
-<!--                     reactiveForm.controls.bankAccount.dirty) " style="color: red">-->
-<!--                      <div *ngIf="reactiveForm.hasError('required','bankAccount')">-->
-<!--                        Bank Account is required-->
-<!--                      </div>-->
-<!--                      <div *ngIf="reactiveForm.hasError('pattern','bankAccount')">-->
-<!--                        Bank Account must be a number-->
-<!--                      </div>-->
-<!--                      <div *ngIf="reactiveForm.hasError('minlength','bankAccount')">-->
-<!--                        Bank Account must be 3 characters or more-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                  <div class="modal-footer">-->
-<!--                    <button type="button" id="add-member-form" class="btn btn-secondary" data-dismiss="modal">Close-->
-<!--                    </button>-->
-<!--                    &lt;!&ndash;                    <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>&ndash;&gt;-->
-<!--                    <button (click)="onAddMember(reactiveForm)" type="submit"-->
-<!--                            class="btn btn-primary">Save changes-->
-<!--                    </button>-->
-<!--                  </div>-->
-<!--                </form>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        &lt;!&ndash; Edit Employee Modal &ndash;&gt;-->
-<!--        <div class="modal fade" id="editMemberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"-->
-<!--             aria-labelledby="editMemberModalLabel" aria-hidden="true">-->
-<!--          <div class="modal-dialog  modal-lg  modal-dialog-scrollable" role="document">-->
-<!--            <div class="modal-content">-->
-<!--              <div class="modal-header">-->
-<!--                <h5 class="modal-title" id="editMemberModalLabel">Edit User</h5>-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                  <span aria-hidden="true">&times;</span>-->
-<!--                </button>-->
-<!--              </div>-->
-<!--              <div class="modal-body">-->
-<!--                <form #editForm="ngForm">-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="editId">Id</label>-->
-<!--                    <input disabled type="text" ngModel="{{editMember?.id}}" name="id" class="form-control" id="editId"-->
-<!--                           placeholder="Id" required>-->
-<!--                  </div>-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="editMemberCode">User Code</label>-->
-<!--                    <input disabled type="text" ngModel="{{editMember?.memberCode}}" name="editMemberCode"-->
-<!--                           class="form-control" id="editMemberCode" placeholder="Id" required>-->
-<!--                  </div>-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="editName">Name</label>-->
-<!--                    <input type="text" ngModel="{{editMember?.firstName}}" name="name" class="form-control"-->
-<!--                           id="editName"-->
-<!--                           placeholder="Name" required>-->
-<!--                  </div>-->
-<!--                  <fieldset class="row mb-3">-->
-<!--                    <legend class="col-form-label col-sm-2 pt-0">Gender</legend>-->
-<!--                    <div class="col-sm-10">-->
-<!--                      <div class="form-check">-->
-<!--                        <input ngModel="{{editMember?.gender}}" name="gender" class="form-check-input" type="radio"-->
-<!--                               id="editMaleRadioButton"-->
-<!--                               value="MALE">-->
-<!--                        <label class="form-check-label" for="editMaleRadioButton">-->
-<!--                          Male-->
-<!--                        </label>-->
-<!--                      </div>-->
-<!--                      <div class="form-check">-->
-<!--                        <input ngModel="{{editMember?.gender}}" name="gender" class="form-check-input" type="radio"-->
-<!--                               id="editFemaleRadioButton"-->
-<!--                               value="FEMALE">-->
-<!--                        <label class="form-check-label" for="editFemaleRadioButton">-->
-<!--                          Female-->
-<!--                        </label>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </fieldset>-->
-<!--                  <div class="row g-3">-->
-<!--                    <div class="col">-->
-<!--                      <div class="form-group">-->
-<!--                        <label>Date Joined</label>-->
-<!--                        <input ngModel="{{editMember?.dateJoined}}" type="date" name="dateJoined" max="3000-12-31"-->
-<!--                               min="1000-01-01" class="form-control">-->
-<!--                      </div>-->
-<!--                      <div class="form-group">-->
-<!--                        <label for="inputState" class="form-label">Rank</label>-->
-<!--                        <select ngModel="{{editMember?.rank}}" name="rank" id="editInputRank" class="form-select">-->
-<!--                          <option disabled>Select Rank</option>-->
-<!--                          <option value="Bronze">Bronze</option>-->
-<!--                          <option value="Silver">Silver</option>-->
-<!--                          <option value="Gold">Gold</option>-->
-<!--                          <option value="Platinum">Platinum</option>-->
-<!--                        </select>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                    <div class="col">-->
-<!--                      <div class="form-group">-->
-<!--                        <label for="country" class="form-label">Nationality</label>-->
-<!--                        <select ngModel="{{editMember?.nationality}}" name="nationality" id="editCountry"-->
-<!--                                class="form-select">-->
-<!--                          <option disabled selected>Select Country</option>-->
-<!--                          <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>-->
-<!--                        </select>-->
-<!--                      </div>-->
-<!--                      <div class="form-group">-->
-<!--                        <label for="editPhoneNumber">Phone</label>-->
-<!--                        <input type="text" ngModel="{{editMember?.phoneNumber}}" name="phoneNumber" class="form-control"-->
-<!--                               id="editPhoneNumber"-->
-<!--                               placeholder="Phone" required>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="editAddress">Address</label>-->
-<!--                    <input type="text" ngModel="{{editMember?.address}}" name="address" class="form-control"-->
-<!--                           id="editAddress" placeholder="Address"-->
-<!--                           required>-->
-<!--                  </div>-->
-<!--                  &lt;!&ndash;                  <div class="form-group">&ndash;&gt;-->
-<!--                  &lt;!&ndash;                    <label class="form-label" for="editCustomImage">Profile Picture</label>&ndash;&gt;-->
-<!--                  &lt;!&ndash;                    <input ngModel="test.jpg" name="profilePicture" type="file" accept="image/*" class="form-control" id="editCustomImage"/>&ndash;&gt;-->
-<!--                  &lt;!&ndash;                  </div>&ndash;&gt;-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="editImageUrl">Image URL</label>-->
-<!--                    <input type="text" ngModel="{{editMember?.imageUrl}}" name="imageUrl" class="form-control"-->
-<!--                           id="editImageUrl"-->
-<!--                           placeholder="Image URL" required>-->
-<!--                  </div>-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="editBankAccount">Bank Account</label>-->
-<!--                    <input type="text" ngModel="{{editMember?.bankAccount}}" name="bankAccount" class="form-control"-->
-<!--                           id="editBankAccount"-->
-<!--                           placeholder="Bank Account" required>-->
-<!--                  </div>-->
-<!--                  <div class="modal-footer">-->
-<!--                    <button type="button" id="edit-member-form" class="btn btn-secondary" data-dismiss="modal">Close-->
-<!--                    </button>-->
-<!--                    <button [disabled]="editForm.invalid" (click)="onEditMember(editForm.value)" type="submit"-->
-<!--                            class="btn btn-primary">Save changes-->
-<!--                    </button>-->
-<!--                  </div>-->
-<!--                </form>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        &lt;!&ndash; Delete Modal &ndash;&gt;-->
-<!--        <div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-labelledby="deleteMemberModalLabel"-->
-<!--             aria-hidden="true">-->
-<!--          <div class="modal-dialog">-->
-<!--            <div class="modal-content">-->
-<!--              <div class="modal-header">-->
-<!--                <h5 class="modal-title" id="deleteMemberModalLabel">Modal title</h5>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--              </div>-->
-<!--              <div class="modal-body">-->
-<!--                delete-->
-<!--              </div>-->
-<!--              <div class="modal-footer">-->
-<!--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
-<!--                <button type="button" class="btn btn-primary">Save changes</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
 

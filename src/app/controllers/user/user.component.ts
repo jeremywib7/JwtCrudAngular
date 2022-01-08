@@ -5,6 +5,9 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {countries} from "../../data/CountryData";
 import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
 import {UserService} from "../../_services/user.service";
+import {Subscription} from "rxjs";
+import {ToastrService} from "ngx-toastr";
+import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-user',
@@ -13,6 +16,8 @@ import {UserService} from "../../_services/user.service";
 })
 export class UserComponent implements OnInit {
   p: number = 1;
+
+  subs: Subscription;
 
   public countries: any = countries;
   selectedImage: File;
@@ -23,22 +28,48 @@ export class UserComponent implements OnInit {
     this.initForm();
   }
 
-  initForm() {}
+  ngOnDestroy() {
+    if (this.subs) {
+      this.subs.unsubscribe();
+    }
+  }
+
+  initForm() {
+  }
+
+  searchInput = {
+    username: '', userFirstName: '', userLastName: '', email: '', gender: '', dateJoined: '',
+    phoneNumber: '', address: '', imageUrl: '', userCode: '', bankAccount: '', role: {roleName: "", roleDescription: ""}
+  };
 
   public users: User[] | undefined;
   public editUsers: User | null | undefined;
-  isDescOrder: boolean = true;
+  isDescOrder: boolean = false;
 
-  constructor(private userService: UserService) {
+
+  constructor(
+    private userService: UserService,
+    private toastr: ToastrService,
+    private modalService: NgbModal
+  ) {
   }
+
+  closeResult = '';
+
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    });
+  }
+
 
   public onSelectFile($event: Event) {
     this.selectedImage = ($event.target as HTMLInputElement).files[0];
   }
 
-  public sort(headerName:String): void {
+  public sort(headerName: String): void {
     this.isDescOrder = !this.isDescOrder;
-    // this.orderHeader =  headerName;
+    this.orderHeader = headerName;
   }
 
   public getMembers(): void {
@@ -73,9 +104,11 @@ export class UserComponent implements OnInit {
   }
 
   public onDeleteUser(username: string) {
-    // this.userService.deleteMember(username).subscribe(res => {
-    //   this.users = this.users.filter(user => user.username !== res.username);
-    // });
+    this.userService.deleteUser(username).subscribe(res => {
+      this.toastr.success('Delete User Success', 'Success');
+      this.modalService.dismissAll();
+      this.getMembers();
+    });
   }
 
 }

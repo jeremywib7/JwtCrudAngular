@@ -7,6 +7,7 @@
   </nav>
   <div class="d-flex page__box p-3 mt-2 ">{{ editMode ? 'Edit' : 'Add'}} User</div>
   <div class="page__content shadow p-3 position-relative">
+
     <div class="modal-body">
       <!--                <form #addForm="ngForm" (ngSubmit)="onAddMember(addForm)">-->
       <form [formGroup]="reactiveForm">

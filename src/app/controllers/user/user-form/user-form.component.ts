@@ -69,6 +69,9 @@ export class UserFormComponent implements OnInit {
         validators: [Validators.required, Validators.compose(
           [Validators.pattern('[a-zA-z]*'), Validators.minLength(2)])]
       }),
+      userPassword: new FormControl(this.user === null ? null : this.user?.userPassword, {
+        updateOn: 'blur',
+      }),
       email: new FormControl(this.user === null ? null : this.user?.email, {
         updateOn: 'blur',
         validators: [Validators.required, Validators.compose(
@@ -125,8 +128,10 @@ export class UserFormComponent implements OnInit {
   }
 
   submit() {
+
     if (this.reactiveForm.valid) {
       this.reactiveForm.patchValue({
+        userPassword: "1234",
         role: {
           roleDescription: this.reactiveForm.value.role.roleName + " role"
         }

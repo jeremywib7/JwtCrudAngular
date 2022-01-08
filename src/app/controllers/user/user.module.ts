@@ -9,16 +9,17 @@ import {NgxPaginationModule} from "ngx-pagination";
 import {UserFormComponent} from './user-form/user-form.component';
 import {FilterPipeModule} from "ngx-filter-pipe";
 import {OrderModule} from "ngx-order-pipe";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 const routes: Routes = [
-  {path: '', component: UserComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
+  {path: '', component: UserComponent, canActivate: [AuthGuard], data: {roles: 'Admin'}},
   {
     path: 'add',
-    component: UserFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}
+    component: UserFormComponent, canActivate: [AuthGuard], data: {roles: 'Admin'}
   },
   {
     path: ':username',
-    component: UserFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}
+    component: UserFormComponent, canActivate: [AuthGuard], data: {roles: 'Admin'}
   }
 ];
 
@@ -30,6 +31,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    NgbModule,
     NgxPaginationModule,
     OrderModule,
     FilterPipeModule
