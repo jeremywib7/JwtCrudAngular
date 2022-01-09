@@ -10,6 +10,8 @@ import {UserFormComponent} from './user-form/user-form.component';
 import {FilterPipeModule} from "ngx-filter-pipe";
 import {OrderModule} from "ngx-order-pipe";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {MyFilterPipe} from "../../FilterPipe";
+import {Ng2SearchPipeModule} from "ng2-search-filter";
 
 const routes: Routes = [
   {path: '', component: UserComponent, canActivate: [AuthGuard], data: {roles: 'Admin'}},
@@ -24,7 +26,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [UserComponent,],
+  declarations: [UserComponent, MyFilterPipe],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -34,7 +36,7 @@ const routes: Routes = [
     NgbModule,
     NgxPaginationModule,
     OrderModule,
-    FilterPipeModule
+    Ng2SearchPipeModule,
   ]
 })
 

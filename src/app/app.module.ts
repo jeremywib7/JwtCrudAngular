@@ -35,7 +35,7 @@ import {AngularToastifyModule} from "angular-toastify";
 import {ToastContainerModule, ToastrModule} from "ngx-toastr";
 import {OrderModule} from "ngx-order-pipe";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 
 @NgModule({
@@ -66,6 +66,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     RouterModule,
     NgxPaginationModule,
     NgbModule,
+    Ng2SearchPipeModule,
     // * MATERIAL IMPORTS
     MatSidenavModule,
     MatToolbarModule,

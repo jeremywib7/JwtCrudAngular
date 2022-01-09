@@ -6,8 +6,6 @@ import {UserComponent} from "./controllers/user/user.component";
 import {LoginComponent} from "./controllers/login/login.component";
 import {ForbiddenComponent} from "./controllers/forbidden/forbidden.component";
 import {AuthGuard} from "./_auth/auth.guard";
-import {MemberComponent} from "./controllers/member/member.component";
-import {MemberFormComponent} from "./controllers/member/member-form/member-form.component";
 
 // @ts-ignore
 const routes: Routes = [

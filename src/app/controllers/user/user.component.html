@@ -10,14 +10,16 @@
               <i *ngIf="!isDescOrder" class="fa fa-sort-alpha-desc"></i>
               <i *ngIf="isDescOrder" class="fa fa-sort-alpha-asc"></i>
             </button>
-            <input [(ngModel)]="searchInput.userFirstName" class="form-control me-2" type="search" placeholder="Search"
+            <input [(ngModel)]="term" class="form-control me-2" type="search" placeholder="Search"
                    aria-label="Search">
           </div>
         </div>
       </nav>
 
       <div class="row justify-content-center mt-5">
-        <div *ngFor="let user of users | orderBy: orderHeader: isDescOrder | filterBy: searchInput |
+        <div *ngFor="let user of users |
+         orderBy: orderHeader: isDescOrder |
+         filter:term |
          paginate: { itemsPerPage: 4, currentPage: p }" class="col-md-6 col-xl-3">
           <div class="card m-b-30 shadow-sm">
             <div class="card-body row">
@@ -39,16 +41,17 @@
                    data-toggle="tooltip" data-original-title="Edit"><i
                   class="fa fa-pencil" style="color: white"></i> </a>
 
-                <a (click)="open(content)" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip"
+                <a (click)="open(deleteUserModal)" class="btn btn-secondary tooltips" data-placement="top"
+                   data-toggle="tooltip"
                    data-original-title="Delete"><i class="fa fa-times" style="color: white"></i></a>
               </div>
             </div>
           </div>
 
           <!-- Modal Delete User -->
-          <ng-template #content let-modal>
+          <ng-template #deleteUserModal let-modal>
             <div class="modal-header">
-              <h4 class="modal-title" id="modal-basic-title">Delete User ?</h4>
+              <h4 class="modal-title" id="deleteUserModal">Delete User ?</h4>
               <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -70,15 +73,10 @@
 
         </div>
 
-        <div *ngIf="( users | filterBy: searchInput).length === 0 && ( users ).length != 0 "
-             class="d-flex align-items-center justify-content-center"
-             style="width: 200px; height: 200px">
-          <div class="text-center mt-2">No Data</div>
-        </div>
-
-        <div *ngIf="( users).length === 0"
-             class="d-flex align-items-center justify-content-center"
-             style="width: 200px; height: 200px">
+        <div
+          *ngIf="!( users | filter: term)?.length"
+          class="d-flex align-items-center justify-content-center"
+          style="width: 200px; height: 200px">
           <div class="text-center mt-2">No Data</div>
         </div>
       </div>

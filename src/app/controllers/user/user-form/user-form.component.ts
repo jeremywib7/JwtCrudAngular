@@ -54,11 +54,17 @@ export class UserFormComponent implements OnInit {
   initForm() {
     this.reactiveForm = this.fb.group({
       username: new FormControl(
-        {value: this.user === null ? null : this.user?.username, disabled: this.editMode}, {
+        this.user === null ? null : this.user?.username, {
           updateOn: 'blur',
           validators: [Validators.required, Validators.compose(
             [Validators.minLength(3)])]
         }),
+      // username: new FormControl(
+      //   {value: this.user === null ? null : this.user?.username, disabled: this.editMode}, {
+      //     updateOn: 'blur',
+      //     validators: [Validators.required, Validators.compose(
+      //       [Validators.minLength(3)])]
+      //   }),
       userFirstName: new FormControl(this.user === null ? null : this.user?.userFirstName, {
         updateOn: 'blur',
         validators: [Validators.required, Validators.compose(
@@ -130,19 +136,42 @@ export class UserFormComponent implements OnInit {
   submit() {
 
     if (this.reactiveForm.valid) {
-      this.reactiveForm.patchValue({
-        userPassword: "1234",
-        role: {
-          roleDescription: this.reactiveForm.value.role.roleName + " role"
-        }
-      });
 
-      this.userService.addUser(this.reactiveForm.value).subscribe(
-        (response: User) => {
-          this.router.navigate(['/user']);
-          this.toastr.success('User successfully registered', 'Success');
-        },
-      );
+      if (this.editMode === true) {
+
+        this.reactiveForm.patchValue({
+          username: this.reactiveForm.get('username').value,
+          userPassword: this.reactiveForm.value.userPassword,
+          role: {
+            roleDescription: this.reactiveForm.value.role.roleName + " role"
+          }
+        });
+
+        this.userService.updateUser(this.reactiveForm.value).subscribe(
+          (response: User) => {
+            this.router.navigate(['/user']);
+            this.toastr.success('User successfully updated', 'Success');
+          },
+        );
+
+      } else {
+
+        this.reactiveForm.patchValue({
+          userPassword: "1234",
+          role: {
+            roleDescription: this.reactiveForm.value.role.roleName + " role"
+          }
+        });
+
+        this.userService.addUser(this.reactiveForm.value).subscribe(
+          (response: User) => {
+            this.router.navigate(['/user']);
+            this.toastr.success('User successfully registered', 'Success');
+          },
+        );
+
+      }
+
     } else {
       this.validateFormFields(this.reactiveForm);
     }

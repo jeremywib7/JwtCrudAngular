@@ -17,6 +17,7 @@ import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 export class UserComponent implements OnInit {
   p: number = 1;
 
+  searchText: string;
   subs: Subscription;
 
   public countries: any = countries;
@@ -45,6 +46,7 @@ export class UserComponent implements OnInit {
   public users: User[] | undefined;
   public editUsers: User | null | undefined;
   isDescOrder: boolean = false;
+  term: any;
 
 
   constructor(
@@ -54,12 +56,9 @@ export class UserComponent implements OnInit {
   ) {
   }
 
-  closeResult = '';
 
   open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    });
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
   }
 
 
@@ -110,5 +109,7 @@ export class UserComponent implements OnInit {
       this.getMembers();
     });
   }
+
+
 
 }
