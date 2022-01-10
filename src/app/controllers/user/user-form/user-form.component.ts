@@ -8,6 +8,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {UserService} from "../../../_services/user.service";
 import {ToastService} from "angular-toastify";
 import {ToastrService} from "ngx-toastr";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-user-form',
@@ -28,7 +29,8 @@ export class UserFormComponent implements OnInit {
     private userService: UserService,
     private fb: FormBuilder,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public datepipe: DatePipe
   ) {
   }
 
@@ -59,12 +61,6 @@ export class UserFormComponent implements OnInit {
           validators: [Validators.required, Validators.compose(
             [Validators.minLength(3)])]
         }),
-      // username: new FormControl(
-      //   {value: this.user === null ? null : this.user?.username, disabled: this.editMode}, {
-      //     updateOn: 'blur',
-      //     validators: [Validators.required, Validators.compose(
-      //       [Validators.minLength(3)])]
-      //   }),
       userFirstName: new FormControl(this.user === null ? null : this.user?.userFirstName, {
         updateOn: 'blur',
         validators: [Validators.required, Validators.compose(
@@ -113,6 +109,10 @@ export class UserFormComponent implements OnInit {
           updateOn: 'blur',
           validators: [Validators.required]
         }),
+      userCode: new FormControl(this.user === null ? null : this.user?.userCode,
+        {
+          updateOn: 'blur',
+        }),
       // imageUrl: new FormControl(this.user === null ? null : this.user?.imageUrl,
       //   {
       //     updateOn: 'blur',
@@ -133,6 +133,7 @@ export class UserFormComponent implements OnInit {
     this.selectedImage = ($event.target as HTMLInputElement).files[0];
   }
 
+
   submit() {
 
     if (this.reactiveForm.valid) {
@@ -140,8 +141,9 @@ export class UserFormComponent implements OnInit {
       if (this.editMode === true) {
 
         this.reactiveForm.patchValue({
-          username: this.reactiveForm.get('username').value,
           userPassword: this.reactiveForm.value.userPassword,
+          userCode: this.reactiveForm.value.userCode,
+          dateJoined: this.datepipe.transform(this.reactiveForm.value.dateJoined, 'dd/MM/yyyy'),
           role: {
             roleDescription: this.reactiveForm.value.role.roleName + " role"
           }

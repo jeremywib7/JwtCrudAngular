@@ -36,7 +36,8 @@ import {ToastContainerModule, ToastrModule} from "ngx-toastr";
 import {OrderModule} from "ngx-order-pipe";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
-
+import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
+import {TooltipModule} from "ngx-bootstrap/tooltip";
 
 @NgModule({
   declarations: [
@@ -50,36 +51,37 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     MemberFormComponent,
     UserFormComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    AngularToastifyModule,
-    ReactiveFormsModule,
-    ToastrModule.forRoot({
-      timeOut: 5000,
-      // positionClass: 'toast-bottom-left',
-    }),
-    ToastContainerModule,
-    FormsModule,
-    HttpClientModule,
-    RouterModule,
-    NgxPaginationModule,
-    NgbModule,
-    Ng2SearchPipeModule,
-    // * MATERIAL IMPORTS
-    MatSidenavModule,
-    MatToolbarModule,
-    MatMenuModule,
-    MatIconModule,
-    MatDividerModule,
-    MatListModule,
-    // Components
-    OrderModule,
-    ButtonModule,
-    FilterPipeModule,
-    NgbModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        AngularToastifyModule,
+        ReactiveFormsModule,
+        ToastrModule.forRoot({
+            timeOut: 5000,
+            // positionClass: 'toast-bottom-left',
+        }),
+        ToastContainerModule,
+        FormsModule,
+        HttpClientModule,
+        RouterModule,
+        NgxPaginationModule,
+        NgbModule,
+        Ng2SearchPipeModule,
+        // * MATERIAL IMPORTS
+        MatSidenavModule,
+        MatToolbarModule,
+        MatMenuModule,
+        MatIconModule,
+        MatDividerModule,
+        MatListModule,
+        // Components
+        OrderModule,
+        ButtonModule,
+        FilterPipeModule,
+        NgbModule,
+        BsDatepickerModule.forRoot(),
+    ],
   providers: [
     AuthGuard, {
       provide: HTTP_INTERCEPTORS,

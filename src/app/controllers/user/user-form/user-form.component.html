@@ -117,8 +117,12 @@
           <div class="col">
             <div class="form-group">
               <label>Date Joined</label>
-              <input type="date" name="dateJoined" max="3000-12-31"
-                     min="1000-01-01" class="form-control" formControlName="dateJoined">
+              <input
+                class="form-control"
+                #datepickerYMD="bsDatepicker"
+                bsDatepicker
+                formControlName="dateJoined"
+                [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }">
               <div *ngIf="reactiveForm.controls.dateJoined.errors && (reactiveForm.controls.dateJoined.touched ||
                            reactiveForm.controls.dateJoined.dirty) " style="color: red">
                 <div *ngIf="reactiveForm.hasError('required','dateJoined')">
@@ -256,5 +260,3 @@
 
   </div>
 </div>
-
-
