@@ -9,6 +9,7 @@ import {UserService} from "../../../_services/user.service";
 import {ToastService} from "angular-toastify";
 import {ToastrService} from "ngx-toastr";
 import {DatePipe} from "@angular/common";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-user-form',
@@ -113,12 +114,12 @@ export class UserFormComponent implements OnInit {
         {
           updateOn: 'blur',
         }),
-      // imageUrl: new FormControl(this.user === null ? null : this.user?.imageUrl,
-      //   {
-      //     updateOn: 'blur',
-      //     validators: [Validators.required]
-      //   }
-      // ),
+      imageUrl: new FormControl(null,
+        {
+          updateOn: 'blur',
+          validators: this.user ? [] : [Validators.required]
+        }
+      ),
       bankAccount: new FormControl(this.user === null ? null : this.user?.bankAccount,
         {
           updateOn: 'blur',
@@ -129,25 +130,27 @@ export class UserFormComponent implements OnInit {
     })
   }
 
-  public onSelectFile($event: Event) {
-    this.selectedImage = ($event.target as HTMLInputElement).files[0];
+  public onSelectFile(event: Event) {
+    this.selectedImage = (event.target as HTMLInputElement).files[0];
   }
 
-
   submit() {
+    event.preventDefault();
+
+    this.reactiveForm.patchValue({
+      userPassword: this.reactiveForm.value.userPassword,
+      dateJoined: this.reactiveForm.value.dateJoined.length === 10 ?
+        this.reactiveForm.value.dateJoined :
+        this.datepipe.transform(this.reactiveForm.value.dateJoined,
+          'dd/MM/yyyy'),
+      role: {
+        roleDescription: this.reactiveForm.value.role.roleName + " role"
+      }
+    });
 
     if (this.reactiveForm.valid) {
 
       if (this.editMode === true) {
-
-        this.reactiveForm.patchValue({
-          userPassword: this.reactiveForm.value.userPassword,
-          userCode: this.reactiveForm.value.userCode,
-          dateJoined: this.datepipe.transform(this.reactiveForm.value.dateJoined, 'dd/MM/yyyy'),
-          role: {
-            roleDescription: this.reactiveForm.value.role.roleName + " role"
-          }
-        });
 
         this.userService.updateUser(this.reactiveForm.value).subscribe(
           (response: User) => {
@@ -160,9 +163,6 @@ export class UserFormComponent implements OnInit {
 
         this.reactiveForm.patchValue({
           userPassword: "1234",
-          role: {
-            roleDescription: this.reactiveForm.value.role.roleName + " role"
-          }
         });
 
         this.userService.addUser(this.reactiveForm.value).subscribe(
@@ -173,6 +173,7 @@ export class UserFormComponent implements OnInit {
         );
 
       }
+
 
     } else {
       this.validateFormFields(this.reactiveForm);
