@@ -11,7 +11,7 @@
 
     <div class="modal-body">
       <!--                <form #addForm="ngForm" (ngSubmit)="onAddMember(addForm)">-->
-      <form [formGroup]="reactiveForm">
+      <form [formGroup]="reactiveForm" (ngSubmit)="submit()" >
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" name="username" class="form-control" id="username" placeholder="Username"
@@ -247,11 +247,10 @@
           </button>
           <!--                    <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>-->
           <ngid-button
-            type="button"
+            type="submit"
             color="PRIMARY"
             size="MD"
-            [disabled]="false"
-            (click)="submit()"> {{ editMode ? 'Save Changes' : 'Add User'}}
+            [disabled]="false"> {{ editMode ? 'Save Changes' : 'Add User'}}
           </ngid-button>
         </div>
       </form>

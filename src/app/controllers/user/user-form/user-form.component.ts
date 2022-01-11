@@ -58,76 +58,62 @@ export class UserFormComponent implements OnInit {
     this.reactiveForm = this.fb.group({
       username: new FormControl(
         this.user === null ? null : this.user?.username, {
-          updateOn: 'blur',
           validators: [Validators.required, Validators.compose(
             [Validators.minLength(3)])]
         }),
       userFirstName: new FormControl(this.user === null ? null : this.user?.userFirstName, {
-        updateOn: 'blur',
         validators: [Validators.required, Validators.compose(
           [Validators.pattern('[a-zA-z]*'), Validators.minLength(3)])]
       }),
       userLastName: new FormControl(this.user === null ? null : this.user?.userLastName, {
-        updateOn: 'blur',
         validators: [Validators.required, Validators.compose(
           [Validators.pattern('[a-zA-z]*'), Validators.minLength(2)])]
       }),
       userPassword: new FormControl(this.user === null ? null : this.user?.userPassword, {
-        updateOn: 'blur',
       }),
       email: new FormControl(this.user === null ? null : this.user?.email, {
-        updateOn: 'blur',
         validators: [Validators.required, Validators.compose(
           [Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')])]
       }),
       role: this.fb.group({
         roleName: new FormControl(this.user === null ? null : this.user?.role.roleName, {
-          updateOn: 'blur',
           validators: [Validators.required]
         }),
         roleDescription: new FormControl(this.user?.role.roleDescription, {
-          updateOn: 'blur',
         }),
       }),
       gender: new FormControl(this.user === null ? null : this.user?.gender, {
-        updateOn: 'blur',
         validators: [Validators.required]
       }),
       dateJoined: new FormControl(this.user === null ? null : this.user?.dateJoined,
         {
-          updateOn: 'blur',
           validators: [Validators.required]
         }),
       phoneNumber: new FormControl(this.user === null ? null : this.user?.phoneNumber,
         {
-          updateOn: 'blur',
           validators: [Validators.required, Validators.compose(
             [Validators.pattern('[0-9+ ]*'), Validators.minLength(10),
               Validators.maxLength(14)])]
         }),
       address: new FormControl(this.user === null ? null : this.user?.address,
         {
-          updateOn: 'blur',
           validators: [Validators.required]
         }),
       userCode: new FormControl(this.user === null ? null : this.user?.userCode,
         {
-          updateOn: 'blur',
         }),
       imageUrl: new FormControl(null,
         {
-          updateOn: 'blur',
           validators: this.user ? [] : [Validators.required]
         }
       ),
       bankAccount: new FormControl(this.user === null ? null : this.user?.bankAccount,
         {
-          updateOn: 'blur',
           validators: [Validators.required, Validators.compose(
             [Validators.pattern('[0-9+ ]*'), Validators.minLength(5), Validators.maxLength(20)])]
         }
       ),
-    })
+    }, { updateOn: 'submit'})
   }
 
   public onSelectFile(event: Event) {
@@ -137,18 +123,18 @@ export class UserFormComponent implements OnInit {
   submit() {
     event.preventDefault();
 
-    this.reactiveForm.patchValue({
-      userPassword: this.reactiveForm.value.userPassword,
-      dateJoined: this.reactiveForm.value.dateJoined.length === 10 ?
-        this.reactiveForm.value.dateJoined :
-        this.datepipe.transform(this.reactiveForm.value.dateJoined,
-          'dd/MM/yyyy'),
-      role: {
-        roleDescription: this.reactiveForm.value.role.roleName + " role"
-      }
-    });
-
     if (this.reactiveForm.valid) {
+
+      this.reactiveForm.patchValue({
+        userPassword: this.reactiveForm.value.userPassword,
+        dateJoined: this.reactiveForm.value.dateJoined.length === 10 ?
+          this.reactiveForm.value.dateJoined :
+          this.datepipe.transform(this.reactiveForm.value.dateJoined,
+            'dd/MM/yyyy'),
+        role: {
+          roleDescription: this.reactiveForm.value.role.roleName + " role"
+        }
+      });
 
       if (this.editMode === true) {
 
@@ -174,7 +160,6 @@ export class UserFormComponent implements OnInit {
 
       }
 
-
     } else {
       this.validateFormFields(this.reactiveForm);
     }
@@ -186,7 +171,9 @@ export class UserFormComponent implements OnInit {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
       let invalidFields = [].slice.call(document.getElementsByClassName('ng-invalid'));
-      invalidFields[1].focus();
+      if ((invalidFields).length != 0) {
+        invalidFields[1].focus();
+      }
       if (control instanceof FormControl) {
         control.markAsTouched({onlySelf: true});
       } else if (control instanceof FormGroup) {
