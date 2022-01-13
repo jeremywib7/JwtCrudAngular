@@ -23,16 +23,12 @@ export class LoginComponent implements OnInit {
   public login(loginForm: NgForm) {
     this.userService.login(loginForm.value).subscribe(
       (response: any) => {
-        // all json data
-        // console.log(response);
-        // console.log(response.jwtToken);
-        // console.log(response.user.role);
 
         this.userAuthService.setRoles(response.user.role);
         this.userAuthService.setToken(response.jwtToken);
         this.userAuthService.setRefreshToken(response.refreshToken);
 
-        const userRole = response.user.role[0].roleName;
+        const userRole = response.user.role.roleName;
         // const userRole = response.user.role[0].roleName;
 
         if (userRole === "Admin") {

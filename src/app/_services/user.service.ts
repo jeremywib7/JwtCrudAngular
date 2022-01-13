@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserAuthService} from "./user-auth.service";
 import {environment} from "../../environments/environment";
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
 import {User} from "../model/User";
+import {Tokens} from "../model/Tokens";
 
 @Injectable({
   providedIn: 'root'

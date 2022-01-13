@@ -1,13 +1,18 @@
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {catchError, Observable, throwError} from "rxjs";
+import {BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError} from "rxjs";
 import {UserAuthService} from "../_services/user-auth.service";
 import {Router} from "@angular/router";
 import {Injectable} from "@angular/core";
 import {ToastrService} from "ngx-toastr";
+import {UserService} from "../_services/user.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private userAuthService: UserAuthService, private router: Router, private toastr: ToastrService) {
+  private isRefreshing: Boolean = false;
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject(null);
+
+  constructor(private userAuthService: UserAuthService, private router: Router, private toastr: ToastrService,
+              private userService: UserService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -25,7 +30,7 @@ export class AuthInterceptor implements HttpInterceptor {
           if (err.status === 401) {
             this.userAuthService.clear();
             this.toastr.info("Please log in again", 'Session expired');
-            // this.router.navigate(['/login']);
+            this.router.navigate(['/login']);
           } else if (err.status === 403) {
             this.router.navigate(['/forbidden']);
           } else {
@@ -43,5 +48,27 @@ export class AuthInterceptor implements HttpInterceptor {
         setHeaders: {Authorization: `Bearer ${token}`}
       }
     );
+  }
+
+  private handle401Error(req: HttpRequest<any>, next: HttpHandler) {
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
+
+      return this.userAuthService.refreshToken().pipe(
+        switchMap((token: any) => {
+          this.isRefreshing = false;
+          this.refreshTokenSubject.next(token.jwt);
+          return next.handle(this.addToken(req, token.jwt));
+        }));
+
+    } else {
+      return this.refreshTokenSubject.pipe(
+        filter(token => token != null),
+        take(1),
+        switchMap(jwt => {
+          return next.handle(this.addToken(req, jwt));
+        }));
+    }
   }
 }
