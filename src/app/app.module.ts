@@ -6,8 +6,8 @@ import {AppComponent} from './app.component';
 import {HomeComponent} from './controllers/home/home.component';
 import {AdminComponent} from './controllers/admin/admin.component';
 import {LoginComponent} from './controllers/login/login.component';
-import {ForbiddenComponent} from './controllers/forbidden/forbidden.component';
-import {HeaderComponent} from './controllers/header/header.component';
+import {ForbiddenComponent} from './controllers/ui/forbidden/forbidden.component';
+import {HeaderComponent} from './controllers/ui/header/header.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
@@ -16,7 +16,7 @@ import {AuthInterceptor} from "./_auth/auth.interceptor";
 import {UserService} from "./_services/user.service";
 import {MemberService} from "./_services/member.service";
 import {DatePipe} from "@angular/common";
-import {SidenavComponent} from './controllers/sidenav/sidenav.component';
+import {SidenavComponent} from './controllers/ui/sidenav/sidenav.component';
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatMenuModule} from "@angular/material/menu";
@@ -38,6 +38,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
 import {TooltipModule} from "ngx-bootstrap/tooltip";
+import { ProductComponent } from './controllers/product/product.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import {TooltipModule} from "ngx-bootstrap/tooltip";
     HeaderComponent,
     SidenavComponent,
     MemberFormComponent,
-    UserFormComponent
+    UserFormComponent,
+    ProductComponent
   ],
     imports: [
         BrowserModule,

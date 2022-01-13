@@ -21,31 +21,31 @@ export class UserService {
   }
 
   public login(loginData: any) {
-    return this.httpClient.post(this.apiServerUrl + '/authenticate', loginData, {headers: this.requestHeader});
+    return this.httpClient.post(this.apiServerUrl + '/selfservice/authenticate', loginData, {headers: this.requestHeader});
   }
 
   public addUser(user: User): Observable<User> {
-    return this.httpClient.post<User>(`${this.apiServerUrl}/user/register`, user );
+    return this.httpClient.post<User>(`${this.apiServerUrl}/selfservice/user/register`, user );
   }
 
   public updateUser(user: User): Observable<User> {
-    return this.httpClient.put<User>(`${this.apiServerUrl}/user/update`, user );
+    return this.httpClient.put<User>(`${this.apiServerUrl}/selfservice/user/update`, user );
   }
 
   public deleteUser(username: string): Observable<User> {
-    return this.httpClient.delete<User>(`${this.apiServerUrl}/user/delete/${username}`);
+    return this.httpClient.delete<User>(`${this.apiServerUrl}/selfservice/user/delete/${username}`);
   }
 
   public getUsers(): Observable<User[]> {
-    return this.httpClient.get<User[]>(`${this.apiServerUrl}/user/all`);
+    return this.httpClient.get<User[]>(`${this.apiServerUrl}/selfservice/user/all`);
   }
 
   public getUserByUsername(username: string): Observable<User> {
-    return this.httpClient.get<User>(`${this.apiServerUrl}/user/find/${username}`);
+    return this.httpClient.get<User>(`${this.apiServerUrl}/selfservice/user/find/${username}`);
   }
 
   public forUser() {
-    return this.httpClient.get(this.apiServerUrl + '/forUser', {
+    return this.httpClient.get(this.apiServerUrl + '/selfservice/forUser', {
       responseType: 'text',
     });
   }

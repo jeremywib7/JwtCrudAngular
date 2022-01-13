@@ -4,7 +4,7 @@ import {HomeComponent} from "./controllers/home/home.component";
 import {AdminComponent} from "./controllers/admin/admin.component";
 import {UserComponent} from "./controllers/user/user.component";
 import {LoginComponent} from "./controllers/login/login.component";
-import {ForbiddenComponent} from "./controllers/forbidden/forbidden.component";
+import {ForbiddenComponent} from "./controllers/ui/forbidden/forbidden.component";
 import {AuthGuard} from "./_auth/auth.guard";
 
 // @ts-ignore
