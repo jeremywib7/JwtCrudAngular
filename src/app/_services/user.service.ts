@@ -34,9 +34,6 @@ export class UserService {
     if (selectedImage) {
       observable = observable.pipe(
         switchMap(() => {
-          // if (!user.imageUrl) {
-          //   user.imageUrl = this.randomStr();
-          // }
 
           const formData: FormData = new FormData();
           formData.append('file', selectedImage);
@@ -70,8 +67,43 @@ export class UserService {
     return result;
   }
 
-  public updateUser(user: User): Observable<User> {
-    return this.httpClient.put<User>(`${this.apiServerUrl}/${this.project}/user/update`, user);
+  public updateUser(user: User, selectedImage?: File): Observable<User> {
+    // return this.httpClient.put<User>(`${this.apiServerUrl}/${this.project}/user/update`, user);
+    let observable = of({});
+
+    const str = user.imageUrl;
+    const dotIndex = str.lastIndexOf('.');
+    const ext = str.substring(dotIndex);
+
+    if (selectedImage) {
+      observable = observable.pipe(
+        switchMap(() => {
+          user.imageUrl = user.username + ext;
+          return this.httpClient.delete(`${this.apiServerUrl}/${this.project}/images/${user.imageUrl}`)
+        }),
+
+        switchMap(() => {
+
+          const formData: FormData = new FormData();
+          formData.append('file', selectedImage);
+          formData.append('username', user.username); // set file name with username
+          // formData.append('username', user.imgUrl); // set file name with original file name
+
+          user.imageUrl = user.username + ext;
+
+          return this.httpClient.post(`${this.apiServerUrl}/${this.project}/images`, formData, {
+            responseType: 'text'
+          });
+        })
+      )
+    }
+
+    return observable.pipe(
+      switchMap(() => {
+        return this.httpClient.put<User>(`${this.apiServerUrl}/${this.project}/user/update`, user);
+      })
+    );
+
   }
 
   public deleteUser(username: string): Observable<User> {

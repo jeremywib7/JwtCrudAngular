@@ -57,23 +57,19 @@ export class UserFormComponent implements OnInit {
     this.reactiveForm = this.fb.group({
       username: new FormControl(
         this.user === null ? null : this.user?.username, {
-          updateOn: 'change',
           validators: [Validators.required, Validators.compose(
             [Validators.minLength(3)])]
         }),
       userFirstName: new FormControl(this.user === null ? null : this.user?.userFirstName, {
-        updateOn: 'change',
         validators: [Validators.required, Validators.compose(
           [Validators.pattern('[a-zA-z]*'), Validators.minLength(3)])]
       }),
       userLastName: new FormControl(this.user === null ? null : this.user?.userLastName, {
-        updateOn: 'change',
         validators: [Validators.required, Validators.compose(
           [Validators.pattern('[a-zA-z]*'), Validators.minLength(2)])]
       }),
       userPassword: new FormControl(this.user === null ? null : this.user?.userPassword, {}),
       email: new FormControl(this.user === null ? null : this.user?.email, {
-        updateOn: 'change',
         validators: [Validators.required, Validators.compose(
           [Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')])]
       }),
@@ -92,7 +88,6 @@ export class UserFormComponent implements OnInit {
         }),
       phoneNumber: new FormControl(this.user === null ? null : this.user?.phoneNumber,
         {
-          updateOn: 'change',
           validators: [Validators.required, Validators.compose(
             [Validators.pattern('[0-9+ ]*'), Validators.minLength(10),
               Validators.maxLength(14)])]
@@ -105,17 +100,16 @@ export class UserFormComponent implements OnInit {
         {}),
       imageUrl: new FormControl(null,
         {
-          validators: this.user ? [] : [Validators.required]
+          validators: [Validators.required]
         }
       ),
       bankAccount: new FormControl(this.user === null ? null : this.user?.bankAccount,
         {
-          updateOn: 'change',
           validators: [Validators.required, Validators.compose(
             [Validators.pattern('[0-9+ ]*'), Validators.minLength(5), Validators.maxLength(20)])]
         }
       ),
-    }, {updateOn: 'submit'})
+    }, {updateOn: 'change'})
   }
 
   onSelectFile(event: Event) {
@@ -140,7 +134,7 @@ export class UserFormComponent implements OnInit {
 
       if (this.editMode === true) {
 
-        this.userService.updateUser(this.reactiveForm.value).subscribe(
+        this.userService.updateUser(this.reactiveForm.value, this.selectedImage).subscribe(
           (response: User) => {
             this.router.navigate(['/user']);
             this.toastr.success('User successfully updated', 'Success');
