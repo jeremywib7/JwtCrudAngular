@@ -9,8 +9,8 @@ import {AuthGuard} from "./_auth/auth.guard";
 
 // @ts-ignore
 const routes: Routes = [
-  {path: '', redirectTo: '/member', pathMatch: 'full'},
-  {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+  {path: '', redirectTo: '/home', pathMatch: 'full'},
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuard], data: {roles: 'All'}},
   {path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: {roles: 'Admin'}},
   {
     path: 'member',

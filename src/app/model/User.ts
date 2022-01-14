@@ -1,4 +1,4 @@
-export interface User {
+export class User {
   username: string;
   userFirstName: string;
   userLastName: string;
@@ -7,12 +7,12 @@ export interface User {
   role: {
     roleName: string;
     roleDescription: string;
-  }
+  };
   gender: string;
-  dateJoined: string;
-  phoneNumber: string;
+  dateJoined: Date;
+  phoneNumber: number;
   address: string;
   imageUrl: string;
   userCode: string;
-  bankAccount: string;
+  bankAccount: number;
 }

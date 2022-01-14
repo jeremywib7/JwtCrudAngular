@@ -9,7 +9,6 @@ import {UserService} from "../../../_services/user.service";
 import {ToastService} from "angular-toastify";
 import {ToastrService} from "ngx-toastr";
 import {DatePipe} from "@angular/common";
-import * as moment from "moment";
 
 @Component({
   selector: 'app-user-form',
@@ -119,7 +118,7 @@ export class UserFormComponent implements OnInit {
     }, {updateOn: 'submit'})
   }
 
-  public onSelectFile(event: Event) {
+  onSelectFile(event: Event) {
     this.selectedImage = (event.target as HTMLInputElement).files[0];
   }
 
@@ -154,7 +153,7 @@ export class UserFormComponent implements OnInit {
           userPassword: "1234",
         });
 
-        this.userService.addUser(this.reactiveForm.value).subscribe(
+        this.userService.addUser(this.reactiveForm.value, this.selectedImage).subscribe(
           (response: User) => {
             this.router.navigate(['/user']);
             this.toastr.success('User successfully registered', 'Success');

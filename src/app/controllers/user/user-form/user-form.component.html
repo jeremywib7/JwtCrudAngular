@@ -11,7 +11,7 @@
 
     <div class="modal-body">
       <!--                <form #addForm="ngForm" (ngSubmit)="onAddMember(addForm)">-->
-      <form [formGroup]="reactiveForm" (ngSubmit)="submit()" >
+      <form [formGroup]="reactiveForm" (ngSubmit)="submit()">
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" name="username" class="form-control" id="username" placeholder="Username"
@@ -236,11 +236,16 @@
             <div *ngIf="reactiveForm.hasError('required','imageUrl')">
               Profile picture is required
             </div>
-            <!--            <div *ngIf="reactiveForm.hasError('pattern','imageUrl')">-->
-            <!--              Profile picture format is invalid-->
-            <!--            </div>-->
+<!--            <div *ngIf="reactiveForm.hasError('pattern','imageUrl')">-->
+<!--              Profile picture format is invalid-->
+<!--            </div>-->
           </div>
         </div>
+        <div class="form-group">
+<!--          <img [src]="'http://localhost:9090/images/' + user.imageUrl">-->
+          <img *ngIf="user?.imageUrl != null" [src]="'http://localhost:9090/selfservice/images/' + user?.imageUrl" alt="User Image">
+        </div>
+
         <div class="modal-footer">
           <button type="button" id="add-member-form" class="btn btn-secondary" data-dismiss="modal"
                   routerLink="/user">Close

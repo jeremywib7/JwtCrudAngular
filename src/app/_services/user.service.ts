@@ -2,9 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserAuthService} from "./user-auth.service";
 import {environment} from "../../environments/environment";
-import {Observable, tap} from "rxjs";
+import {observable, Observable, of, switchMap, tap} from "rxjs";
 import {User} from "../model/User";
-import {Tokens} from "../model/Tokens";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +11,7 @@ import {Tokens} from "../model/Tokens";
 export class UserService {
 
   private apiServerUrl = environment.apiBaseUrl;
+  private project = environment.project;
 
   requestHeader = new HttpHeaders(
     {"No-Auth": "True"}
@@ -24,28 +24,70 @@ export class UserService {
     return this.httpClient.post(this.apiServerUrl + '/selfservice/authenticate', loginData, {headers: this.requestHeader});
   }
 
-  public addUser(user: User): Observable<User> {
-    return this.httpClient.post<User>(`${this.apiServerUrl}/selfservice/user/register`, user );
+  public addUser(user: User, selectedImage?: File): Observable<User> {
+    let observable = of({});
+
+    const str = user.imageUrl;
+    const dotIndex = str.lastIndexOf('.');
+    const ext = str.substring(dotIndex);
+
+    if (selectedImage) {
+      observable = observable.pipe(
+        switchMap(() => {
+          // if (!user.imageUrl) {
+          //   user.imageUrl = this.randomStr();
+          // }
+
+          const formData: FormData = new FormData();
+          formData.append('file', selectedImage);
+          formData.append('username', user.username); // set file name with username
+          // formData.append('username', user.imgUrl); // set file name with original file name
+
+          user.imageUrl = user.username + ext;
+
+          return this.httpClient.post(`${this.apiServerUrl}/${this.project}/images`, formData, {
+            responseType: 'text'
+          });
+        })
+      )
+    }
+
+    return observable.pipe(
+      switchMap(() => {
+        return this.httpClient.post<User>(`${this.apiServerUrl}/${this.project}/user/register`, user);
+      })
+    );
+  }
+
+  private randomStr() {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+    for (let i = 0; i < 14; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    return result;
   }
 
   public updateUser(user: User): Observable<User> {
-    return this.httpClient.put<User>(`${this.apiServerUrl}/selfservice/user/update`, user );
+    return this.httpClient.put<User>(`${this.apiServerUrl}/${this.project}/user/update`, user);
   }
 
   public deleteUser(username: string): Observable<User> {
-    return this.httpClient.delete<User>(`${this.apiServerUrl}/selfservice/user/delete/${username}`);
+    return this.httpClient.delete<User>(`${this.apiServerUrl}/${this.project}/user/delete/${username}`);
   }
 
   public getUsers(): Observable<User[]> {
-    return this.httpClient.get<User[]>(`${this.apiServerUrl}/selfservice/user/all`);
+    return this.httpClient.get<User[]>(`${this.apiServerUrl}/${this.project}/user/all`);
   }
 
   public getUserByUsername(username: string): Observable<User> {
-    return this.httpClient.get<User>(`${this.apiServerUrl}/selfservice/user/find/${username}`);
+    return this.httpClient.get<User>(`${this.apiServerUrl}/${this.project}/user/find/${username}`);
   }
 
   public forUser() {
-    return this.httpClient.get(this.apiServerUrl + '/selfservice/forUser', {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/selfservice/forUser`, {
       responseType: 'text',
     });
   }
