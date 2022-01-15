@@ -30,15 +30,15 @@ import {MemberFormComponent} from './controllers/member/member-form/member-form.
 import {ButtonModule} from "../../projects/components/button/src/lib/button.module";
 import {NgxPaginationModule} from "ngx-pagination";
 import {UserFormComponent} from "./controllers/user/user-form/user-form.component";
-import { FilterPipeModule } from 'ngx-filter-pipe';
+import {FilterPipeModule} from 'ngx-filter-pipe';
 import {AngularToastifyModule} from "angular-toastify";
 import {ToastContainerModule, ToastrModule} from "ngx-toastr";
 import {OrderModule} from "ngx-order-pipe";
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {Ng2SearchPipeModule} from 'ng2-search-filter';
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
-import {TooltipModule} from "ngx-bootstrap/tooltip";
-
+import {ApplicationPipesModule} from "./modules/ApplicationPipesModule";
+''
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,37 +51,38 @@ import {TooltipModule} from "ngx-bootstrap/tooltip";
     MemberFormComponent,
     UserFormComponent,
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        AngularToastifyModule,
-        ReactiveFormsModule,
-        ToastrModule.forRoot({
-            timeOut: 5000,
-            // positionClass: 'toast-bottom-left',
-        }),
-        ToastContainerModule,
-        FormsModule,
-        HttpClientModule,
-        RouterModule,
-        NgxPaginationModule,
-        NgbModule,
-        Ng2SearchPipeModule,
-        // * MATERIAL IMPORTS
-        MatSidenavModule,
-        MatToolbarModule,
-        MatMenuModule,
-        MatIconModule,
-        MatDividerModule,
-        MatListModule,
-        // Components
-        OrderModule,
-        ButtonModule,
-        FilterPipeModule,
-        NgbModule,
-        BsDatepickerModule.forRoot(),
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    AngularToastifyModule,
+    ReactiveFormsModule,
+    ApplicationPipesModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      // positionClass: 'toast-bottom-left',
+    }),
+    ToastContainerModule,
+    FormsModule,
+    HttpClientModule,
+    RouterModule,
+    NgxPaginationModule,
+    NgbModule,
+    Ng2SearchPipeModule,
+    // * MATERIAL IMPORTS
+    MatSidenavModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
+    // Components
+    OrderModule,
+    ButtonModule,
+    FilterPipeModule,
+    NgbModule,
+    BsDatepickerModule.forRoot(),
+  ],
   providers: [
     AuthGuard, {
       provide: HTTP_INTERCEPTORS,

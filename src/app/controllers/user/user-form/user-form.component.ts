@@ -3,12 +3,10 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {countries} from "src/app/data/CountryData";
 import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../../model/User";
-import {MemberService} from "../../../_services/member.service";
-import {HttpErrorResponse} from "@angular/common/http";
 import {UserService} from "../../../_services/user.service";
-import {ToastService} from "angular-toastify";
 import {ToastrService} from "ngx-toastr";
 import {DatePipe} from "@angular/common";
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-user-form',
@@ -16,6 +14,14 @@ import {DatePipe} from "@angular/common";
   styleUrls: ['./user-form.component.scss']
 })
 export class UserFormComponent implements OnInit {
+
+  //https://stackoverflow.com/questions/47018151/how-to-update-global-variable-in-angular2
+
+  //Main Config
+  apiBaseUrl = environment.apiBaseUrl;
+  projectName = environment.project;
+  accessToken = environment.accessToken;
+  //
 
   editMode = true;
   reactiveForm: any = FormGroup;
@@ -30,8 +36,9 @@ export class UserFormComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private toastr: ToastrService,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
   ) {
+
   }
 
   ngOnInit(): void {
@@ -100,7 +107,7 @@ export class UserFormComponent implements OnInit {
         {}),
       imageUrl: new FormControl(null,
         {
-          validators: [Validators.required]
+          validators: this.user ? [] : [Validators.required]
         }
       ),
       bankAccount: new FormControl(this.user === null ? null : this.user?.bankAccount,
@@ -132,7 +139,12 @@ export class UserFormComponent implements OnInit {
         }
       });
 
+
       if (this.editMode === true) {
+
+        this.reactiveForm.patchValue({
+          imageUrl: this.user ? this.user.imageUrl : null,
+        });
 
         this.userService.updateUser(this.reactiveForm.value, this.selectedImage).subscribe(
           (response: User) => {

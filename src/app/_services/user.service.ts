@@ -18,6 +18,7 @@ export class UserService {
   );
 
   constructor(private httpClient: HttpClient, private userAuthService: UserAuthService) {
+    environment.accessToken = '1234';
   }
 
   public login(loginData: any) {

@@ -1,83 +1,120 @@
 <div class="container-fluid page">
   <div class="d-flex page__box p-3 mt-2 justify-content-center" style="font-size: 25px">User List</div>
   <div class="page__content shadow p-3 card-body d-flex flex-column">
-    <div class="container" id="main-container">
-      <nav class="navbar navbar-expand navbar-light bg-light">
-        <div class="container-fluid">
-          <button routerLink="/user/add" class="btn btn-primary">Add User</button>
-          <div class="d-flex">
-            <button (click)="sort('userFirstName')" class="btn btn-dark me-2">
-              <i *ngIf="!isDescOrder" class="fa fa-sort-alpha-desc"></i>
-              <i *ngIf="isDescOrder" class="fa fa-sort-alpha-asc"></i>
-            </button>
-            <input [(ngModel)]="term" class="form-control me-2" type="search" placeholder="Search"
-                   aria-label="Search">
-          </div>
+
+    <nav class="navbar navbar-expand navbar-light bg-light">
+      <div class="container-fluid">
+        <button routerLink="/user/add" class="btn btn-primary">Add User</button>
+        <div class="d-flex">
+          <button (click)="sort('userFirstName')" class="btn btn-dark me-2">
+            <i *ngIf="!isDescOrder" class="fa fa-sort-alpha-desc"></i>
+            <i *ngIf="isDescOrder" class="fa fa-sort-alpha-asc"></i>
+          </button>
+          <input [(ngModel)]="term" class="form-control me-2" type="search" placeholder="Search"
+                 aria-label="Search">
         </div>
-      </nav>
+      </div>
+    </nav>
 
-      <div class="row justify-content-center mt-5">
-        <div *ngFor="let user of users |
-         orderBy: orderHeader: isDescOrder |
-         filter:term |
-         paginate: { itemsPerPage: 4, currentPage: p }" class="col-md-6 col-xl-3">
-          <div class="card m-b-30 shadow-sm">
-            <div class="card-body row">
-              <div class="col-6">
-<!--                <a href=""><img src="{{user.imageUrl}}" class="img-fluid rounded-circle w-60"></a>-->
-              </div>
-              <div class="col-6 card-title align-self-center mb-0">
-                <h5>{{user?.userFirstName}}</h5>
-              </div>
-            </div>
-            <ul class="list-group list-group-flush">
-              <h6 class="list-group-item"><i class="fa fa-home float-right"></i>Address : <a
-                href="#">{{user?.address}}</a></h6>
-              <h6 class="list-group-item"><i class="fa fa-phone float-right"></i>Phone : {{user?.phoneNumber}}</h6>
-            </ul>
-            <div class="card-body">
-              <div class="float-lg-start btn-group btn-group-sm">
-                <a class="btn btn-primary tooltips" routerLink="/user/{{user.username}}" data-placement="top"
-                   data-toggle="tooltip" data-original-title="Edit"><i
-                  class="fa fa-pencil" style="color: white"></i> </a>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
+          integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous"/>
+    <div class="container mt-3 mb-4">
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
+              <table class="table manage-candidates-top mb-0">
+                <thead>
+                <tr>
+                  <th>User Name</th>
+                  <th class="text-center">Status</th>
+                  <th class="action text-right">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr
+                  *ngFor="let user of users |
+                  orderBy: orderHeader: isDescOrder |
+                  filter:term |
+                  paginate: { itemsPerPage: 4, currentPage: p }"
+                  class="candidates-list">
+                  <td class="title">
+                    <div class="thumb">
+                      <img
+                        *ngIf="user?.imageUrl === null"
+                        class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="">
+                      <img
+                        *ngIf="user?.imageUrl != null" [src]="'http://localhost:9090/selfservice/images/' +
+                 user?.imageUrl"
+                        class="img-fluid" alt="">
+                    </div>
+                    <div class="candidate-list-details">
+                      <div class="candidate-list-info">
+                        <div class="candidate-list-title">
+                          <h5 class="mb-0"><a href="#">{{user?.userFirstName}}</a></h5>
+                        </div>
+                        <div class="candidate-list-option">
+                          <ul class="list-unstyled">
+                            <li><i class="fas fa-filter pr-1"></i>{{user?.role.roleName}}</li>
+                            <li><i class="fas fa-map-marker-alt pr-1"></i>{{user?.address}}</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="candidate-list-favourite-time text-center">
+                    <a class="candidate-list-favourite order-2 text-danger" href="#"><i class="fas fa-heart"></i></a>
+                    <span class="candidate-list-time order-1">Shortlisted</span>
+                  </td>
+                  <td>
+                    <ul class="list-unstyled mb-0 d-flex justify-content-end">
+                      <li><a routerLink="/user/{{user.username}}" class="text-primary" data-toggle="tooltip" title="" data-original-title="view"><i
+                        class="far fa-eye"></i></a></li>
+                      <li><a routerLink="/user/{{user.username}}" class="text-info" data-toggle="tooltip" title="" data-original-title="Edit"><i
+                        class="fas fa-pencil-alt"></i></a></li>
+                      <li><a (click)="open(deleteUserModal)" *ngIf="user.username.toString() != 'Admin'" class="text-danger" data-toggle="tooltip" title="" data-original-title="Delete"><i
+                        class="far fa-trash-alt"></i></a></li>
 
-                <a (click)="open(deleteUserModal)" class="btn btn-secondary tooltips" data-placement="top"
-                   data-toggle="tooltip"
-                   data-original-title="Delete"><i class="fa fa-times" style="color: white"></i></a>
-              </div>
+                      <!-- Modal Delete User -->
+                      <ng-template #deleteUserModal let-modal>
+                        <div class="modal-header">
+                          <h4 class="modal-title" id="deleteUserModal">Delete User ?</h4>
+                          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form>
+                            <div class="form-group">
+                              Delete user {{user?.username}} ?
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
+                          <button type="button" class="btn btn-outline-primary" (click)="onDeleteUser(user?.username)">Delete
+                          </button>
+
+                        </div>
+                      </ng-template>
+                    </ul>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <!--              <div class="text-center mt-3 mt-sm-3">-->
+              <!--                <ul class="pagination justify-content-center mb-0">-->
+              <!--                  <li class="page-item disabled"> <span class="page-link">Prev</span> </li>-->
+              <!--                  <li class="page-item active" aria-current="page"><span class="page-link">1 </span> <span class="sr-only">(current)</span></li>-->
+              <!--                  <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+              <!--                  <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+              <!--                  <li class="page-item"><a class="page-link" href="#">...</a></li>-->
+              <!--                  <li class="page-item"><a class="page-link" href="#">25</a></li>-->
+              <!--                  <li class="page-item"> <a class="page-link" href="#">Next</a> </li>-->
+              <!--                </ul>-->
+              <!--              </div>-->
             </div>
           </div>
-
-          <!-- Modal Delete User -->
-          <ng-template #deleteUserModal let-modal>
-            <div class="modal-header">
-              <h4 class="modal-title" id="deleteUserModal">Delete User ?</h4>
-              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <div class="form-group">
-                  Delete user {{user?.username}} ?
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
-              <button type="button" class="btn btn-outline-primary" (click)="onDeleteUser(user?.username)">Delete
-              </button>
-
-            </div>
-          </ng-template>
-
-        </div>
-
-        <div
-          *ngIf="!( users | filter: term)?.length"
-          class="d-flex align-items-center justify-content-center"
-          style="width: 200px; height: 200px">
-          <div class="text-center mt-2">No Data</div>
         </div>
       </div>
     </div>
@@ -93,7 +130,6 @@
         class="my-pagination"
       ></pagination-controls>
     </div>
-
   </div>
 </div>
 

@@ -1,30 +1,24 @@
 import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {UserFormComponent} from "./user-form.component";
-import {CommonModule} from "@angular/common";
-import {ToastContainerModule, ToastrModule} from "ngx-toastr";
+import {CommonModule, DatePipe} from "@angular/common";
 import {NgbButtonsModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import {Ng2BootstrapModule} from "ng-bootstrap";
-import {MatInputModule} from "@angular/material/input";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {DatepickerModule} from "ng2-datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
-import {ButtonComponent} from "../../../../../projects/components/button/src/lib/button.component";
+import {ApplicationPipesModule} from "../../../modules/ApplicationPipesModule";
 
 const routes: Routes = [
   {path: '', component: UserFormComponent},
 ];
 
 @NgModule({
-  declarations: [UserFormComponent],
+  declarations: [UserFormComponent ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     NgbModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    ApplicationPipesModule,
   ],
-
 })
 export class UserFormModule {
 }

@@ -25,6 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
     req = this.addToken(req, token);
 
     return next.handle(req).pipe(
+
       catchError(
         (err: HttpErrorResponse) => {
           if (err.status === 401) {

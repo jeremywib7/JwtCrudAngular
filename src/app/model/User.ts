@@ -15,4 +15,5 @@ export class User {
   imageUrl: string;
   userCode: string;
   bankAccount: number;
+  accessToken: string;
 }

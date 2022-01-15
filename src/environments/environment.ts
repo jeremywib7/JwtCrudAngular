@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   apiBaseUrl: 'http://localhost:9090',
-  project: 'selfservice'
+  project: 'selfservice',
+  accessToken: '1234'
 };
 
 /*

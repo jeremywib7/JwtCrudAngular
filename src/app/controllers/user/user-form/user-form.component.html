@@ -230,8 +230,10 @@
         <div class="form-group">
           <label class="form-label" for="customFile">Profile Picture</label>
           <input name="profilePicture" type="file" accept="image/*" (change)="onSelectFile($event)"
-                 class="form-control" id="customFile" formControlName="imageUrl">
-          <div *ngIf="reactiveForm.controls.imageUrl.errors && (reactiveForm.controls.imageUrl.touched ||
+                 class="form-control" id="customFile" *ngIf="!editMode" formControlName="imageUrl" >
+          <input name="profilePicture" type="file" accept="image/*" (change)="onSelectFile($event)"
+                 class="form-control" id="editFIle" *ngIf="editMode">
+          <div *ngIf="reactiveForm.controls.imageUrl.invalid && (reactiveForm.controls.imageUrl.touched ||
                              reactiveForm.controls.imageUrl.dirty) " style="color: red">
             <div *ngIf="reactiveForm.hasError('required','imageUrl')">
               Profile picture is required
@@ -242,8 +244,9 @@
           </div>
         </div>
         <div class="form-group">
-<!--          <img [src]="'http://localhost:9090/images/' + user.imageUrl">-->
-          <img *ngIf="user?.imageUrl != null" [src]="'http://localhost:9090/selfservice/images/' + user?.imageUrl" alt="User Image">
+          <img *ngIf="user?.imageUrl != null"
+               [src]=" apiBaseUrl +'/'+ projectName +'/images/' + user?.imageUrl + '?accessToken=' + accessToken
+           " alt="User Image">
         </div>
 
         <div class="modal-footer">
