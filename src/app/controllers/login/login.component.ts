@@ -25,9 +25,9 @@ export class LoginComponent implements OnInit {
     this.userService.login(loginForm.value).subscribe(
       (response: any) => {
 
+        // set in local storage
         this.userAuthService.setRoles(response.user.role);
         this.userAuthService.setToken(response.jwtToken);
-        this.userAuthService.setRefreshToken(response.refreshToken);
 
         const userRole = response.user.role.roleName;
         // const userRole = response.user.role[0].roleName;

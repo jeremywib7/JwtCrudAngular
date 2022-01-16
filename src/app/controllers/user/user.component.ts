@@ -8,6 +8,7 @@ import {UserService} from "../../_services/user.service";
 import {Subscription} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-user',
@@ -18,7 +19,8 @@ export class UserComponent implements OnInit {
   p: number = 1;
 
   searchText: string;
-  subs: Subscription;
+  apiBaseUrl = environment.apiBaseUrl;
+  projectName = environment.project;
 
   public countries: any = countries;
   selectedImage: File;
@@ -29,11 +31,6 @@ export class UserComponent implements OnInit {
     this.initForm();
   }
 
-  ngOnDestroy() {
-    if (this.subs) {
-      this.subs.unsubscribe();
-    }
-  }
 
   initForm() {
   }

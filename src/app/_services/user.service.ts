@@ -4,6 +4,7 @@ import {UserAuthService} from "./user-auth.service";
 import {environment} from "../../environments/environment";
 import {observable, Observable, of, switchMap, tap} from "rxjs";
 import {User} from "../model/User";
+import {CookieService} from "ngx-cookie-service";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class UserService {
     {"No-Auth": "True"}
   );
 
-  constructor(private httpClient: HttpClient, private userAuthService: UserAuthService) {
+  constructor(private httpClient: HttpClient, private userAuthService: UserAuthService,) {
     environment.accessToken = '1234';
   }
 
@@ -135,7 +136,10 @@ export class UserService {
     const userRoles: any = this.userAuthService.getRoles();
 
     if (userRoles != null && userRoles) {
-      if (userRoles.roleName.toString() === allowedRoles.toString()) {
+
+
+
+      if (userRoles.toString() === allowedRoles.toString() || allowedRoles.toString() === "All") {
         isMatch = true;
       } else {
         isMatch = false;

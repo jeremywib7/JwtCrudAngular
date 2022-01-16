@@ -37,8 +37,8 @@ import {OrderModule} from "ngx-order-pipe";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Ng2SearchPipeModule} from 'ng2-search-filter';
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
-import {ApplicationPipesModule} from "./modules/ApplicationPipesModule";
-''
+import {CookieService} from "ngx-cookie-service";
+import {ProductService} from "./_services/product.service";
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,7 +57,6 @@ import {ApplicationPipesModule} from "./modules/ApplicationPipesModule";
     AppRoutingModule,
     AngularToastifyModule,
     ReactiveFormsModule,
-    ApplicationPipesModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       // positionClass: 'toast-bottom-left',
@@ -90,8 +89,10 @@ import {ApplicationPipesModule} from "./modules/ApplicationPipesModule";
       multi: true
     },
     DatePipe,
+    CookieService,
     UserService,
-    MemberService
+    MemberService,
+    ProductService,
   ],
   bootstrap: [AppComponent]
 })

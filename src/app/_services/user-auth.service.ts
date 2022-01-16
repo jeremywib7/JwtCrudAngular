@@ -1,54 +1,39 @@
 import {Injectable} from '@angular/core';
-import {tap} from "rxjs";
-import {Tokens} from "../model/Tokens";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment";
+import {CookieService} from "ngx-cookie-service";
+import * as CryptoJS from 'crypto-js';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserAuthService {
 
-  private apiServerUrl = environment.apiBaseUrl;
+  secretKey = "nih71h8dh1j2spaksnjabx1092k1osom1inu1b27y17u2e9109io1ksoj2ih1udubfkkvk12j819291kd00k[pkajkncwniq";
 
-  constructor(private httpClient: HttpClient) {
-  }
-
-  refreshToken() {
-    return this.httpClient.post<any>(`${this.apiServerUrl}/refresh`, {
-      'refreshToken': this.getRefreshToken()
-    }).pipe(tap((tokens: Tokens) => {
-      this.setToken(tokens.jwt);
-    }));
-  }
-
-  private getRefreshToken() {
-    return localStorage.getItem("refreshToken");
-  }
-
-  public setRefreshToken(refreshToken: string) {
-    localStorage.setItem("refreshToken", refreshToken);
+  constructor(private cookieService: CookieService) {
   }
 
   public setRoles(roles: []) {
-    localStorage.setItem("roles", JSON.stringify(roles));
+    this.cookieService.set('_security_role',
+      CryptoJS.AES.encrypt(roles['roleName'].toString(), this.secretKey.trim()).toString());
   }
 
   public getRoles() {
-    //return roles array
-    return JSON.parse(<string>localStorage.getItem("roles"));
+    return CryptoJS.AES.decrypt(this.cookieService.get('_security_role'), this.secretKey.trim()).toString(CryptoJS.enc.Utf8);
   }
 
-  public setToken(jwtToken: string) {
-    localStorage.setItem("jwtToken", jwtToken);
+  public setToken(accessToken: string) {
+    this.cookieService.set('_security_accessToken',
+      CryptoJS.AES.encrypt(accessToken, this.secretKey.trim()).toString());
   }
 
-  public getToken(): string {
-    return <string>localStorage.getItem("jwtToken");
+  public getToken() {
+    return CryptoJS.AES.decrypt(this.cookieService.get('_security_accessToken'), this.secretKey.trim()).toString(CryptoJS.enc.Utf8);
   }
 
   public clear() {
-    localStorage.clear();
+    this.cookieService.delete('_security_role');
+    this.cookieService.delete('_security_accessToken');
   }
 
   public isLoggedIn() {

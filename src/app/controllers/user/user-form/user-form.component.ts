@@ -7,6 +7,7 @@ import {UserService} from "../../../_services/user.service";
 import {ToastrService} from "ngx-toastr";
 import {DatePipe} from "@angular/common";
 import {environment} from "../../../../environments/environment";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-user-form',
@@ -15,12 +16,9 @@ import {environment} from "../../../../environments/environment";
 })
 export class UserFormComponent implements OnInit {
 
-  //https://stackoverflow.com/questions/47018151/how-to-update-global-variable-in-angular2
-
   //Main Config
   apiBaseUrl = environment.apiBaseUrl;
   projectName = environment.project;
-  accessToken = environment.accessToken;
   //
 
   editMode = true;

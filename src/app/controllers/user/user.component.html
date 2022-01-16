@@ -44,8 +44,8 @@
                         *ngIf="user?.imageUrl === null"
                         class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="">
                       <img
-                        *ngIf="user?.imageUrl != null" [src]="'http://localhost:9090/selfservice/images/' +
-                 user?.imageUrl"
+                        *ngIf="user?.imageUrl != null"
+                        [src]=" apiBaseUrl +'/'+ projectName +'/images/' + user?.imageUrl + '?accessToken=1234' "
                         class="img-fluid" alt="">
                     </div>
                     <div class="candidate-list-details">

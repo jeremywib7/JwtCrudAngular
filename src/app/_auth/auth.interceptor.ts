@@ -8,8 +8,6 @@ import {UserService} from "../_services/user.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  private isRefreshing: Boolean = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject(null);
 
   constructor(private userAuthService: UserAuthService, private router: Router, private toastr: ToastrService,
               private userService: UserService) {
@@ -25,7 +23,6 @@ export class AuthInterceptor implements HttpInterceptor {
     req = this.addToken(req, token);
 
     return next.handle(req).pipe(
-
       catchError(
         (err: HttpErrorResponse) => {
           if (err.status === 401) {
@@ -51,25 +48,4 @@ export class AuthInterceptor implements HttpInterceptor {
     );
   }
 
-  private handle401Error(req: HttpRequest<any>, next: HttpHandler) {
-    if (!this.isRefreshing) {
-      this.isRefreshing = true;
-      this.refreshTokenSubject.next(null);
-
-      return this.userAuthService.refreshToken().pipe(
-        switchMap((token: any) => {
-          this.isRefreshing = false;
-          this.refreshTokenSubject.next(token.jwt);
-          return next.handle(this.addToken(req, token.jwt));
-        }));
-
-    } else {
-      return this.refreshTokenSubject.pipe(
-        filter(token => token != null),
-        take(1),
-        switchMap(jwt => {
-          return next.handle(this.addToken(req, jwt));
-        }));
-    }
-  }
 }
