@@ -5,7 +5,7 @@
 
     <nav class="navbar navbar-expand navbar-light bg-light">
       <div class="container-fluid">
-        <button routerLink="/user/add" class="btn btn-primary">Add User</button>
+        <button routerLink="/int/user/add" class="btn btn-primary">Add User</button>
         <div class="d-flex">
           <button (click)="sort('userFirstName')" class="btn btn-dark me-2">
             <i *ngIf="!isDescOrder" class="fa fa-sort-alpha-desc"></i>
@@ -70,7 +70,7 @@
                       <li><a routerLink="/user/{{user.username}}" class="text-primary" data-toggle="tooltip" title=""
                              data-original-title="view"><i
                         class="far fa-eye"></i></a></li>
-                      <li><a routerLink="/user/{{user.username}}" class="text-info" data-toggle="tooltip" title=""
+                      <li><a routerLink="/int/user/{{user.username}}" class="text-info" data-toggle="tooltip" title=""
                              data-original-title="Edit"><i
                         class="fas fa-pencil-alt"></i></a></li>
                       <li><a (click)="open(deleteUserModal)" *ngIf="user.username.toString() != 'Admin'"

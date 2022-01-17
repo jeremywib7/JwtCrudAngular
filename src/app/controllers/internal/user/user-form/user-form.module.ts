@@ -4,7 +4,6 @@ import {UserFormComponent} from "./user-form.component";
 import {CommonModule, DatePipe} from "@angular/common";
 import {NgbButtonsModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
-import {ApplicationPipesModule} from "../../../modules/ApplicationPipesModule";
 
 const routes: Routes = [
   {path: '', component: UserFormComponent},
@@ -17,7 +16,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     NgbModule,
     BsDatepickerModule.forRoot(),
-    ApplicationPipesModule,
   ],
 })
 export class UserFormModule {

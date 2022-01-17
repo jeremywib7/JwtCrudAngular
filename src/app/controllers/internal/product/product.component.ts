@@ -9,7 +9,7 @@ import {Product} from "../../../model/Product";
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css']
 })
-export class ProductComponent implements OnInit {
+export class InternalProductComponent implements OnInit {
 
   constructor(private productService: ProductService) { }
 

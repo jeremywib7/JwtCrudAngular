@@ -7,7 +7,6 @@ import {UserService} from "../../../../_services/user.service";
 import {ToastrService} from "ngx-toastr";
 import {DatePipe} from "@angular/common";
 import {environment} from "../../../../../environments/environment";
-import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-user-form',
@@ -146,7 +145,7 @@ export class UserFormComponent implements OnInit {
 
         this.userService.updateUser(this.reactiveForm.value, this.selectedImage).subscribe(
           (response: User) => {
-            this.router.navigate(['/user']);
+            this.router.navigate(['/int/user']);
             this.toastr.success('User successfully updated', 'Success');
           },
         );
@@ -159,7 +158,7 @@ export class UserFormComponent implements OnInit {
 
         this.userService.addUser(this.reactiveForm.value, this.selectedImage).subscribe(
           (response: User) => {
-            this.router.navigate(['/user']);
+            this.router.navigate(['/int/user']);
             this.toastr.success('User successfully registered', 'Success');
           },
         );

@@ -6,14 +6,17 @@ import {UserComponent} from "./controllers/internal/user/user.component";
 import {LoginComponent} from "./controllers/both/login/login.component";
 import {ForbiddenComponent} from "./controllers/ui/forbidden/forbidden.component";
 import {AuthGuard} from "./_auth/auth.guard";
-import {ProductComponent} from "./controllers/internal/product/product.component";
+import {InternalProductComponent} from "./controllers/internal/product/product.component";
+import {ExternalProductComponent} from "./controllers/external/product/product.component";
 
 // @ts-ignore
 const routes: Routes = [
-  {path: '', redirectTo: '/home', pathMatch: 'full'},
+  // {path: '', redirectTo: '/home', pathMatch: 'full'},
+  {path: '', component: ExternalProductComponent, canActivate: [AuthGuard], data: {roles: 'Customer'}},
   {path: 'home', component: HomeComponent, canActivate: [AuthGuard], data: {roles: 'All'}},
   {path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: {roles: 'Admin'}},
-  {path: 'admin/product', component: ProductComponent, canActivate: [AuthGuard], data: {roles: 'Admin'}},
+  {path: 'int/product', component: InternalProductComponent, canActivate: [AuthGuard], data: {roles: 'Admin'}},
+  {path: 'ext/product', component: ExternalProductComponent, canActivate: [AuthGuard], data: {roles: 'Admin'}},
 
   // {
   //   path: 'admin/product',
@@ -22,7 +25,7 @@ const routes: Routes = [
   //   data: {roles: 'Admin'}
   // },
   {
-    path: 'user',
+    path: 'int/user',
     loadChildren: () => import('./controllers/internal/user/user.module').then(x => x.UserModule),
     canActivate: [AuthGuard],
     data: {roles: 'Admin'}

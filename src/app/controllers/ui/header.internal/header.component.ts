@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import {UserService} from "../../../_services/user.service";
 
 @Component({
-  selector: 'app-header',
+  selector: 'app-header-internal',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })

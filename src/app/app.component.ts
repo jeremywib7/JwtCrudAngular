@@ -15,11 +15,15 @@ export class AppComponent {
   constructor(private userAuthService: UserAuthService) {
   }
 
-  public isLoggedIn() {
-    return this.userAuthService.isLoggedIn();
+  public roleInternal() {
+    return this.userAuthService.isLoggedIn() && this.userAuthService.getRoles() != 'Customer';
   }
 
   public sideBarToggler() {
     this.sideBarOpen = !this.sideBarOpen;
+  }
+
+  public roleExternal() {
+    return this.userAuthService.isLoggedIn() && this.userAuthService.getRoles() === 'Customer';
   }
 }

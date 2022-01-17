@@ -1,9 +1,10 @@
 <mat-drawer-container>
-  <mat-drawer mode="side" [opened]="sideBarOpen" *ngIf="isLoggedIn()">
+  <mat-drawer mode="side" [opened]="sideBarOpen" *ngIf="roleInternal()">
     <app-sidenav></app-sidenav>
   </mat-drawer>
   <mat-drawer-content>
-    <app-header *ngIf="isLoggedIn()" (toggleSidebarForMe)="sideBarToggler()"></app-header>
+    <app-header-internal *ngIf="roleInternal()" (toggleSidebarForMe)="sideBarToggler()"></app-header-internal>
+    <app-header-external *ngIf="roleExternal()" ></app-header-external>
     <router-outlet></router-outlet>
   </mat-drawer-content>
 </mat-drawer-container>
