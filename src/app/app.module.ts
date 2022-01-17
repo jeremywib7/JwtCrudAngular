@@ -3,9 +3,9 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {HomeComponent} from './controllers/home/home.component';
-import {AdminComponent} from './controllers/admin/admin.component';
-import {LoginComponent} from './controllers/login/login.component';
+import {HomeComponent} from './controllers/both/home/home.component';
+import {AdminComponent} from './controllers/internal/admin/admin.component';
+import {LoginComponent} from './controllers/both/login/login.component';
 import {ForbiddenComponent} from './controllers/ui/forbidden/forbidden.component';
 import {HeaderComponent} from './controllers/ui/header/header.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -14,7 +14,6 @@ import {RouterModule} from "@angular/router";
 import {AuthGuard} from "./_auth/auth.guard";
 import {AuthInterceptor} from "./_auth/auth.interceptor";
 import {UserService} from "./_services/user.service";
-import {MemberService} from "./_services/member.service";
 import {DatePipe} from "@angular/common";
 import {SidenavComponent} from './controllers/ui/sidenav/sidenav.component';
 import {MatSidenavModule} from "@angular/material/sidenav";
@@ -24,12 +23,11 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatListModule} from "@angular/material/list";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MemberFormComponent} from './controllers/member/member-form/member-form.component';
 
 //library section
 import {ButtonModule} from "../../projects/components/button/src/lib/button.module";
 import {NgxPaginationModule} from "ngx-pagination";
-import {UserFormComponent} from "./controllers/user/user-form/user-form.component";
+import {UserFormComponent} from "./controllers/internal/user/user-form/user-form.component";
 import {FilterPipeModule} from 'ngx-filter-pipe';
 import {AngularToastifyModule} from "angular-toastify";
 import {ToastContainerModule, ToastrModule} from "ngx-toastr";
@@ -39,6 +37,7 @@ import {Ng2SearchPipeModule} from 'ng2-search-filter';
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
 import {CookieService} from "ngx-cookie-service";
 import {ProductService} from "./_services/product.service";
+import { ProductComponent } from './controllers/internal/product/product.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,8 +47,8 @@ import {ProductService} from "./_services/product.service";
     ForbiddenComponent,
     HeaderComponent,
     SidenavComponent,
-    MemberFormComponent,
     UserFormComponent,
+    ProductComponent,
   ],
   imports: [
     BrowserModule,
@@ -91,7 +90,6 @@ import {ProductService} from "./_services/product.service";
     DatePipe,
     CookieService,
     UserService,
-    MemberService,
     ProductService,
   ],
   bootstrap: [AppComponent]

@@ -14,16 +14,18 @@ export class UserService {
   private apiServerUrl = environment.apiBaseUrl;
   private project = environment.project;
 
+  private headers: HttpHeaders;
+
   requestHeader = new HttpHeaders(
     {"No-Auth": "True"}
   );
 
   constructor(private httpClient: HttpClient, private userAuthService: UserAuthService,) {
-    environment.accessToken = '1234';
   }
 
   public login(loginData: any) {
-    return this.httpClient.post(this.apiServerUrl + '/selfservice/authenticate', loginData, {headers: this.requestHeader});
+    return this.httpClient.post(this.apiServerUrl + '/selfservice/authenticate',
+      loginData, {headers: this.requestHeader, withCredentials: true});
   }
 
   public addUser(user: User, selectedImage?: File): Observable<User> {
@@ -56,17 +58,6 @@ export class UserService {
         return this.httpClient.post<User>(`${this.apiServerUrl}/${this.project}/user/register`, user);
       })
     );
-  }
-
-  private randomStr() {
-    let result = '';
-    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-
-    for (let i = 0; i < 14; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-
-    return result;
   }
 
   public updateUser(user: User, selectedImage?: File): Observable<User> {
@@ -136,7 +127,6 @@ export class UserService {
     const userRoles: any = this.userAuthService.getRoles();
 
     if (userRoles != null && userRoles) {
-
 
 
       if (userRoles.toString() === allowedRoles.toString() || allowedRoles.toString() === "All") {
