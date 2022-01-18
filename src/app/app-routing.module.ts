@@ -2,12 +2,11 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from "./controllers/both/home/home.component";
 import {AdminComponent} from "./controllers/internal/admin/admin.component";
-import {UserComponent} from "./controllers/internal/user/user.component";
 import {LoginComponent} from "./controllers/both/login/login.component";
 import {ForbiddenComponent} from "./controllers/ui/forbidden/forbidden.component";
 import {AuthGuard} from "./_auth/auth.guard";
 import {InternalProductComponent} from "./controllers/internal/product/product.component";
-import {ExternalProductComponent} from "./controllers/external/product/product.component";
+import {ExternalProductComponent} from "./controllers/external/external-product/external-product.component";
 
 // @ts-ignore
 const routes: Routes = [

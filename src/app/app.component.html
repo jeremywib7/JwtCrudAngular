@@ -6,6 +6,7 @@
     <app-header-internal *ngIf="roleInternal()" (toggleSidebarForMe)="sideBarToggler()"></app-header-internal>
     <app-header-external *ngIf="roleExternal()" ></app-header-external>
     <router-outlet></router-outlet>
+    <app-footer-external *ngIf="roleExternal()"></app-footer-external>
   </mat-drawer-content>
 </mat-drawer-container>
 

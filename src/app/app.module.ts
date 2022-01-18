@@ -7,7 +7,6 @@ import {HomeComponent} from './controllers/both/home/home.component';
 import {AdminComponent} from './controllers/internal/admin/admin.component';
 import {LoginComponent} from './controllers/both/login/login.component';
 import {ForbiddenComponent} from './controllers/ui/forbidden/forbidden.component';
-import {HeaderComponent} from './controllers/ui/header.internal/header.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
@@ -37,9 +36,11 @@ import {Ng2SearchPipeModule} from 'ng2-search-filter';
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
 import {CookieService} from "ngx-cookie-service";
 import {ProductService} from "./_services/product.service";
-import {ExternalProductComponent} from "./controllers/external/product/product.component";
 import {InternalProductComponent} from "./controllers/internal/product/product.component";
 import {HeaderExternalComponent} from "./controllers/ui/header.external/header.external.component";
+import {ExternalProductComponent} from "./controllers/external/external-product/external-product.component";
+import {InternalHeaderComponent} from "./controllers/ui/header.internal/header.component";
+import { FooterExternalComponent } from './controllers/ui/footer-external/footer-external.component';
 
 @NgModule({
   declarations: [
@@ -48,12 +49,13 @@ import {HeaderExternalComponent} from "./controllers/ui/header.external/header.e
     AdminComponent,
     LoginComponent,
     ForbiddenComponent,
-    HeaderComponent,
+    InternalHeaderComponent,
     SidenavComponent,
     UserFormComponent,
     ExternalProductComponent,
     InternalProductComponent,
-    HeaderExternalComponent
+    HeaderExternalComponent,
+    FooterExternalComponent,
   ],
   imports: [
     BrowserModule,

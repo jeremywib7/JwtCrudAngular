@@ -8,7 +8,7 @@ import {UserService} from "../../../_services/user.service";
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class InternalHeaderComponent implements OnInit {
   @Output() toggleSidebarForMe: EventEmitter<any> = new EventEmitter();
 
   constructor(private userAuthService: UserAuthService, private router: Router, public userService: UserService) {

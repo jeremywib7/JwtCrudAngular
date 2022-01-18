@@ -1,0 +1,62 @@
+<body>
+<!-- Header-->
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Shop in style</h1>
+      <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+    </div>
+  </div>
+</header>
+<!-- Section-->
+<section class="py-5">
+  <div class="container px-4 px-lg-5 mt-5">
+    <div class="row justify-content-center">
+      <div class="col-sm-5 col-md-4 col-lg-3" *ngFor=" let product of products">
+        <div class="food-card">
+          <div class="food-card_img">
+            <img src="https://i.imgur.com/eFWRUuR.jpg" alt="">
+            <a href="#!"><i class="far fa-heart"></i></a>
+          </div>
+          <div class="food-card_content">
+            <div class="food-card_title-section">
+              <a href="#!" class="food-card_title">{{product.name}}</a>
+              <div class="food-card_price">
+                <span>{{product.unitPrice | currency:'IDR ':'symbol':'3.0'}} </span>
+              </div>
+            </div>
+            <div class="food-card_bottom-section">
+              <div class="space-between">
+                <div>
+                  <span class="fa fa-fire"></span> 220 - 280 Kcal
+                </div>
+                <div class="pull-right">
+                  <span class="badge badge-success">Veg</span>
+                </div>
+              </div>
+              <hr>
+              <div class="space-between h-25">
+                <div class="food-card_order-count">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <button class="btn btn-outline-secondary minus-btn" type="button"><i class="fa fa-minus"></i>
+                      </button>
+                    </div>
+                    <input type="text" class="form-control input-manulator" placeholder=""
+                           aria-label="Example text with button addon" aria-describedby="button-addon1" value="0">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary add-btn" type="button"><i class="fa fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+
