@@ -11,7 +11,9 @@ export class ExternalProductComponent implements OnInit {
 
   constructor(private productService: ProductService) { }
 
-  public products: Product[] | undefined;
+  // images = [944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/1800/900`);
+
+  public products: object[]| undefined;
 
   ngOnInit(): void {
     this.getlistProducts();
@@ -19,7 +21,7 @@ export class ExternalProductComponent implements OnInit {
 
   getlistProducts() {
     this.productService.getProducts().subscribe(
-      (data: Product[]) => {
+      (data: object[]) => {
         this.products = data['data'];
       },
     );

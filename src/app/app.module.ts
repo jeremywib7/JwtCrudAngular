@@ -41,6 +41,7 @@ import {HeaderExternalComponent} from "./controllers/ui/header.external/header.e
 import {ExternalProductComponent} from "./controllers/external/external-product/external-product.component";
 import {InternalHeaderComponent} from "./controllers/ui/header.internal/header.component";
 import { FooterExternalComponent } from './controllers/ui/footer-external/footer-external.component';
+import {CarouselModule} from "ngx-bootstrap/carousel";
 
 @NgModule({
   declarations: [
