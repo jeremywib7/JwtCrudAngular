@@ -25,6 +25,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 //library section
 import {ButtonModule} from "../../projects/components/button/src/lib/button.module";
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {NgxPaginationModule} from "ngx-pagination";
 import {UserFormComponent} from "./controllers/internal/user/user-form/user-form.component";
 import {FilterPipeModule} from 'ngx-filter-pipe';
@@ -41,7 +42,6 @@ import {HeaderExternalComponent} from "./controllers/ui/header.external/header.e
 import {ExternalProductComponent} from "./controllers/external/external-product/external-product.component";
 import {InternalHeaderComponent} from "./controllers/ui/header.internal/header.component";
 import { FooterExternalComponent } from './controllers/ui/footer-external/footer-external.component';
-import {CarouselModule} from "ngx-bootstrap/carousel";
 
 @NgModule({
   declarations: [
@@ -68,6 +68,7 @@ import {CarouselModule} from "ngx-bootstrap/carousel";
       timeOut: 5000,
       // positionClass: 'toast-bottom-left',
     }),
+    AutocompleteLibModule,
     ToastContainerModule,
     FormsModule,
     HttpClientModule,

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserAuthService} from "./user-auth.service";
 import {environment} from "../../environments/environment";
@@ -9,7 +9,7 @@ import {CookieService} from "ngx-cookie-service";
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService implements OnInit {
 
   private apiServerUrl = environment.apiBaseUrl;
   private project = environment.project;
@@ -21,6 +21,9 @@ export class UserService {
   );
 
   constructor(private httpClient: HttpClient, private userAuthService: UserAuthService,) {
+  }
+
+  ngOnInit(): void {
   }
 
   public login(loginData: any) {
