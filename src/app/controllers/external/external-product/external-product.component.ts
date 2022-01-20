@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProductService} from "../../../_services/product.service";
 import {Product} from "../../../model/Product";
+import {Store} from "@ngrx/store";
+import {retrievedProduct} from "../../../store/actions/product.actions";
 
 @Component({
   selector: 'app-external-product',
@@ -9,18 +11,22 @@ import {Product} from "../../../model/Product";
 })
 export class ExternalProductComponent implements OnInit {
 
-  constructor(private productService: ProductService) { }
+  constructor(
+    private productService: ProductService,
+    private store: Store) {
+  }
 
-  public products: object[]| undefined;
+  public products: object[] | undefined;
 
   ngOnInit(): void {
-    this.getlistProducts();
+    // this.getlistProducts();
   }
 
   getlistProducts() {
     this.productService.getProducts().subscribe(
       (data: object[]) => {
-        this.products = data['data'];
+        // this.products = data['data'];
+        this.store.dispatch(retrievedProduct({allProduct: data['data'] as Product[]}));
       },
     );
   }
