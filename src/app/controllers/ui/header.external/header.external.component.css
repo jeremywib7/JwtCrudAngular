@@ -1,0 +1,33 @@
+.ng-autocomplete ::ng-deep .autocomplete-container {
+  box-shadow: none;
+  width: available;
+}
+
+/* Cart icon */
+
+.fas[data-count]{
+  position:relative;
+}
+.fas[data-count]:after{
+  position: absolute;
+  right: -0.75em;
+  top: -.75em;
+  content: attr(data-count);
+  padding: .5em;
+  border-radius: 10em;
+  line-height: .9em;
+  color: white;
+  background: rgba(255,0,0,.75);
+  text-align: center;
+  min-width: 2em;
+  font: bold .4em sans-serif;
+}
+
+/*This is modifying the btn-primary colors but you could create your own .btn-something class as well*/
+.btn:hover, .btn:focus, .btn:active, .btn.active, .open>.dropdown-toggle.btn {
+  /*color: #fff;*/
+  background-color: #D3DEDC;
+  /*border-color: #285e8e; !*set the color you want here*!*/
+}
+
+

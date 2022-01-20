@@ -14,8 +14,6 @@ import {environment} from "../../../../environments/environment";
 })
 export class UserComponent implements OnInit {
   p: number = 1;
-
-  searchText: string;
   apiBaseUrl = environment.apiBaseUrl;
   projectName = environment.project;
 

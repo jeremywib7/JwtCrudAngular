@@ -14,8 +14,6 @@ export class UserService implements OnInit {
   private apiServerUrl = environment.apiBaseUrl;
   private project = environment.project;
 
-  private headers: HttpHeaders;
-
   requestHeader = new HttpHeaders(
     {"No-Auth": "True"}
   );

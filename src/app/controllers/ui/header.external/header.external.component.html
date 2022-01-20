@@ -20,14 +20,14 @@
             <li><a class="dropdown-item" href="#!">Drinks</a></li>
           </ul>
         </li>
-<!--        (selected)='selectEvent($event)'-->
-<!--        (inputChanged)='onChangeSearch($event)'-->
-<!--        (inputFocused)='onFocused($event)'-->
+        <!--        (selected)='selectEvent($event)'-->
+        <!--        (inputChanged)='onChangeSearch($event)'-->
+        <!--        (inputFocused)='onFocused($event)'-->
         <div class="ng-autocomplete">
           <ng-autocomplete
             [data]="products"
             [searchKeyword]="keyword"
-
+            [placeholder]="'Search'"
             [itemTemplate]="itemTemplate"
             [notFoundTemplate]="notFoundTemplate">
           </ng-autocomplete>
@@ -40,14 +40,10 @@
             <div [innerHTML]="notFound"></div>
           </ng-template>
         </div>
-
-
       </ul>
-      <form class="d-flex">
-        <button class="btn btn-outline-dark" type="submit">
-          <i class="bi-cart-fill me-1"></i>
-          Cart
-          <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+      <form class="d-flex ms-3">
+        <button class="btn" [routerLink]="'/'">
+          <i  class="fas fa-shopping-cart fa-lg" data-count="16"></i>
         </button>
       </form>
     </div>

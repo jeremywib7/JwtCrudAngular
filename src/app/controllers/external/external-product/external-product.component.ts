@@ -11,8 +11,6 @@ export class ExternalProductComponent implements OnInit {
 
   constructor(private productService: ProductService) { }
 
-  // images = [944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/1800/900`);
-
   public products: object[]| undefined;
 
   ngOnInit(): void {
