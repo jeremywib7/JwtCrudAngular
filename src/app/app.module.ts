@@ -42,6 +42,9 @@ import {HeaderExternalComponent} from "./controllers/ui/header.external/header.e
 import {ExternalProductComponent} from "./controllers/external/external-product/external-product.component";
 import {InternalHeaderComponent} from "./controllers/ui/header.internal/header.component";
 import { FooterExternalComponent } from './controllers/ui/footer-external/footer-external.component';
+import {Store, StoreModule} from "@ngrx/store";
+import {productReducer} from "./store/reducers/product.reducer";
+import {productCategoryReducer} from "./store/reducers/product-category.reducer";
 
 @NgModule({
   declarations: [
@@ -88,6 +91,7 @@ import { FooterExternalComponent } from './controllers/ui/footer-external/footer
     ButtonModule,
     FilterPipeModule,
     NgbModule,
+    StoreModule.forRoot({product:productReducer, productCategory: productCategoryReducer}),
     BsDatepickerModule.forRoot(),
   ],
   providers: [
@@ -100,6 +104,7 @@ import { FooterExternalComponent } from './controllers/ui/footer-external/footer
     CookieService,
     UserService,
     ProductService,
+    Store
   ],
   bootstrap: [AppComponent]
 })

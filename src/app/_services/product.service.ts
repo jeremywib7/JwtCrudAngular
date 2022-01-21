@@ -12,17 +12,16 @@ export class ProductService{
   private apiServerUrl = environment.apiBaseUrl;
   private project = environment.project;
 
-  public products: Observable<Product[]>;
-
   constructor(private httpClient: HttpClient) {
   }
 
-  public getProducts(): Observable<Product[]> {
-    return this.httpClient.get<Product[]>(`${this.apiServerUrl}/${this.project}/product/all`);
-  }
+  // public getProducts(): Observable<Product[]> {
+  //   return this.httpClient.get<Product[]>(`${this.apiServerUrl}/${this.project}/product/all`);
+  // }
 
   loadProducts() {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/all`)
       .pipe(map((data) => data|| []))
   }
+
 }

@@ -16,8 +16,9 @@
             <li>
               <hr class="dropdown-divider"/>
             </li>
-            <li><a class="dropdown-item" href="#!">Foods</a></li>
-            <li><a class="dropdown-item" href="#!">Drinks</a></li>
+            <li *ngFor=" let productCategory of allProductCategories$ | async | orderBy: orderHeader: false">
+              <a class="dropdown-item" href="#!">{{productCategory.categoryName}}</a>
+            </li>
           </ul>
         </li>
         <!--        (selected)='selectEvent($event)'-->
@@ -25,7 +26,7 @@
         <!--        (inputFocused)='onFocused($event)'-->
         <div class="ng-autocomplete">
           <ng-autocomplete
-            [data]="products"
+            [data]="allProduct$ | async"
             [searchKeyword]="keyword"
             [placeholder]="'Search'"
             [itemTemplate]="itemTemplate"
@@ -43,7 +44,7 @@
       </ul>
       <form class="d-flex ms-3">
         <button class="btn" [routerLink]="'/'">
-          <i  class="fas fa-shopping-cart fa-lg" data-count="16"></i>
+          <i class="fas fa-shopping-cart fa-lg" data-count="16"></i>
         </button>
       </form>
     </div>

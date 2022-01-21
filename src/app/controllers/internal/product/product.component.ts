@@ -21,7 +21,7 @@ export class InternalProductComponent implements OnInit {
   }
 
   getlistProducts() {
-    this.productService.getProducts().subscribe(
+    this.productService.loadProducts().subscribe(
       (data: Product[]) => {
         this.products = data;
         },
