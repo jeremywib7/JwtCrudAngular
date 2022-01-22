@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {UserAuthService} from "../../../_services/user-auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-forbidden',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ForbiddenComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private userAuthService: UserAuthService,
+    private router: Router
+    ) { }
 
   ngOnInit(): void {
+    if (this.userAuthService.getRoles() === "Customer") {
+      this.router.navigate(['/']);
+    }
   }
 
 }

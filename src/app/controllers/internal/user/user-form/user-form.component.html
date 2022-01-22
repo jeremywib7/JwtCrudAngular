@@ -2,7 +2,7 @@
 <div class="container-fluid page">
   <nav aria-label="breadcrumb" class="main-breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a routerLink="/user">User</a></li>
+      <li class="breadcrumb-item"><a routerLink="/int/user">User</a></li>
       <li class="breadcrumb-item active" aria-current="page">{{ editMode ? 'Edit' : 'Add'}} User</li>
     </ol>
   </nav>
@@ -251,7 +251,7 @@
 
         <div class="modal-footer">
           <button type="button" id="add-member-form" class="btn btn-secondary" data-dismiss="modal"
-                  routerLink="/user">Close
+                  routerLink="/int/user">Close
           </button>
           <!--                    <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>-->
           <ngid-button

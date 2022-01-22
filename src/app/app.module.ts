@@ -9,7 +9,7 @@ import {LoginComponent} from './controllers/both/login/login.component';
 import {ForbiddenComponent} from './controllers/ui/forbidden/forbidden.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {RouterModule} from "@angular/router";
+import {RouterModule, Routes} from "@angular/router";
 import {AuthGuard} from "./_auth/auth.guard";
 import {AuthInterceptor} from "./_auth/auth.interceptor";
 import {UserService} from "./_services/user.service";

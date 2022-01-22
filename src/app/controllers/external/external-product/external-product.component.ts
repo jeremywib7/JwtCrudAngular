@@ -19,31 +19,8 @@ export class ExternalProductComponent  {
   allProduct$ = this.store.pipe(select(productById(this.productSelectedId)));
 
   constructor(
-    private productService: ProductService,
-    private productCategoryService: ProductCategoryService,
     private store: Store<{ product: Product[] }>
   ) {
-  }
-
-  ngOnInit(): void {
-    this.getlistProducts();
-    this.getListProductCategories();
-  }
-
-  getlistProducts() {
-    this.productService.loadProducts().subscribe(
-      (data) => {
-        this.store.dispatch(retrievedProduct({allProduct: data['data'] as Product[]}));
-      },
-    );
-  }
-
-  getListProductCategories() {
-    this.productCategoryService.loadProductCategories().subscribe(
-      (data) => {
-        this.store.dispatch(retrievedProductCategory({allProductCategory: data['data'] as ProductCategory[]}));
-      },
-    );
   }
 
 }
