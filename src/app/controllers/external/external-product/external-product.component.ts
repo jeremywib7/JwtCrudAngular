@@ -7,20 +7,33 @@ import {productById} from "../../../store/selectors/product.selector";
 import {ProductCategoryService} from "../../../_services/product-category.service";
 import {retrievedProductCategory} from "../../../store/actions/product-category.actions";
 import {ProductCategory} from "../../../model/ProductCategory";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-external-product',
   templateUrl: './external-product.component.html',
   styleUrls: ['./external-product.component.css']
 })
-export class ExternalProductComponent  {
+export class ExternalProductComponent implements OnInit{
 
   productSelectedId = -1;
   allProduct$ = this.store.pipe(select(productById(this.productSelectedId)));
 
   constructor(
-    private store: Store<{ product: Product[] }>
+    private store: Store<{ product: Product[] }>,
+    private _activatedRoute: ActivatedRoute
   ) {
+  }
+
+  ngOnInit(): void {
+    this.listProducts();
+  }
+
+  listProducts() {
+    const hasCategoryId: boolean = this._activatedRoute.snapshot.paramMap.has('id');
+    if (hasCategoryId) {
+      +this._activatedRoute.snapshot.paramMap.get('id');
+    }
   }
 
 }

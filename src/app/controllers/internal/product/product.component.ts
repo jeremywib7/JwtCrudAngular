@@ -15,13 +15,14 @@ export class InternalProductComponent implements OnInit {
   constructor(private productService: ProductService, private headerExternal : HeaderExternalComponent) { }
 
   public products: Product[];
+  productPageNumber: number = 0;
 
   ngOnInit(): void {
     this.getlistProducts();
   }
 
   getlistProducts() {
-    this.productService.loadProducts().subscribe(
+    this.productService.loadProducts(this.productPageNumber).subscribe(
       (data: Product[]) => {
         this.products = data;
         },

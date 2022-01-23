@@ -3,6 +3,13 @@
   width: available;
 }
 
+.icon-header {
+  font-size: 1.4em;
+  color: #575656;
+  text-shadow: 1px 1px 1px #ccc;
+
+}
+
 /* Cart icon */
 
 .fas[data-count]{

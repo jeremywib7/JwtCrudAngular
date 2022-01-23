@@ -19,8 +19,14 @@ export class ProductService{
   //   return this.httpClient.get<Product[]>(`${this.apiServerUrl}/${this.project}/product/all`);
   // }
 
-  loadProducts() {
-    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/all`)
+  loadProducts(pageNumber: number) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/all?page=${pageNumber}`)
+      .pipe(map((data) => data|| []))
+  }
+
+  loadProductsByCategoryId(categoryId: number, pageNumber: number) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByCategory?id=${categoryId}
+    &page=${pageNumber}`)
       .pipe(map((data) => data|| []))
   }
 

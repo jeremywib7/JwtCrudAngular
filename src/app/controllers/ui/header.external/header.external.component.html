@@ -2,7 +2,7 @@
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container px-4 px-lg-5">
-    <a class="navbar-brand" href="#!">Start Bootstrap</a>
+    <a class="navbar-brand" routerLink="/">Start Bootstrap</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
       class="navbar-toggler-icon"></span></button>
@@ -17,7 +17,9 @@
               <hr class="dropdown-divider"/>
             </li>
             <li *ngFor=" let productCategory of allProductCategories$ | async | orderBy: orderHeader: false">
-              <a class="dropdown-item" href="#!">{{productCategory.categoryName}}</a>
+              <a class="dropdown-item"
+                 routerLink="/ext/category/{{productCategory.id}}"
+              >{{productCategory.categoryName}}</a>
             </li>
           </ul>
         </li>
@@ -44,7 +46,7 @@
       </ul>
       <form class="d-flex ms-3">
         <button class="btn" [routerLink]="'/'">
-          <i class="fas fa-shopping-cart fa-lg" data-count="16"></i>
+          <i class="icon-header fas fa-shopping-cart" data-count="16"></i>
         </button>
       </form>
     </div>

@@ -45,6 +45,10 @@ import { FooterExternalComponent } from './controllers/ui/footer-external/footer
 import {Store, StoreModule} from "@ngrx/store";
 import {productReducer} from "./store/reducers/product.reducer";
 import {productCategoryReducer} from "./store/reducers/product-category.reducer";
+import { PageNotFoundComponent } from './controllers/both/page-not-found/page-not-found.component';
+import {
+  ExternalProductByCategoryComponent
+} from "./controllers/external/product-by-category/product-by-category.component";
 
 @NgModule({
   declarations: [
@@ -60,6 +64,8 @@ import {productCategoryReducer} from "./store/reducers/product-category.reducer"
     InternalProductComponent,
     HeaderExternalComponent,
     FooterExternalComponent,
+    PageNotFoundComponent,
+    ExternalProductByCategoryComponent,
   ],
   imports: [
     BrowserModule,

@@ -18,6 +18,7 @@ import {Store} from "@ngrx/store";
 })
 export class AppComponent {
   sideBarOpen: any = true;
+  productsPageNumber: number = 0;
 
   constructor(
     private userAuthService: UserAuthService,
@@ -27,14 +28,20 @@ export class AppComponent {
   ) {
   }
   ngOnInit(): void {
-    this.getlistProducts();
-    this.getListProductCategories();
+    this.onInitMethod();
+  }
+
+  onInitMethod(): void {
+    if (this.userAuthService.isLoggedIn()) {
+      this.getlistProducts();
+    }
   }
 
   getlistProducts() {
-    this.productService.loadProducts().subscribe(
+    this.productService.loadProducts(this.productsPageNumber).subscribe(
       (data) => {
-        this.store.dispatch(retrievedProduct({allProduct: data['data'] as Product[]}));
+        this.store.dispatch(retrievedProduct({allProduct: data['data']['content'] as Product[]}));
+        this.getListProductCategories();
       },
     );
   }
