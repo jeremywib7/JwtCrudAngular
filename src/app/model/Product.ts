@@ -6,6 +6,7 @@ export class Product {
     id: string;
     categoryName: string;
   };
+  totalCalories:string;
   description: string;
   unitPrice: string;
   imageUrl: string;
