@@ -18,7 +18,8 @@
             </li>
             <li *ngFor=" let productCategory of allProductCategories$ | async | orderBy: orderHeader: false">
               <a class="dropdown-item"
-                 routerLink="/ext/category/{{productCategory.id}}"
+                 routerLink="/ext/category/filter"
+                 [queryParams]="{categoryId: productCategory.id}"
               >{{productCategory.categoryName}}</a>
             </li>
           </ul>

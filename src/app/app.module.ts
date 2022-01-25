@@ -45,10 +45,12 @@ import { FooterExternalComponent } from './controllers/ui/footer-external/footer
 import {Store, StoreModule} from "@ngrx/store";
 import {productReducer} from "./store/reducers/product.reducer";
 import {productCategoryReducer} from "./store/reducers/product-category.reducer";
-import { PageNotFoundComponent } from './controllers/both/page-not-found/page-not-found.component';
-import {
-  ExternalProductByCategoryComponent
-} from "./controllers/external/product-by-category/product-by-category.component";
+import {ExternalProductByCategoryComponent} from "./controllers/external/product-by-category/product-by-category.component";
+import {NgxSliderModule} from "@angular-slider/ngx-slider";
+// import { PageNotFoundComponent } from './controllers/both/page-not-found/page-not-found.component';
+// import {
+//   ExternalProductByCategoryComponent
+// } from "./controllers/external/product-by-category/product-by-category.component";
 
 @NgModule({
   declarations: [
@@ -56,6 +58,7 @@ import {
     HomeComponent,
     AdminComponent,
     LoginComponent,
+    ExternalProductByCategoryComponent,
     ForbiddenComponent,
     InternalHeaderComponent,
     SidenavComponent,
@@ -64,8 +67,8 @@ import {
     InternalProductComponent,
     HeaderExternalComponent,
     FooterExternalComponent,
-    PageNotFoundComponent,
-    ExternalProductByCategoryComponent,
+    // PageNotFoundComponent,
+    // ExternalProductByCategoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -97,8 +100,9 @@ import {
     ButtonModule,
     FilterPipeModule,
     NgbModule,
-    StoreModule.forRoot({product:productReducer, productCategory: productCategoryReducer}),
+    StoreModule.forRoot({product: productReducer, productCategory: productCategoryReducer}),
     BsDatepickerModule.forRoot(),
+    NgxSliderModule,
   ],
   providers: [
     AuthGuard, {

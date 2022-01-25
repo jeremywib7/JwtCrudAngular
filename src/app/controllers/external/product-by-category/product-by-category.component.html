@@ -25,14 +25,21 @@
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
               <div class="card-body p-0">
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="caloryCheck1">
-                  <label class="custom-control-label ml-1 text-muted f-15" for="caloryCheck1">0 -50 kCals</label>
+                  <div class="custom-slider">
+                    <ngx-slider [(value)]="minCalories"
+                                [(highValue)]="maxCalories"
+                                [options]="optionsCalories"
+                                (userChangeEnd)="getlistProducts(this.currentCategoryId, this.minCalories,
+                     this.maxCalories, this.minPrice,this.maxPrice, this.productsPageNumber)"></ngx-slider>
+                  </div>
                 </div>
 
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="caloryCheck2">
-                  <label class="custom-control-label ml-1 text-muted f-15" for="caloryCheck2">50 - 100 kCals</label>
-                </div>
+                <!--                CHECKBOX OPT -->
+
+                <!--                <div class="custom-control custom-checkbox">-->
+                <!--                  <input type="checkbox" class="custom-control-input" id="caloryCheck2">-->
+                <!--                  <label class="custom-control-label ml-1 text-muted f-15" for="caloryCheck2">50 - 100 kCals</label>-->
+                <!--                </div>-->
               </div>
             </div>
           </div>
@@ -47,28 +54,11 @@
             <div id="collapsetwo" class="collapse show" aria-labelledby="headingtwo">
               <div class="card-body p-0">
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="customCheck7">
-                  <label class="custom-control-label ml-1 text-muted f-15" for="customCheck7">Rp. 0 - Rp. 10.000</label>
+                  <div class="custom-slider">
+                    <ngx-slider [(value)]="minPrice" [(highValue)]="maxPrice"
+                                [options]="optionsPrice"></ngx-slider>
+                  </div>
                 </div>
-
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="customCheck8">
-                  <label class="custom-control-label ml-1 text-muted f-15" for="customCheck8">Rp. 10.000 -
-                    20.000</label>
-                </div>
-
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="customCheck3">
-                  <label class="custom-control-label ml-1 text-muted f-15" for="customCheck3">Rp. 20.000 -
-                    30.000</label>
-                </div>
-
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="customCheck4">
-                  <label class="custom-control-label ml-1 text-muted f-15" for="customCheck4">Rp. 30.000 -
-                    40.000</label>
-                </div>
-
               </div>
             </div>
           </div>
@@ -84,7 +74,9 @@
               <div class="card-body p-0">
                 <div class="custom-control custom-radio" *ngFor=" let productCategory of allProductCategories$ |
                 async | orderBy: 'categoryName': false">
-                  <input (click)="getlistProducts(productCategory.id)" type="radio" id="{{productCategory.id}}"
+                  <input (click)="getlistProducts(productCategory.id, this.minCalories, this.maxCalories, this.minPrice,
+                  this.maxPrice, this.productsPageNumber)"
+                         type="radio" id="{{productCategory.id}}"
                          name="customRadio2"
                          class="custom-control-input me-2">
                   <label class="custom-control-label ml-1 text-muted f-15" for="{{productCategory.id}}">
