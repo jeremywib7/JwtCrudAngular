@@ -29,8 +29,7 @@
                     <ngx-slider [(value)]="minCalories"
                                 [(highValue)]="maxCalories"
                                 [options]="optionsCalories"
-                                (userChangeEnd)="getlistProducts(this.currentCategoryId, this.minCalories,
-                     this.maxCalories, this.minPrice,this.maxPrice, this.productsPageNumber)"></ngx-slider>
+                                (userChangeEnd)="getlistProducts(this.currentCategoryId)"></ngx-slider>
                   </div>
                 </div>
 
@@ -56,7 +55,8 @@
                 <div class="custom-control custom-checkbox">
                   <div class="custom-slider">
                     <ngx-slider [(value)]="minPrice" [(highValue)]="maxPrice"
-                                [options]="optionsPrice"></ngx-slider>
+                                [options]="optionsPrice"
+                                (userChangeEnd)="getlistProducts(this.currentCategoryId)"></ngx-slider>
                   </div>
                 </div>
               </div>
@@ -74,8 +74,9 @@
               <div class="card-body p-0">
                 <div class="custom-control custom-radio" *ngFor=" let productCategory of allProductCategories$ |
                 async | orderBy: 'categoryName': false">
-                  <input (click)="getlistProducts(productCategory.id, this.minCalories, this.maxCalories, this.minPrice,
-                  this.maxPrice, this.productsPageNumber)"
+                  <input (click)="getlistProducts(productCategory.id)"
+                         [ngModel]="currentCategoryId"
+                         [value]="productCategory.id"
                          type="radio" id="{{productCategory.id}}"
                          name="customRadio2"
                          class="custom-control-input me-2">
