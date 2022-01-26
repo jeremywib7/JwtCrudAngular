@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {select, Store} from "@ngrx/store";
 import {productById} from "../../../store/selectors/product.selector";
 import {Product} from "../../../model/Product";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router} from "@angular/router";
 import {retrievedProduct} from "../../../store/actions/product.actions";
 import {ProductService} from "../../../_services/product.service";
 import {allProductCategory} from "../../../store/selectors/product-category.selector";
@@ -32,9 +32,6 @@ export class ExternalProductByCategoryComponent implements OnInit {
   minPrice: number;
   maxPrice: number;
 
-  minCaloriesQuery: number;
-  maxCaloriesQuery: number;
-
   productByCategory: Product[] = [];
 
   //first page
@@ -57,6 +54,7 @@ export class ExternalProductByCategoryComponent implements OnInit {
       }
     }
   };
+
   optionsPrice: Options = {
     floor: 0,
     ceil: 100000,
@@ -77,16 +75,24 @@ export class ExternalProductByCategoryComponent implements OnInit {
     }
   };
 
+  first: boolean = true;
   constructor(
     private store: Store<{ product: Product[] }>,
     private productService: ProductService,
     private _activatedRoute: ActivatedRoute,
     private router: Router
   ) {
+    // router.events.forEach((event) => {
+    //   if(event instanceof NavigationEnd) {
+    //     this.listProducts();
+    //   }
+    // });
   }
 
-  ngOnInit(): void {
-    this.listProducts();
+  async ngOnInit(): Promise<void> {
+    await this.listProducts();
+    await this.getlistProducts(this.currentCategoryId);
+
   }
 
 
@@ -94,7 +100,7 @@ export class ExternalProductByCategoryComponent implements OnInit {
     this._activatedRoute.queryParams.subscribe(params => {
 
       this.currentCategoryId = +params['categoryId'];
-      this.currentCategoryId === undefined || Number.isNaN(this.currentCategoryId) ? this.currentCategoryId = 0 : null;
+      this.currentCategoryId === undefined || Number.isNaN(this.currentCategoryId) ? this.currentCategoryId = -1 : null;
 
       this.minCalories = +params['minCalories'];
       this.minCalories === undefined || Number.isNaN(this.minCalories) ? this.minCalories = 0 : null;
@@ -109,17 +115,29 @@ export class ExternalProductByCategoryComponent implements OnInit {
       this.maxPrice === undefined || Number.isNaN(this.maxPrice) ? this.maxPrice = 100000 : null;
     });
 
-    this.getlistProducts(this.currentCategoryId);
   }
 
-  getlistProducts(currentCategoryId: number) {
-    //fetch product
-    this.productService.loadProductsByFilter(currentCategoryId, this.minCalories, this.maxCalories,
-      this.minPrice, this.maxPrice, this.productsPageNumber).subscribe(
-      (data: Product[]) => {
-        this.productByCategory = data['data']['content'];
-      },
-    );
+  async getlistProducts(currentCategoryId: number) {
+
+    if (currentCategoryId === -1) {
+      //fetch all products
+      await this.productService.loadProducts(this.minCalories, this.maxCalories,
+        this.minPrice, this.maxPrice, this.productsPageNumber).subscribe(
+        (data: Product[]) => {
+          this.productByCategory = data['data']['content'];
+        },
+      );
+    } else {
+      //fetch product based on category
+      await this.productService.loadProductsByFilter(currentCategoryId, this.minCalories, this.maxCalories,
+        this.minPrice, this.maxPrice, this.productsPageNumber).subscribe(
+        (data: Product[]) => {
+          this.productByCategory = data['data']['content'];
+        },
+      );
+    }
+
+
 
     // update url param
     this.router.navigate([], {

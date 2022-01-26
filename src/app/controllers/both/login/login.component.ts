@@ -34,11 +34,11 @@ export class LoginComponent implements OnInit {
   }
 
   getlistProducts() {
-    this.productService.loadProducts(this.productPageNumber).subscribe(
-      (data) => {
-        this.store.dispatch(retrievedProduct({allProduct: data['data']['content'] as Product[]}));
-      },
-    );
+    // this.productService.loadProducts(this.productPageNumber).subscribe(
+    //   (data) => {
+    //     this.store.dispatch(retrievedProduct({allProduct: data['data']['content'] as Product[]}));
+    //   },
+    // );
   }
 
   getListProductCategories() {

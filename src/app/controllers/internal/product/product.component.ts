@@ -22,11 +22,11 @@ export class InternalProductComponent implements OnInit {
   }
 
   getlistProducts() {
-    this.productService.loadProducts(this.productPageNumber).subscribe(
-      (data: Product[]) => {
-        this.products = data;
-        },
-    );
+    // this.productService.loadProducts(this.productPageNumber).subscribe(
+    //   (data: Product[]) => {
+    //     this.products = data;
+    //     },
+    // );
   }
 
 }

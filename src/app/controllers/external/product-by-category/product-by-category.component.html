@@ -72,6 +72,16 @@
             </a>
             <div id="collapsethree" class="collapse show" aria-labelledby="headingthree">
               <div class="card-body p-0">
+                <div class="custom-control custom-radio">
+                  <input (click)="getlistProducts(-1)"
+                         [ngModel]="currentCategoryId"
+                         [value]="-1"
+                         type="radio" id="{{-1}}"
+                         name="customRadio2"
+                         class="custom-control-input me-2">
+                  <label class="custom-control-label ml-1 text-muted f-15" for="{{-1}}">
+                    All</label>
+                </div>
                 <div class="custom-control custom-radio" *ngFor=" let productCategory of allProductCategories$ |
                 async | orderBy: 'categoryName': false">
                   <input (click)="getlistProducts(productCategory.id)"
@@ -119,6 +129,8 @@
 
     <div class="col-lg-9 ">
       <div class="row">
+        <img *ngIf="productByCategory.length === 0" src="../../../../assets/image/oops.png"
+             alt="" class="w-50 h-50 mx-auto d-block"/>
         <div class="col-sm-5 col-md-6 col-lg-3" *ngFor=" let product of productByCategory">
           <div class="food-card">
             <div class="food-card_img">

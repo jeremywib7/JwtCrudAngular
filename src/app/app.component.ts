@@ -38,12 +38,14 @@ export class AppComponent {
   }
 
   getlistProducts() {
-    this.productService.loadProducts(this.productsPageNumber).subscribe(
-      (data) => {
-        this.store.dispatch(retrievedProduct({allProduct: data['data']['content'] as Product[]}));
+    // this.productService.loadProducts(this.productsPageNumber).subscribe(
+    //   (data) => {
+    //     this.store.dispatch(retrievedProduct({allProduct: data['data']['content'] as Product[]}));
+    //   },
+    // );
+
         this.getListProductCategories();
-      },
-    );
+
   }
 
   getListProductCategories() {
