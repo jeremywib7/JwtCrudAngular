@@ -49,6 +49,12 @@ export class HeaderExternalComponent implements OnInit {
     void {
   }
 
+  route(){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+      this.router.navigate(['/ext/category/filter/']));
+  }
+
+
   selectCategory(currentCategoryId: number) {
     this._activatedRoute.queryParams.subscribe(params => {
 

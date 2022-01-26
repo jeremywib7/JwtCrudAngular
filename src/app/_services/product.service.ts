@@ -26,6 +26,13 @@ export class ProductService {
       .pipe(map((data) => data || []))
   }
 
+  // loadProducts(minCalories: number, maxCalories: number,
+  //              minPrice: number, maxPrice: number, pageNumber: number) {
+  //   return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/all?minPrice=` + minPrice +
+  //     `&maxPrice=` + maxPrice + `&minCalories=` + minCalories + `&maxCalories=` + maxCalories)
+  //     .pipe(map((data) => data || []))
+  // }
+
   loadProductsByFilter(categoryId: number, minCalories: number, maxCalories: number,
                        minPrice: number, maxPrice: number, pageNumber: number) {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByCategory?categoryId=` + categoryId

@@ -32,6 +32,7 @@
         <!--        (inputFocused)='onFocused($event)'-->
         <div class="ng-autocomplete">
           <ng-autocomplete
+            (keydown.enter)="route()"
             [data]="allProduct$ | async"
             [searchKeyword]="keyword"
             [placeholder]="'Search'"

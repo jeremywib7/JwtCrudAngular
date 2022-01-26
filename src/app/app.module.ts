@@ -47,6 +47,7 @@ import {productReducer} from "./store/reducers/product.reducer";
 import {productCategoryReducer} from "./store/reducers/product-category.reducer";
 import {ExternalProductByCategoryComponent} from "./controllers/external/product-by-category/product-by-category.component";
 import {NgxSliderModule} from "@angular-slider/ngx-slider";
+import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
 // import { PageNotFoundComponent } from './controllers/both/page-not-found/page-not-found.component';
 // import {
 //   ExternalProductByCategoryComponent
@@ -80,6 +81,7 @@ import {NgxSliderModule} from "@angular-slider/ngx-slider";
       timeOut: 5000,
       // positionClass: 'toast-bottom-left',
     }),
+    NgxSkeletonLoaderModule,
     AutocompleteLibModule,
     ToastContainerModule,
     FormsModule,

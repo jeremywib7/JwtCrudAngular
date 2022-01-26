@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
-import {User} from "./model/User";
 import {UserAuthService} from "./_services/user-auth.service";
-import {Router} from "@angular/router";
-import {UserService} from "./_services/user.service";
-import {retrievedProduct} from "./store/actions/product.actions";
 import {Product} from "./model/Product";
 import {retrievedProductCategory} from "./store/actions/product-category.actions";
 import {ProductCategory} from "./model/ProductCategory";
@@ -43,8 +39,7 @@ export class AppComponent {
     //     this.store.dispatch(retrievedProduct({allProduct: data['data']['content'] as Product[]}));
     //   },
     // );
-
-        this.getListProductCategories();
+    this.getListProductCategories();
 
   }
 

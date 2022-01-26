@@ -10,6 +10,8 @@ import {environment} from "../../../../environments/environment";
 import {LabelType, Options} from "@angular-slider/ngx-slider";
 import {formatCurrency} from '@angular/common';
 import { HttpParams } from '@angular/common/http';
+import {retrievedProductCategory} from "../../../store/actions/product-category.actions";
+import {ProductCategory} from "../../../model/ProductCategory";
 
 @Component({
   selector: 'app-product-by-category',
@@ -82,11 +84,6 @@ export class ExternalProductByCategoryComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private router: Router
   ) {
-    // router.events.forEach((event) => {
-    //   if(event instanceof NavigationEnd) {
-    //     this.listProducts();
-    //   }
-    // });
   }
 
   async ngOnInit(): Promise<void> {
@@ -118,15 +115,25 @@ export class ExternalProductByCategoryComponent implements OnInit {
   }
 
   async getlistProducts(currentCategoryId: number) {
-
+    console.log("initiated");
     if (currentCategoryId === -1) {
       //fetch all products
-      await this.productService.loadProducts(this.minCalories, this.maxCalories,
+      this.productService.loadProducts(this.minCalories, this.maxCalories,
         this.minPrice, this.maxPrice, this.productsPageNumber).subscribe(
         (data: Product[]) => {
           this.productByCategory = data['data']['content'];
-        },
+        }
       );
+
+      // this.productService.loadProducts(
+      //   this.minCalories, this.maxCalories, this.minPrice, this.maxPrice, this.productsPageNumber
+      // ).subscribe(
+      //   (data) => {
+      //     this.store.dispatch(retrievedProductCategory({allProductCategory: data['data'] as ProductCategory[]}));
+      //   },
+      // );
+
+
     } else {
       //fetch product based on category
       await this.productService.loadProductsByFilter(currentCategoryId, this.minCalories, this.maxCalories,
