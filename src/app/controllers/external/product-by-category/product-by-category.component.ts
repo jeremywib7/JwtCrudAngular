@@ -23,6 +23,9 @@ export class ExternalProductByCategoryComponent implements OnInit {
   //set as not selected any a.k.a -1
   productSelectedId = -1;
 
+  //skeleton
+  contentLoaded = false;
+
   //from ngrx storage
   allProduct$ = this.store.pipe(select(productById(this.productSelectedId)));
   allProductCategories$ = this.store.pipe(select(allProductCategory()));
@@ -122,6 +125,8 @@ export class ExternalProductByCategoryComponent implements OnInit {
         this.minPrice, this.maxPrice, this.productsPageNumber).subscribe(
         (data: Product[]) => {
           this.productByCategory = data['data']['content'];
+          this.contentLoaded = true;
+
         }
       );
 
@@ -140,6 +145,7 @@ export class ExternalProductByCategoryComponent implements OnInit {
         this.minPrice, this.maxPrice, this.productsPageNumber).subscribe(
         (data: Product[]) => {
           this.productByCategory = data['data']['content'];
+          this.contentLoaded = true;
         },
       );
     }
