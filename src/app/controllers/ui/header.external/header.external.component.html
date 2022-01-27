@@ -8,32 +8,33 @@
       class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-        <li class="nav-item me-3"><a routerLink="/ext/category/filter" class="nav-link active" aria-current="page" >Products</a></li>
-<!--        <li class="nav-item dropdown">-->
-<!--          <a class="nav-link dropdown-toggle me-3" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"-->
-<!--             aria-expanded="false">Category</a>-->
+        <li class="nav-item me-3"><a routerLink="/ext/category/filter" class="nav-link active" aria-current="page">Products</a>
+        </li>
+        <!--        <li class="nav-item dropdown">-->
+        <!--          <a class="nav-link dropdown-toggle me-3" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"-->
+        <!--             aria-expanded="false">Category</a>-->
 
-<!--        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
-<!--            <li><a class="dropdown-item" href="#!">All Products</a></li>-->
-<!--            <li>-->
-<!--              <hr class="dropdown-divider"/>-->
-<!--            </li>-->
-<!--            <li *ngFor=" let productCategory of allProductCategories$ | async | orderBy: orderHeader: false">-->
-<!--              <a class="dropdown-item"-->
-<!--                 (click)="selectCategory(productCategory.id)">-->
-<!--                 routerLink="/ext/category/filter"-->
-<!--                 [queryParams]="{categoryId: productCategory.id}"-->
-<!--              {{productCategory.categoryName}}</a>-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </li>-->
-        <!--        (selected)='selectEvent($event)'-->
-        <!--        (inputChanged)='onChangeSearch($event)'-->
+        <!--        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+        <!--            <li><a class="dropdown-item" href="#!">All Products</a></li>-->
+        <!--            <li>-->
+        <!--              <hr class="dropdown-divider"/>-->
+        <!--            </li>-->
+        <!--            <li *ngFor=" let productCategory of allProductCategories$ | async | orderBy: orderHeader: false">-->
+        <!--              <a class="dropdown-item"-->
+        <!--                 (click)="selectCategory(productCategory.id)">-->
+        <!--                 routerLink="/ext/category/filter"-->
+        <!--                 [queryParams]="{categoryId: productCategory.id}"-->
+        <!--              {{productCategory.categoryName}}</a>-->
+        <!--            </li>-->
+        <!--          </ul>-->
+        <!--        </li>-->
         <!--        (inputFocused)='onFocused($event)'-->
         <div class="ng-autocomplete">
           <ng-autocomplete
+            [data]="data"
+            (inputChanged)='onChange($event)'
+            (selected)="onSelect($event)"
             (keydown.enter)="route()"
-            [data]="allProduct$ | async"
             [searchKeyword]="keyword"
             [placeholder]="'Search'"
             [itemTemplate]="itemTemplate"

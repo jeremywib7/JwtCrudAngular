@@ -16,7 +16,9 @@ import {ExternalProductByCategoryComponent} from "../../external/product-by-cate
 })
 export class HeaderExternalComponent implements OnInit {
 
-  @ViewChild('appDashboard', { static: false }) productByCat: ExternalProductByCategoryComponent;
+  // @ViewChild('appDashboard', { static: false }) productByCat: ExternalProductByCategoryComponent;
+
+  searchValue: any;
 
 
   //for store
@@ -33,7 +35,20 @@ export class HeaderExternalComponent implements OnInit {
 
   //for autocomplete
   keyword: any = 'name';
-  orderHeader: String = 'categoryName';
+  // orderHeader: String = 'categoryName';
+  // orderHeader: String = 'name';
+
+
+  data = [
+    {
+      id: 1,
+      name: 'Usa'
+    },
+    {
+      id: 2,
+      name: 'England'
+    }
+  ];
 
 
   constructor(
@@ -50,10 +65,31 @@ export class HeaderExternalComponent implements OnInit {
   }
 
   route(){
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
-      this.router.navigate(['/ext/category/filter/']));
+    if (this.searchValue != undefined && this.searchValue.replace(/\s/g, '').length) {
+      console.log(this.searchValue);
+      // this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+      //   this.router.navigate(['/ext/category/filter/'], {
+      //     queryParams: {
+      //       'name': this.searchValue,
+      //     },
+      //   }));
+    }
+
   }
 
+  onChange(item) {
+    this.searchValue = item;
+  }
+
+  onSelect(item) {
+    console.log(item.name);
+    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+    //   this.router.navigate(['/ext/category/filter/'], {
+    //     queryParams: {
+    //       'name': this.searchValue,
+    //     },
+    //   }));
+  }
 
   selectCategory(currentCategoryId: number) {
     this._activatedRoute.queryParams.subscribe(params => {

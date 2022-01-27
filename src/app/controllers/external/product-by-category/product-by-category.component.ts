@@ -129,17 +129,11 @@ export class ExternalProductByCategoryComponent implements OnInit {
 
         }
       );
-
-      // this.productService.loadProducts(
-      //   this.minCalories, this.maxCalories, this.minPrice, this.maxPrice, this.productsPageNumber
-      // ).subscribe(
-      //   (data) => {
-      //     this.store.dispatch(retrievedProductCategory({allProductCategory: data['data'] as ProductCategory[]}));
-      //   },
-      // );
-
-
     } else {
+      //check if search is empty
+      //if not then search
+
+
       //fetch product based on category
       await this.productService.loadProductsByFilter(currentCategoryId, this.minCalories, this.maxCalories,
         this.minPrice, this.maxPrice, this.productsPageNumber).subscribe(
