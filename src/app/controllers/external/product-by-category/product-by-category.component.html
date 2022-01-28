@@ -29,7 +29,7 @@
                     <ngx-slider [(value)]="minCalories"
                                 [(highValue)]="maxCalories"
                                 [options]="optionsCalories"
-                                (userChangeEnd)="getlistProducts(this.currentCategoryId)"></ngx-slider>
+                                (userChangeEnd)="getListProductsFromFilter(this.currentCategoryId)"></ngx-slider>
                   </div>
                 </div>
 
@@ -56,7 +56,7 @@
                   <div class="custom-slider">
                     <ngx-slider [(value)]="minPrice" [(highValue)]="maxPrice"
                                 [options]="optionsPrice"
-                                (userChangeEnd)="getlistProducts(this.currentCategoryId)"></ngx-slider>
+                                (userChangeEnd)="getListProductsFromFilter(this.currentCategoryId)"></ngx-slider>
                   </div>
                 </div>
               </div>
@@ -73,7 +73,7 @@
             <div id="collapsethree" class="collapse show" aria-labelledby="headingthree">
               <div class="card-body p-0">
                 <div class="custom-control custom-radio">
-                  <input (click)="getlistProducts(-1)"
+                  <input (click)="getListProductsFromFilter(-1)"
                          [ngModel]="currentCategoryId"
                          [value]="-1"
                          type="radio" id="{{-1}}"
@@ -84,7 +84,7 @@
                 </div>
                 <div class="custom-control custom-radio" *ngFor=" let productCategory of allProductCategories$ |
                 async | orderBy: 'categoryName': false">
-                  <input (click)="getlistProducts(productCategory.id)"
+                  <input (click)="getListProductsFromFilter(productCategory.id)"
                          [ngModel]="currentCategoryId"
                          [value]="productCategory.id"
                          type="radio" id="{{productCategory.id}}"
@@ -127,16 +127,15 @@
       </div>
     </div>
 
-    <div class="col-lg-9 ">
+    <div class="col-lg-9 mt-4">
       <img *ngIf="productByCategory.length === 0 && contentLoaded" src="../../../../assets/image/oops.png"
-           alt="" class="w-50 h-50 mx-auto d-block"/>
+           alt="" class="w-50 h-75 mx-auto d-block"/>
       <div class="row">
-
-        <div class="col-sm-5 col-md-6 col-lg-3" *ngFor=" let product of productByCategory">
+        <div class="col-sm-6 col-md-4 col-lg-3" *ngFor=" let product of productByCategory">
           <div class="food-card">
             <div class="food-card_img">
-              <img src="https://i.imgur.com/eFWRUuR.jpg" alt="">
-              <a href="#!"><i class="far fa-heart"></i></a>
+              <img [src]=" apiBaseUrl +'/'+ projectName +'/images/product/download/' + product?.imageUrl " alt="User Image"> <a
+              href="#!"><i class="far fa-heart"></i></a>
             </div>
             <div class="food-card_content">
               <div class="food-card_title-section">
@@ -155,19 +154,17 @@
                   </div>
                 </div>
                 <hr>
-                <div class="space-between h-25">
-                  <div class="food-card_order-count">
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary minus-btn" type="button"><i class="fa fa-minus"></i>
-                        </button>
-                      </div>
-                      <input type="text" class="form-control input-manulator" placeholder=""
-                             aria-label="Example text with button addon" aria-describedby="button-addon1" value="0">
-                      <div class="input-group-append">
-                        <button class="btn btn-outline-secondary add-btn" type="button"><i class="fa fa-plus"></i>
-                        </button>
-                      </div>
+                <div class="food-card_order-count">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <button class="btn btn-outline-secondary minus-btn" type="button"><i class="fa fa-minus"></i>
+                      </button>
+                    </div>
+                    <input type="text" class="form-control input-manulator" placeholder=""
+                           aria-label="Example text with button addon" aria-describedby="button-addon1" value="0">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary add-btn" type="button"><i class="fa fa-plus"></i>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -177,39 +174,43 @@
         </div>
 
         <!--    SKELETON LOADING    -->
-        <div class="col-sm-5 col-md-6 col-lg-3" *ngFor="let item of [].constructor(12); let i = index">
-          <div class="food-card" *ngIf="!contentLoaded">
-            <div class="food-card_img">
-              <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '200px',
+        <ng-container *ngIf="!contentLoaded">
+          <div class="col-sm-5 col-md-6 col-lg-3" *ngFor="let item of [].constructor(12); let i = index">
+            <div class="food-card">
+              <div class="food-card_img">
+                <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '200px',
             'border-radius': '0px' }">
-              </ngx-skeleton-loader>
-            </div>
-            <div class="food-card_content">
-              <div class="food-card_title-section">
-                <ngx-skeleton-loader [theme]="{ width: '40%', height: '15px'}" appearance="line"></ngx-skeleton-loader>
-                <div class="food-card_price">
-                  <ngx-skeleton-loader [theme]="{ width: '60%', height: '17px',
+                </ngx-skeleton-loader>
+              </div>
+              <div class="food-card_content">
+                <div class="food-card_title-section">
+                  <ngx-skeleton-loader [theme]="{ width: '40%', height: '15px'}"
+                                       appearance="line"></ngx-skeleton-loader>
+                  <div class="food-card_price">
+                    <ngx-skeleton-loader [theme]="{ width: '60%', height: '17px',
                   'background-color': '#e5b98e'}" appearance="line"></ngx-skeleton-loader>
-                </div>
-              </div>
-              <div class="food-card_bottom-section">
-                <div class="space-between">
-                  <div>
-                    <ngx-skeleton-loader [theme]="{ width: '60px', height: '15px'}"
-                                         appearance="line"></ngx-skeleton-loader>
-                  </div>
-                  <div class="pull-right">
-                    <ngx-skeleton-loader [theme]="{ width: '55px', height: '15px','background-color': '#2baef3'}"
-                                         appearance="line"></ngx-skeleton-loader>
                   </div>
                 </div>
-                <hr>
-                <ngx-skeleton-loader [theme]="{ width: '100%', height: '30px'}" appearance="line"></ngx-skeleton-loader>
+                <div class="food-card_bottom-section">
+                  <div class="space-between">
+                    <div>
+                      <ngx-skeleton-loader [theme]="{ width: '60px', height: '15px'}"
+                                           appearance="line"></ngx-skeleton-loader>
+                    </div>
+                    <div class="pull-right">
+                      <ngx-skeleton-loader [theme]="{ width: '55px', height: '15px','background-color': '#2baef3'}"
+                                           appearance="line"></ngx-skeleton-loader>
+                    </div>
+                  </div>
+                  <hr>
+                  <ngx-skeleton-loader [theme]="{ width: '100%', height: '30px'}"
+                                       appearance="line"></ngx-skeleton-loader>
+                </div>
               </div>
-            </div>
 
+            </div>
           </div>
-        </div>
+        </ng-container>
       </div>
     </div>
   </div>

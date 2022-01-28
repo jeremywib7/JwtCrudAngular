@@ -33,10 +33,11 @@
           <ng-autocomplete
             [data]="data"
             (inputChanged)='onChange($event)'
+            [debounceTime]="500"
             (selected)="onSelect($event)"
             (keydown.enter)="route()"
-            [searchKeyword]="keyword"
-            [placeholder]="'Search'"
+            [searchKeyword]="'name'"
+            [placeholder]="'Search products...'"
             [itemTemplate]="itemTemplate"
             [notFoundTemplate]="notFoundTemplate">
           </ng-autocomplete>
@@ -49,6 +50,7 @@
             <div [innerHTML]="notFound"></div>
           </ng-template>
         </div>
+        
       </ul>
       <form class="d-flex ms-3">
         <button class="btn" [routerLink]="'/'">

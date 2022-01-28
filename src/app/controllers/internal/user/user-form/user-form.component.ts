@@ -18,7 +18,6 @@ export class UserFormComponent implements OnInit {
   //Main Config
   apiBaseUrl = environment.apiBaseUrl;
   projectName = environment.project;
-  //
 
   editMode = true;
   reactiveForm: any = FormGroup;

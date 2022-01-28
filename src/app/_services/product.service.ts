@@ -15,23 +15,22 @@ export class ProductService {
   constructor(private httpClient: HttpClient) {
   }
 
-  // public getProducts(): Observable<Product[]> {
-  //   return this.httpClient.get<Product[]>(`${this.apiServerUrl}/${this.project}/product/all`);
-  // }
-
-  loadProducts(minCalories: number, maxCalories: number,
+  loadAllProducts(minCalories: number, maxCalories: number,
                minPrice: number, maxPrice: number, pageNumber: number) {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/all?minPrice=` + minPrice +
       `&maxPrice=` + maxPrice + `&minCalories=` + minCalories + `&maxCalories=` + maxCalories)
       .pipe(map((data) => data || []))
   }
 
-  // loadProducts(minCalories: number, maxCalories: number,
-  //              minPrice: number, maxPrice: number, pageNumber: number) {
-  //   return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/all?minPrice=` + minPrice +
-  //     `&maxPrice=` + maxPrice + `&minCalories=` + minCalories + `&maxCalories=` + maxCalories)
-  //     .pipe(map((data) => data || []))
-  // }
+  loadProductsByNameAutoComplete(searchValue: string) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByNameAutoComplete?name=` + searchValue)
+      .pipe(map((data) => data || []))
+  }
+
+  loadProductsByName(searchValue: string) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByName?name=` + searchValue)
+      .pipe(map((data) => data || []))
+  }
 
   loadProductsByFilter(categoryId: number, minCalories: number, maxCalories: number,
                        minPrice: number, maxPrice: number, pageNumber: number) {

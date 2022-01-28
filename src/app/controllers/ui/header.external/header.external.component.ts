@@ -18,8 +18,9 @@ export class HeaderExternalComponent implements OnInit {
 
   // @ViewChild('appDashboard', { static: false }) productByCat: ExternalProductByCategoryComponent;
 
+  //for autocomplete
+  data = [];
   searchValue: any;
-
 
   //for store
   productSelectedId = -1;
@@ -33,28 +34,12 @@ export class HeaderExternalComponent implements OnInit {
   minPrice: number;
   maxPrice: number;
 
-  //for autocomplete
-  keyword: any = 'name';
-  // orderHeader: String = 'categoryName';
-  // orderHeader: String = 'name';
-
-
-  data = [
-    {
-      id: 1,
-      name: 'Usa'
-    },
-    {
-      id: 2,
-      name: 'England'
-    }
-  ];
-
 
   constructor(
     // private productService: ProductService,
     private store: Store<{ product: Product[], productCategory: ProductCategory[] }>,
     private _activatedRoute: ActivatedRoute,
+    private productService: ProductService,
     private router: Router,
   ) {
   }
@@ -64,31 +49,34 @@ export class HeaderExternalComponent implements OnInit {
     void {
   }
 
-  route(){
+  route() {
     if (this.searchValue != undefined && this.searchValue.replace(/\s/g, '').length) {
-      console.log(this.searchValue);
-      // this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
-      //   this.router.navigate(['/ext/category/filter/'], {
-      //     queryParams: {
-      //       'name': this.searchValue,
-      //     },
-      //   }));
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
+        this.router.navigate(['/ext/category/filter/'], {
+          queryParams: {
+            'nameSearch': this.searchValue,
+          },
+        }));
     }
 
   }
 
-  onChange(item) {
+  async onChange(item) {
     this.searchValue = item;
+    await this.productService.loadProductsByNameAutoComplete(item).subscribe(
+      (data: Product[]) => {
+        this.data = data['data'];
+      },
+    );
   }
 
   onSelect(item) {
-    console.log(item.name);
-    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
-    //   this.router.navigate(['/ext/category/filter/'], {
-    //     queryParams: {
-    //       'name': this.searchValue,
-    //     },
-    //   }));
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
+      this.router.navigate(['/ext/category/filter/'], {
+        queryParams: {
+          'nameSearch': item.name,
+        },
+      }));
   }
 
   selectCategory(currentCategoryId: number) {
