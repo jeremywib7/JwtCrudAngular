@@ -6,13 +6,14 @@ import {UserService} from "../../../_services/user.service";
 import {ToastrService} from "ngx-toastr";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {environment} from "../../../../environments/environment";
+import {IntersectionObserverHooks} from "ng-lazyload-image";
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
-export class UserComponent implements OnInit {
+export class UserComponent extends IntersectionObserverHooks implements OnInit {
   p: number = 1;
   apiBaseUrl = environment.apiBaseUrl;
   projectName = environment.project;
@@ -45,6 +46,7 @@ export class UserComponent implements OnInit {
     private toastr: ToastrService,
     private modalService: NgbModal
   ) {
+    super();
   }
 
 

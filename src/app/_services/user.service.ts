@@ -47,7 +47,7 @@ export class UserService implements OnInit {
 
           user.imageUrl = user.username + ext;
 
-          return this.httpClient.post(`${this.apiServerUrl}/${this.project}/images`, formData, {
+          return this.httpClient.post(`${this.apiServerUrl}/${this.project}/images/user/upload`, formData, {
             responseType: 'text'
           });
         })
@@ -71,10 +71,10 @@ export class UserService implements OnInit {
 
     if (selectedImage) {
       observable = observable.pipe(
-        switchMap(() => {
-          user.imageUrl = user.username + ext;
-          return this.httpClient.delete(`${this.apiServerUrl}/${this.project}/images/${user.imageUrl}`)
-        }),
+        // switchMap(() => {
+        //   user.imageUrl = user.username + ext;
+        //   return this.httpClient.delete(`${this.apiServerUrl}/${this.project}/images//${user.imageUrl}`)
+        // }),
 
         switchMap(() => {
 
@@ -85,7 +85,7 @@ export class UserService implements OnInit {
 
           user.imageUrl = user.username + ext;
 
-          return this.httpClient.post(`${this.apiServerUrl}/${this.project}/images`, formData, {
+          return this.httpClient.post(`${this.apiServerUrl}/${this.project}/images/user/upload/`, formData, {
             responseType: 'text'
           });
         })

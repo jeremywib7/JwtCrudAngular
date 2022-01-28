@@ -39,13 +39,9 @@
                   class="candidates-list">
                   <td class="title">
                     <div class="thumb">
-                      <img
-                        *ngIf="user?.imageUrl === null"
-                        class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="">
-                      <img
-                        *ngIf="user?.imageUrl != null"
-                        [src]=" apiBaseUrl +'/'+ projectName +'/images/' + user?.imageUrl "
-                        class="img-fluid" alt="">
+                      <img [src]="'/assets/image/user.jpg'"
+                           [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/user/download/' + user?.imageUrl  "
+                           class="img-fluid"/>
                     </div>
                     <div class="candidate-list-details">
                       <div class="candidate-list-info">

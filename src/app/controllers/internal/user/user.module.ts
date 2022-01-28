@@ -11,6 +11,7 @@ import {FilterPipeModule} from "ngx-filter-pipe";
 import {OrderModule} from "ngx-order-pipe";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {Ng2SearchPipeModule} from "ng2-search-filter";
+import {LazyLoadImageModule} from "ng-lazyload-image";
 
 const routes: Routes = [
   {path: '', component: UserComponent, canActivate: [AuthGuard], data: {roles: 'Admin'}},
@@ -26,17 +27,18 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [UserComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    ReactiveFormsModule,
-    FormsModule,
-    HttpClientModule,
-    NgbModule,
-    NgxPaginationModule,
-    OrderModule,
-    Ng2SearchPipeModule,
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        ReactiveFormsModule,
+        FormsModule,
+        HttpClientModule,
+        NgbModule,
+        NgxPaginationModule,
+        OrderModule,
+        Ng2SearchPipeModule,
+        LazyLoadImageModule,
+    ]
 })
 
 export class UserModule {

@@ -25,6 +25,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 //library section
 import {ButtonModule} from "../../projects/components/button/src/lib/button.module";
+import {LazyLoadImageModule} from 'ng-lazyload-image'; // <-- import it
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {NgxPaginationModule} from "ngx-pagination";
 import {UserFormComponent} from "./controllers/internal/user/user-form/user-form.component";
@@ -41,11 +42,13 @@ import {InternalProductComponent} from "./controllers/internal/product/product.c
 import {HeaderExternalComponent} from "./controllers/ui/header.external/header.external.component";
 import {ExternalProductComponent} from "./controllers/external/external-product/external-product.component";
 import {InternalHeaderComponent} from "./controllers/ui/header.internal/header.component";
-import { FooterExternalComponent } from './controllers/ui/footer-external/footer-external.component';
+import {FooterExternalComponent} from './controllers/ui/footer-external/footer-external.component';
 import {Store, StoreModule} from "@ngrx/store";
 import {productReducer} from "./store/reducers/product.reducer";
 import {productCategoryReducer} from "./store/reducers/product-category.reducer";
-import {ExternalProductByCategoryComponent} from "./controllers/external/product-by-category/product-by-category.component";
+import {
+  ExternalProductByCategoryComponent
+} from "./controllers/external/product-by-category/product-by-category.component";
 import {NgxSliderModule} from "@angular-slider/ngx-slider";
 import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
 // import { PageNotFoundComponent } from './controllers/both/page-not-found/page-not-found.component';
@@ -84,6 +87,7 @@ import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
     NgxSkeletonLoaderModule,
     AutocompleteLibModule,
     ToastContainerModule,
+    LazyLoadImageModule,
     FormsModule,
     HttpClientModule,
     RouterModule,
