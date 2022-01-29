@@ -18,7 +18,7 @@ import {ProductCategory} from "../../../model/ProductCategory";
   templateUrl: './product-by-category.component.html',
   styleUrls: ['./product-by-category.component.scss']
 })
-export class ExternalProductByCategoryComponent implements OnInit {
+export class ProductByCategoryComponent implements OnInit {
 
   //set as not selected any category a.k.a -1
   productSelectedId = -1;

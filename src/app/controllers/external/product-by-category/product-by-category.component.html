@@ -134,7 +134,9 @@
         <div class="col-sm-6 col-md-4 col-lg-3" *ngFor=" let product of productByCategory">
           <div class="food-card">
             <div class="food-card_img">
-              <img [src]=" apiBaseUrl +'/'+ projectName +'/images/product/download/' + product?.imageUrl " alt="User Image"> <a
+              <img
+                [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/product/download/' + product?.imageUrl  "
+                class="img-fluid"/>              <a
               href="#!"><i class="far fa-heart"></i></a>
             </div>
             <div class="food-card_content">

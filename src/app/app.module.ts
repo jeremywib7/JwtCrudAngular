@@ -28,7 +28,6 @@ import {ButtonModule} from "../../projects/components/button/src/lib/button.modu
 import {LazyLoadImageModule} from 'ng-lazyload-image'; // <-- import it
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {NgxPaginationModule} from "ngx-pagination";
-import {UserFormComponent} from "./controllers/internal/user/user-form/user-form.component";
 import {FilterPipeModule} from 'ngx-filter-pipe';
 import {AngularToastifyModule} from "angular-toastify";
 import {ToastContainerModule, ToastrModule} from "ngx-toastr";
@@ -46,15 +45,7 @@ import {FooterExternalComponent} from './controllers/ui/footer-external/footer-e
 import {Store, StoreModule} from "@ngrx/store";
 import {productReducer} from "./store/reducers/product.reducer";
 import {productCategoryReducer} from "./store/reducers/product-category.reducer";
-import {
-  ExternalProductByCategoryComponent
-} from "./controllers/external/product-by-category/product-by-category.component";
-import {NgxSliderModule} from "@angular-slider/ngx-slider";
 import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
-// import { PageNotFoundComponent } from './controllers/both/page-not-found/page-not-found.component';
-// import {
-//   ExternalProductByCategoryComponent
-// } from "./controllers/external/product-by-category/product-by-category.component";
 
 @NgModule({
   declarations: [
@@ -62,17 +53,13 @@ import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
     HomeComponent,
     AdminComponent,
     LoginComponent,
-    ExternalProductByCategoryComponent,
     ForbiddenComponent,
     InternalHeaderComponent,
     SidenavComponent,
-    UserFormComponent,
     ExternalProductComponent,
     InternalProductComponent,
     HeaderExternalComponent,
     FooterExternalComponent,
-    // PageNotFoundComponent,
-    // ExternalProductByCategoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -108,10 +95,10 @@ import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
     NgbModule,
     StoreModule.forRoot({product: productReducer, productCategory: productCategoryReducer}),
     BsDatepickerModule.forRoot(),
-    NgxSliderModule,
   ],
   providers: [
-    AuthGuard, {
+    AuthGuard,
+    {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true

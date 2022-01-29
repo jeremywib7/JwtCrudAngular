@@ -7,7 +7,6 @@ import {productById} from "../../../store/selectors/product.selector";
 import {ProductCategory} from "../../../model/ProductCategory";
 import {allProductCategory} from "../../../store/selectors/product-category.selector";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ExternalProductByCategoryComponent} from "../../external/product-by-category/product-by-category.component";
 
 @Component({
   selector: 'app-header-external',

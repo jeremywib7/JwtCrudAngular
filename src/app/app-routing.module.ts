@@ -8,7 +8,6 @@ import {AuthGuard} from "./_auth/auth.guard";
 import {InternalProductComponent} from "./controllers/internal/product/product.component";
 import {ExternalProductComponent} from "./controllers/external/external-product/external-product.component";
 import {PageNotFoundComponent} from "./controllers/both/page-not-found/page-not-found.component";
-import {ExternalProductByCategoryComponent} from "./controllers/external/product-by-category/product-by-category.component";
 
 // @ts-ignore
 const routes: Routes = [
@@ -29,13 +28,13 @@ const routes: Routes = [
 
 
   // external
-  {path: 'ext/product', component: ExternalProductComponent, canActivate: [AuthGuard], data: {roles: ['Customer']}},
   {path: '', component: ExternalProductComponent, canActivate: [AuthGuard], data: {roles: ['Customer']}},
   {
     path: 'ext/category/filter',
-    component: ExternalProductByCategoryComponent,
+    loadChildren: () => import('./controllers/external/product-by-category/product-by-category.module').then(x =>
+      x.ProductByCategoryModule),
     canActivate: [AuthGuard],
-    data: {roles: ['Customer']}
+    data: {roles: 'Customer'}
   },
 
   {
