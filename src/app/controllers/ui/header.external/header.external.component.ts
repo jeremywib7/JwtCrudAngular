@@ -51,7 +51,7 @@ export class HeaderExternalComponent implements OnInit {
   route() {
     if (this.searchValue != undefined && this.searchValue.replace(/\s/g, '').length) {
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
-        this.router.navigate(['/ext/category/filter/'], {
+        this.router.navigate(['/ext/product'], {
           queryParams: {
             'nameSearch': this.searchValue,
           },

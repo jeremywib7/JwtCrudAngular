@@ -25,7 +25,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 //library section
 import {ButtonModule} from "../../projects/components/button/src/lib/button.module";
-import {LazyLoadImageModule} from 'ng-lazyload-image'; // <-- import it
+import {Attributes, IntersectionObserverHooks, LazyLoadImageModule} from 'ng-lazyload-image'; // <-- import it
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {NgxPaginationModule} from "ngx-pagination";
 import {FilterPipeModule} from 'ngx-filter-pipe';
@@ -39,13 +39,15 @@ import {CookieService} from "ngx-cookie-service";
 import {ProductService} from "./_services/product.service";
 import {InternalProductComponent} from "./controllers/internal/product/product.component";
 import {HeaderExternalComponent} from "./controllers/ui/header.external/header.external.component";
-import {ExternalProductComponent} from "./controllers/external/external-product/external-product.component";
+import {ExternalProductComponent} from "./controllers/external/homepage/external-product.component";
 import {InternalHeaderComponent} from "./controllers/ui/header.internal/header.component";
 import {FooterExternalComponent} from './controllers/ui/footer-external/footer-external.component';
 import {Store, StoreModule} from "@ngrx/store";
 import {productReducer} from "./store/reducers/product.reducer";
 import {productCategoryReducer} from "./store/reducers/product-category.reducer";
 import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
+import {UserAuthService} from "./_services/user-auth.service";
+import { ProductDetailComponent } from './controllers/external/product-detail/product-detail.component';
 
 @NgModule({
   declarations: [
@@ -60,27 +62,25 @@ import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
     InternalProductComponent,
     HeaderExternalComponent,
     FooterExternalComponent,
+    ProductDetailComponent,
   ],
+
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     AngularToastifyModule,
-    ReactiveFormsModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       // positionClass: 'toast-bottom-left',
     }),
-    NgxSkeletonLoaderModule,
     AutocompleteLibModule,
     ToastContainerModule,
     LazyLoadImageModule,
     FormsModule,
     HttpClientModule,
     RouterModule,
-    NgxPaginationModule,
-    NgbModule,
-    Ng2SearchPipeModule,
+
     // * MATERIAL IMPORTS
     MatSidenavModule,
     MatToolbarModule,
@@ -88,13 +88,9 @@ import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
     MatIconModule,
     MatDividerModule,
     MatListModule,
-    // Components
-    OrderModule,
-    ButtonModule,
-    FilterPipeModule,
-    NgbModule,
+
+    // NGRX STORE
     StoreModule.forRoot({product: productReducer, productCategory: productCategoryReducer}),
-    BsDatepickerModule.forRoot(),
   ],
   providers: [
     AuthGuard,
@@ -111,5 +107,6 @@ import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule {
 }

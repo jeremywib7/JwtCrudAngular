@@ -6,7 +6,7 @@ import {LoginComponent} from "./controllers/both/login/login.component";
 import {ForbiddenComponent} from "./controllers/ui/forbidden/forbidden.component";
 import {AuthGuard} from "./_auth/auth.guard";
 import {InternalProductComponent} from "./controllers/internal/product/product.component";
-import {ExternalProductComponent} from "./controllers/external/external-product/external-product.component";
+import {ExternalProductComponent} from "./controllers/external/homepage/external-product.component";
 import {PageNotFoundComponent} from "./controllers/both/page-not-found/page-not-found.component";
 
 // @ts-ignore
@@ -30,7 +30,7 @@ const routes: Routes = [
   // external
   {path: '', component: ExternalProductComponent, canActivate: [AuthGuard], data: {roles: ['Customer']}},
   {
-    path: 'ext/category/filter',
+    path: 'ext/product',
     loadChildren: () => import('./controllers/external/product-by-category/product-by-category.module').then(x =>
       x.ProductByCategoryModule),
     canActivate: [AuthGuard],

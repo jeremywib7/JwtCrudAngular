@@ -12,5 +12,4 @@ export class Product {
   imageUrl: string;
   active: boolean;
   createdOn: Date;
-  updatedOn: Date;
 }
