@@ -71,7 +71,7 @@ export class HeaderExternalComponent implements OnInit {
 
   onSelect(item) {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
-      this.router.navigate(['/ext/category/filter/'], {
+      this.router.navigate(['/ext/product'], {
         queryParams: {
           'nameSearch': item.name,
         },

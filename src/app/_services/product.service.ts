@@ -27,8 +27,13 @@ export class ProductService {
       .pipe(map((data) => data || []))
   }
 
-  loadProductsByName(searchValue: string) {
+  loadProductsSearchByName(searchValue: string) {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByName?name=` + searchValue)
+      .pipe(map((data) => data || []))
+  }
+
+  loadProductDetailById(id: number) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findById?id=` + id)
       .pipe(map((data) => data || []))
   }
 

@@ -24,17 +24,11 @@ import {MatListModule} from "@angular/material/list";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 //library section
-import {ButtonModule} from "../../projects/components/button/src/lib/button.module";
+
 import {Attributes, IntersectionObserverHooks, LazyLoadImageModule} from 'ng-lazyload-image'; // <-- import it
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
-import {NgxPaginationModule} from "ngx-pagination";
-import {FilterPipeModule} from 'ngx-filter-pipe';
 import {AngularToastifyModule} from "angular-toastify";
 import {ToastContainerModule, ToastrModule} from "ngx-toastr";
-import {OrderModule} from "ngx-order-pipe";
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {Ng2SearchPipeModule} from 'ng2-search-filter';
-import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
 import {CookieService} from "ngx-cookie-service";
 import {ProductService} from "./_services/product.service";
 import {InternalProductComponent} from "./controllers/internal/product/product.component";

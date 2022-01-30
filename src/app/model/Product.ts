@@ -10,6 +10,9 @@ export class Product {
   description: string;
   unitPrice: string;
   imageUrl: string;
+  // image: [
+  //   imageUrl: string
+  // ];
   active: boolean;
   createdOn: Date;
 }

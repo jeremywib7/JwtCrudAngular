@@ -165,7 +165,7 @@ export class ProductByCategoryComponent implements OnInit {
   }
 
   async getlistProductsNameSearch(searchValue: string) {
-    await this.productService.loadProductsByName(searchValue).subscribe(
+    await this.productService.loadProductsSearchByName(searchValue).subscribe(
       (data: Product[]) => {
         this.productByCategory = data['data']['content'];
         this.contentLoaded = true;
