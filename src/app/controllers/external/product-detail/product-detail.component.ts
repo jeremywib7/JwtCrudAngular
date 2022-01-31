@@ -27,7 +27,7 @@ export class ProductDetailComponent implements OnInit {
     this.detailProduct();
   }
 
-  id: number;
+  id: string;
 
   //skeleton
   contentLoaded = false;
@@ -35,8 +35,8 @@ export class ProductDetailComponent implements OnInit {
   detailProduct() {
     this._activatedRoute.queryParams.subscribe(params => {
 
-      this.id = +params['i'];
-      if (this.id === undefined || Number.isNaN(this.id)) {
+      this.id = params['i'];
+      if (this.id === undefined) {
         this.router.navigate(['ext/product']);
       }
     });

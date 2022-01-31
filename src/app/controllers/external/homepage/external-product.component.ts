@@ -16,7 +16,7 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class ExternalProductComponent implements OnInit{
 
-  productSelectedId = -1;
+  productSelectedId = "all";
   allProduct$ = this.store.pipe(select(productById(this.productSelectedId)));
 
   constructor(

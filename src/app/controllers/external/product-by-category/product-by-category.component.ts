@@ -36,7 +36,7 @@ export class ProductByCategoryComponent implements OnInit {
   allProductCategories$ = this.store.pipe(select(allProductCategory()));
 
   //get parameter (1, 2, etc)
-  currentCategoryId: number;
+  currentCategoryId: string;
   minCalories: number;
   maxCalories: number;
   minPrice: number;
@@ -46,6 +46,7 @@ export class ProductByCategoryComponent implements OnInit {
 
   //first page
   productsPageNumber: number = 0;
+  productsSizeNumber: number = 10;
 
   optionsCalories: Options = {
     floor: 0,
@@ -100,8 +101,8 @@ export class ProductByCategoryComponent implements OnInit {
   listProducts() {
     this._activatedRoute.queryParams.subscribe(params => {
 
-      this.currentCategoryId = +params['categoryId'];
-      this.currentCategoryId === undefined || Number.isNaN(this.currentCategoryId) ? this.currentCategoryId = -1 : null;
+      this.currentCategoryId = params['categoryId'];
+      this.currentCategoryId === undefined || Number.isNaN(this.currentCategoryId) ? this.currentCategoryId = "all" : null;
 
       this.nameSearch = params['nameSearch'];
       this.nameSearch === undefined ? this.nameSearch = "none" : null;
@@ -127,19 +128,39 @@ export class ProductByCategoryComponent implements OnInit {
 
   }
 
-  async getListProductsFromFilter(currentCategoryId: number) {
-    if (currentCategoryId === -1) {
+  async getListProductsFromFilter(currentCategoryId: string) {
+
+    if (currentCategoryId === "all") {
       //fetch all products
-      await this.productService.loadAllProducts(this.minCalories, this.maxCalories,
-        this.minPrice, this.maxPrice, this.productsPageNumber).subscribe(
+      let params = new HttpParams();
+
+      params = params.append('minCalories', JSON.stringify(this.minCalories));
+      params = params.append('maxCalories', JSON.stringify(this.maxCalories));
+      params = params.append('minPrice', JSON.stringify(this.minPrice));
+      params = params.append('maxPrice', JSON.stringify(this.maxPrice));
+      params = params.append('page', JSON.stringify(this.productsPageNumber));
+      params = params.append('size', JSON.stringify(this.productsSizeNumber));
+
+
+      this.productService.loadAllProducts(params).subscribe(
         (data: Product[]) => {
           this.productByCategory = data['data']['content'];
           this.contentLoaded = true;
         }
       );
     } else {
-      await this.productService.loadProductsByFilter(currentCategoryId, this.minCalories, this.maxCalories,
-        this.minPrice, this.maxPrice, this.productsPageNumber).subscribe(
+
+      let params = new HttpParams();
+
+      params = params.append('categoryId', currentCategoryId);
+      params = params.append('minCalories', JSON.stringify(this.minCalories));
+      params = params.append('maxCalories', JSON.stringify(this.maxCalories));
+      params = params.append('minPrice', JSON.stringify(this.minPrice));
+      params = params.append('maxPrice', JSON.stringify(this.maxPrice));
+      params = params.append('page', JSON.stringify(this.productsPageNumber));
+      params = params.append('size', JSON.stringify(this.productsSizeNumber));
+
+      await this.productService.loadProductsByFilter(params).subscribe(
         (data: Product[]) => {
           this.productByCategory = data['data']['content'];
           this.contentLoaded = true;
@@ -151,7 +172,7 @@ export class ProductByCategoryComponent implements OnInit {
 
       relativeTo: this._activatedRoute,
       queryParams: {
-        'categoryId': currentCategoryId,
+        'categoryId': currentCategoryId === "all" ? null : currentCategoryId,
         'nameSearch': null,
         'minPrice': this.minPrice === undefined || this.minPrice === 0 ? null : this.minPrice,
         'maxPrice': this.maxPrice === undefined || this.maxPrice === 0 || this.maxPrice === 100000 ? null :

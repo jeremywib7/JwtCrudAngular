@@ -53,7 +53,6 @@ import { ProductDetailComponent } from './controllers/external/product-detail/pr
     InternalHeaderComponent,
     SidenavComponent,
     ExternalProductComponent,
-    InternalProductComponent,
     HeaderExternalComponent,
     FooterExternalComponent,
     ProductDetailComponent,

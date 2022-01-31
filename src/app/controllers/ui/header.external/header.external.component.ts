@@ -22,7 +22,7 @@ export class HeaderExternalComponent implements OnInit {
   searchValue: any;
 
   //for store
-  productSelectedId = -1;
+  productSelectedId = "all";
   allProduct$ = this.store.pipe(select(productById(this.productSelectedId)));
   allProductCategories$ = this.store.pipe(select(allProductCategory()));
 

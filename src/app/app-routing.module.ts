@@ -17,7 +17,12 @@ const routes: Routes = [
   {path: 'forbidden', component: ForbiddenComponent},
 
   // internal
-  {path: 'int/product', component: InternalProductComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
+  {
+    path: 'int/product',
+    loadChildren: () => import('./controllers/internal/product/product.module').then(x => x.InternalProductModule),
+    canActivate: [AuthGuard],
+    data: {roles: 'Admin'}
+  },
   {
     path: 'int/user',
     loadChildren: () => import('./controllers/internal/user/user.module').then(x => x.UserModule),

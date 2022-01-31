@@ -4,9 +4,9 @@ import {Product} from "../../model/Product";
 
 export const productRootSelector = (state:AppState) => state.product;
 
-export const productById = (productId: number) =>
+export const productById = (productId: string) =>
   createSelector(productRootSelector, (product: Product[]) => {
-    if (productId === -1) {
+    if (productId === "all") {
       return product;
     }
 

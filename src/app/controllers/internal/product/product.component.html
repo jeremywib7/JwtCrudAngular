@@ -1,91 +1,54 @@
-<section class="main-content">
-  <div class="container">
-    <h1 class="text-center text-uppercase">Food Order Card</h1>
-    <br>
-    <br>
-    <div class="row">
-      <div class="col-sm-6 col-md-6 col-lg-4">
-        <div class="food-card">
-          <div class="food-card_img">
-            <img src="https://i.imgur.com/eFWRUuR.jpg" alt="">
-            <a href="#!"><i class="far fa-heart"></i></a>
-          </div>
-          <div class="food-card_content">
-            <div class="food-card_title-section">
-              <a href="#!" class="food-card_title">Double Cheese Potato Burger</a>
-              <a href="#!" class="food-card_author">Burger</a>
-            </div>
-            <div class="food-card_bottom-section">
-              <div class="space-between">
-                <div>
-                  <span class="fa fa-fire"></span> 220 - 280 Kcal
-                </div>
-                <div class="pull-right">
-                  <span class="badge badge-success">Veg</span>
-                </div>
-              </div>
-              <hr>
-              <div class="space-between">
-                <div class="food-card_price">
-                  <span>5.99$</span>
-                </div>
-                <div class="food-card_order-count">
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <button class="btn btn-outline-secondary minus-btn" type="button" id="button-addon1"><i class="fa fa-minus"></i></button>
-                    </div>
-                    <input type="text" class="form-control input-manulator" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" value="0">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary add-btn" type="button" id="button-addon1"><i class="fa fa-plus"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-6 col-lg-6">
-        <div class="food-card food-card--vertical">
-          <div class="food-card_img">
-            <img src="https://i.imgur.com/eFWRUuR.jpg" alt="">
-            <a href="#!"><i class="fa fa-heart"></i></a>
-          </div>
-          <div class="food-card_content">
-            <div class="food-card_title-section">
-              <a href="#!" class="food-card_title">Double Cheese Potato Burger</a>
-              <a href="#!" class="food-card_author">Burger</a>
-            </div>
-            <div class="food-card_bottom-section">
-              <div class="space-between">
-                <div>
-                  <span class="fa fa-fire"></span> 220 - 280 Kcal
-                </div>
-                <div class="pull-right">
-                  <span class="badge badge-success">Veg</span>
-                </div>
-              </div>
-              <hr>
-              <div class="space-between">
-                <div class="food-card_price">
-                  <span>5.99$</span>
-                </div>
-                <div class="food-card_order-count">
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <button class="btn btn-outline-secondary minus-btn" type="button" id="button-addon1"><i class="fa fa-minus"></i></button>
-                    </div>
-                    <input type="text" class="form-control input-manulator" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" value="0">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary add-btn" type="button" id="button-addon1"><i class="fa fa-plus"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="container-fluid page mb-5">
+  <div class="d-flex page__box p-3 mt-2">Product</div>
+  <div class="page__content shadow  p-3 card-body d-flex flex-column">
+    <table mat-table [dataSource]="product" matSort (matSortChange)="announceSortChange($event)">
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns;  sticky: true"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row;
+        columns: displayedColumns;"></tr>
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+          Name
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by description">
+          Description
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by weight">
+          Price
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.unitPrice}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by symbol">
+          Symbol
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+      </ng-container>
+
+
+    </table>
+    <mat-paginator [length]="pagination?.totalElements"
+                   [pageSize]="pagination?.size"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   (page)="pageEvent = $event; onPaginateChange($event)"
+                   aria-label="Select page">
+    </mat-paginator>
+
   </div>
-</section>
+</div>

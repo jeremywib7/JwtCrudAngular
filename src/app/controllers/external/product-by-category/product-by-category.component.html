@@ -73,9 +73,9 @@
             <div id="collapsethree" class="collapse show" aria-labelledby="headingthree">
               <div class="card-body p-0">
                 <div class="custom-control custom-radio">
-                  <input (click)="getListProductsFromFilter(-1)"
+                  <input (click)="getListProductsFromFilter('all')"
                          [ngModel]="currentCategoryId"
-                         [value]="-1"
+                         [value]="'all'"
                          type="radio" id="{{-1}}"
                          name="customRadio2"
                          class="custom-control-input me-2">
@@ -140,6 +140,7 @@
                 [queryParams]="{i: product.id}"
                 [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/product/download/' + product?.imageUrl  "
                 class="img-fluid"/>
+<!--              <a href="#!"><i class="far fa-heart"></i></a>-->
               <a><i class="far fa-heart"></i></a>
             </div>
             <div class="food-card_content">

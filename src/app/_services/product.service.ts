@@ -1,5 +1,5 @@
 import {Injectable, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {map, Observable} from "rxjs";
 import {Product} from "../model/Product";
@@ -15,10 +15,8 @@ export class ProductService {
   constructor(private httpClient: HttpClient) {
   }
 
-  loadAllProducts(minCalories: number, maxCalories: number,
-               minPrice: number, maxPrice: number, pageNumber: number) {
-    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/all?minPrice=` + minPrice +
-      `&maxPrice=` + maxPrice + `&minCalories=` + minCalories + `&maxCalories=` + maxCalories)
+  loadAllProducts(params: HttpParams) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/all`, {params})
       .pipe(map((data) => data || []))
   }
 
@@ -32,15 +30,13 @@ export class ProductService {
       .pipe(map((data) => data || []))
   }
 
-  loadProductDetailById(id: number) {
+  loadProductDetailById(id: string) {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findById?id=` + id)
       .pipe(map((data) => data || []))
   }
 
-  loadProductsByFilter(categoryId: number, minCalories: number, maxCalories: number,
-                       minPrice: number, maxPrice: number, pageNumber: number) {
-    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByCategory?categoryId=` + categoryId
-      + `&minPrice=` + minPrice + `&maxPrice=` + maxPrice + `&minCalories=` + minCalories + `&maxCalories=` + maxCalories)
+  loadProductsByFilter(params : HttpParams) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByCategory`, {params})
       .pipe(map((data) => data || []))
   }
 
