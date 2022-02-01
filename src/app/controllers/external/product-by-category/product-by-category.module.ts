@@ -12,6 +12,7 @@ import {ProductByCategoryComponent} from "./product-by-category.component";
 import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
 import {NgxSliderModule} from "@angular-slider/ngx-slider";
 import {ProductDetailComponent} from "../product-detail/product-detail.component";
+import {BrowserModule} from "@angular/platform-browser";
 
 const routes: Routes = [
   {path: '', component: ProductByCategoryComponent, canActivate: [AuthGuard], data: {roles: 'Customer'}},
@@ -21,6 +22,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [ProductByCategoryComponent],
   imports: [
+    BrowserModule,
     CommonModule,
     RouterModule.forChild(routes),
     HttpClientModule,

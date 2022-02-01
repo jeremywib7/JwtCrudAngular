@@ -8,10 +8,10 @@ export class Product {
   };
   totalCalories: string;
   description: string;
-  unitPrice: string;
+  unitPrice: number;
   imageUrl: string;
-  image: [
-    imageUrl: string
+  images: [
+    imageName: string
   ];
   active: boolean;
   createdOn: Date;

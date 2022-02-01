@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ProductService} from "../../../_services/product.service";
 import {Pagination, Product} from "../../../model/Product";
 import {MatTableDataSource} from '@angular/material/table';
-import {MatSort, Sort} from "@angular/material/sort";
-import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {HttpParams} from "@angular/common/http";
-import {PageEvent} from "@angular/material/paginator";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
+import {ActivatedRoute, Router} from "@angular/router";
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-product',
@@ -14,14 +15,23 @@ import {PageEvent} from "@angular/material/paginator";
 })
 export class InternalProductComponent implements OnInit {
 
-  constructor(private productService: ProductService, private _liveAnnouncer: LiveAnnouncer) {
+  apiBaseUrl = environment.apiBaseUrl;
+  projectName = environment.project;
+
+  constructor(
+    private productService: ProductService,
+    private router: Router,
+    private _activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.getAllProducts(this.productsPageNumber, this.productsSizeNumber);
+    this.onInit(this.productsPageNumber, this.productsSizeNumber);
   }
 
-  product: Product[] = [];
+  @ViewChild(MatSort) matSort!: MatSort;
+
+  dataSource!: MatTableDataSource<Product[]>;
+  product: Product[];
 
   currentCategoryId: string = "all";
   minCalories: number = 0;
@@ -30,7 +40,7 @@ export class InternalProductComponent implements OnInit {
   maxPrice: number = 10000000;
 
   //angular table
-  displayedColumns: string[] = ['name', 'description', 'price'];
+  displayedColumns: string[] = ['image','name', 'description', 'price', 'edit', 'delete'];
   //first page
   productsPageNumber: number = 0;
   productsSizeNumber: number = 10;
@@ -39,37 +49,37 @@ export class InternalProductComponent implements OnInit {
 
   params = new HttpParams();
 
-  async getAllProducts(page: number, size: number) {
+
+  async onInit(page: number, size: number) {
 
     //reset and set page and size
     await this.getPageAndSize(page, size);
-
-    await this.productService.loadAllProducts(this.params).subscribe(
-      (data: object) => {
-        this.product = data['data']['content'];
-        this.pagination = data['data'];
-      },
-    );
+    await this.loadAllProducts();
   }
 
   async onPaginateChange(event: PageEvent) {
-    console.log("pagination changed");
-
     let page = event.pageIndex;
     let size = event.pageSize;
 
-    //reset and set page and size
+    //get current page and size
     await this.getPageAndSize(page, size);
+    await this.loadAllProducts();
+  }
 
+  async loadAllProducts() {
     await this.productService.loadAllProducts(this.params).subscribe(
       (data: object) => {
-        this.product = data['data']['content'];
+        this.dataSource = new MatTableDataSource(data['data']['content']);
         this.pagination = data['data'];
+        this.dataSource.sort = this.matSort;
+
+        //  for autocomplete
+        this.product = data['data']['content'];
       },
     );
   }
 
-  getPageAndSize(page: number, size:number) {
+  getPageAndSize(page: number, size: number) {
     this.params = new HttpParams();
 
     this.params = this.params.append('page', JSON.stringify(page));
@@ -77,18 +87,34 @@ export class InternalProductComponent implements OnInit {
 
   }
 
-  /** Announce the change in sort state for assistive technology. */
-  announceSortChange(sortState: Sort) {
-    // This example uses English messages. If your application supports
-    // multiple language, you would internationalize these strings.
-    // Furthermore, you can customize the message to add additional
-    // details about the values being sorted.
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
+  onEditButtonClicked(id: string) {
+    console.log(id);
   }
 
+  async getlistProductsNameSearch(item) {
+    console.log(item);
+    await this.productService.loadProductsSearchByName(item.name).subscribe(
+      (data: Product[]) => {
+        this.dataSource = new MatTableDataSource(data['data']['content']);
+        this.pagination = data['data'];
+        this.dataSource.sort = this.matSort;
+        // this.contentLoaded = true;
+      },
+    );
 
+    // update url param
+    this.router.navigate([], {
+
+      relativeTo: this._activatedRoute,
+      queryParams: {
+        'minPrice': this.minPrice === undefined || this.minPrice === 0 ? null : this.minPrice,
+        'maxPrice': this.maxPrice === undefined || this.maxPrice === 0 || this.maxPrice === 100000 ? null :
+          this.maxPrice,
+        'minCalories': this.minCalories === undefined || this.minCalories === 0 ? null : this.minCalories,
+        'maxCalories': this.maxCalories === undefined || this.maxCalories === 0 || this.maxCalories === 200 ? null :
+          this.maxCalories,
+      },
+      queryParamsHandling: 'merge',
+    })
+  }
 }
