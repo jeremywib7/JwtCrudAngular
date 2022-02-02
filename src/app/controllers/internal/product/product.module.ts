@@ -20,17 +20,49 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {UserAuthService} from "../../../_services/user-auth.service";
 import {MatDialogModule} from "@angular/material/dialog";
-import { ProductFormComponent } from './product-form/product-form.component';
+import {ProductFormComponent} from './product-form/product-form.component';
 import {MatInputModule} from "@angular/material/input";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatTabsModule} from "@angular/material/tabs";
+import {ProductCategoryComponent} from './product-category/product-category.component';
+import { ProductTableComponent } from './product-table/product-table.component';
 
 const routes: Routes = [
-  {path: '', component: InternalProductComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
+  {
+    path: '',
+    component: InternalProductComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['Admin']
+    },
+    children:[
+      { path: '', redirectTo: 'table' },
+      {
+        path: 'table',
+        component: ProductTableComponent,
+        canActivate: [AuthGuard],
+        data: {
+          roles: ['Admin'],
+          label: 'Product'
+        }
+      },
+      {
+        path: 'category',
+        component: ProductCategoryComponent,
+        canActivate: [AuthGuard],
+        data: {
+          roles: ['Admin'],
+          label: 'Category'
+        }
+      },
+    ]
+  },
+
   {path: 'add', component: ProductFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}}
 ];
 
 @NgModule({
-  declarations: [InternalProductComponent, ProductFormComponent],
+  declarations: [InternalProductComponent, ProductFormComponent, ProductCategoryComponent, ProductTableComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -52,7 +84,8 @@ const routes: Routes = [
     MatTooltipModule,
     MatDialogModule,
     MatInputModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatTabsModule
   ],
   providers: [{provide: LAZYLOAD_IMAGE_HOOKS, useClass: InternalProductModule}],
 })

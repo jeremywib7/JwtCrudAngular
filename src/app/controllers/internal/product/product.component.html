@@ -2,189 +2,231 @@
   <div class="row flex-lg-nowrap">
     <div class="col">
       <div class="e-tabs mb-3 px-3">
-        <ul class="nav nav-tabs">
-          <li class="nav-item"><a class="nav-link active" href="#">Products</a></li>
-        </ul>
-      </div>
-      <div class="row flex-lg-nowrap mt-4">
-        <div class="col-12 col-lg-3 mb-3">
-          <div class="card">
-            <div class="card-body">
-              <div class="text-center px-xl-3">
-                <button class="btn btn-success btn-block" type="button" data-toggle="modal"
-                routerLink="/int/product/add">New Product
-                </button>
-              </div>
-              <hr class="my-3">
-              <div>
-                <div class="form-group">
-                  <div style="font-size: 14px">
-                    <mat-form-field [style.width.%]="100" appearance="outline">
-                      <mat-label>Search Products</mat-label>
-                      <input matInput aria-label="State" [matAutocomplete]="auto"
-                             [formControl]="searchProductCtrl">
-                      <button *ngIf="searchProductCtrl.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
-                        <mat-icon>close</mat-icon>
-                      </button>
-                      <mat-autocomplete #auto="matAutocomplete">
-                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
-                        <ng-container *ngIf="!isLoading">
-                          <mat-option *ngFor="let element of product" [value]="element.name">
-                            <span><b>{{element.name}}</b></span>
-                          </mat-option>
-                        </ng-container>
-                      </mat-autocomplete>
-                    </mat-form-field>
+        <nav mat-tab-nav-bar>
+          <a mat-tab-link
+             *ngFor="let link of navLinks"
+             [routerLink]="link.path"
+             routerLinkActive #rla="routerLinkActive"
+             [active]="rla.isActive">
+            {{link.label}}
+          </a>
+        </nav>
 
-                    <br>
+        <router-outlet></router-outlet>
+        <!--        <mat-tab-group dynamicHeight>-->
+        <!--          <mat-tab>-->
+        <!--            <ng-template mat-tab-label>-->
+        <!--              <mat-icon class="me-2">product</mat-icon>-->
+        <!--              Product-->
+        <!--            </ng-template>-->
+        <!--            <ng-template matTabContent>-->
+        <!--              &lt;!&ndash;              Content 1 - Loaded: {{getTimeLoaded(1) | date:'medium'}}&ndash;&gt;-->
+        <!--              <div class="row flex-lg-nowrap mt-4">-->
+        <!--                <div class="col-12 col-lg-3 mb-3">-->
+        <!--                  <div class="card">-->
+        <!--                    <div class="card-body">-->
+        <!--                      <div class="text-center px-xl-3">-->
+        <!--                        <button class="btn btn-success btn-block" type="button" data-toggle="modal"-->
+        <!--                                routerLink="/int/product/add">New Product-->
+        <!--                        </button>-->
+        <!--                      </div>-->
+        <!--                      <hr class="my-3">-->
+        <!--                      <div>-->
+        <!--                        <div class="form-group">-->
+        <!--                          <div style="font-size: 14px">-->
+        <!--                            <mat-form-field [style.width.%]="100" appearance="outline">-->
+        <!--                              <mat-label>Search Products</mat-label>-->
+        <!--                              <input matInput aria-label="State" [matAutocomplete]="auto"-->
+        <!--                                     [formControl]="searchProductCtrl">-->
+        <!--                              <button *ngIf="searchProductCtrl.value" matSuffix mat-icon-button aria-label="Clear"-->
+        <!--                                      (click)="clearSearch()">-->
+        <!--                                <mat-icon>close</mat-icon>-->
+        <!--                              </button>-->
+        <!--                              <mat-autocomplete #auto="matAutocomplete">-->
+        <!--                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>-->
+        <!--                                <ng-container *ngIf="!isLoading">-->
+        <!--                                  <mat-option *ngFor="let element of product" [value]="element.name">-->
+        <!--                                    <span><b>{{element.name}}</b></span>-->
+        <!--                                  </mat-option>-->
+        <!--                                </ng-container>-->
+        <!--                              </mat-autocomplete>-->
+        <!--                            </mat-form-field>-->
 
-                    <ng-container *ngIf="errorMsg">
-                      {{errorMsg}}
-                    </ng-container>
-                  </div>
+        <!--                            <br>-->
 
-                </div>
-              </div>
-              <hr class="my-3">
-              <div class="">
-                <label>Status:</label>
-                <div class="px-2">
-                  <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" name="user-status" id="users-status-disabled">
-                    <label class="custom-control-label" for="users-status-disabled">Any</label>
-                  </div>
-                </div>
-                <div class="px-2">
-                  <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" name="user-status" id="users-status-active">
-                    <label class="custom-control-label" for="users-status-active">Active</label>
-                  </div>
-                </div>
-                <div class="px-2">
-                  <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" name="user-status" id="users-status-any"
-                           checked="">
-                    <label class="custom-control-label" for="users-status-any">Inactive</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col mb-3">
-          <div class="e-panel card" style="padding: 20px">
-            <table mat-table matSort [dataSource]="dataSource">
+        <!--                            <ng-container *ngIf="errorMsg">-->
+        <!--                              {{errorMsg}}-->
+        <!--                            </ng-container>-->
+        <!--                          </div>-->
 
-              <tr mat-header-row *matHeaderRowDef="displayedColumns;  sticky: true"></tr>
-              <tr
-                mat-row
-                *matRowDef="let row;
-        columns: displayedColumns;"></tr>
+        <!--                        </div>-->
+        <!--                      </div>-->
+        <!--                      <hr class="my-3">-->
+        <!--                      <div class="">-->
+        <!--                        <label>Status:</label>-->
+        <!--                        <div class="px-2">-->
+        <!--                          <div class="custom-control custom-radio">-->
+        <!--                            <input type="radio" class="custom-control-input" name="user-status"-->
+        <!--                                   id="users-status-disabled">-->
+        <!--                            <label class="custom-control-label" for="users-status-disabled">Any</label>-->
+        <!--                          </div>-->
+        <!--                        </div>-->
+        <!--                        <div class="px-2">-->
+        <!--                          <div class="custom-control custom-radio">-->
+        <!--                            <input type="radio" class="custom-control-input" name="user-status"-->
+        <!--                                   id="users-status-active">-->
+        <!--                            <label class="custom-control-label" for="users-status-active">Active</label>-->
+        <!--                          </div>-->
+        <!--                        </div>-->
+        <!--                        <div class="px-2">-->
+        <!--                          <div class="custom-control custom-radio">-->
+        <!--                            <input type="radio" class="custom-control-input" name="user-status" id="users-status-any"-->
+        <!--                                   checked="">-->
+        <!--                            <label class="custom-control-label" for="users-status-any">Inactive</label>-->
+        <!--                          </div>-->
+        <!--                        </div>-->
+        <!--                      </div>-->
+        <!--                    </div>-->
+        <!--                  </div>-->
+        <!--                </div>-->
+        <!--                <div class="col mb-3">-->
+        <!--                  <div class="e-panel card" style="padding: 20px">-->
+        <!--                    <table mat-table matSort [dataSource]="dataSource">-->
 
-
-              <!--      <img-->
-              <!--        [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/user/download/' + user?.imageUrl  "-->
-              <!--        class="img-fluid" alt=""/>-->
-
-              <!-- Position Column -->
-              <ng-container matColumnDef="image">
-                <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let element">
-                  <img
-                    [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/product/download/' + element?.images[0]?.imageName  "
-                    class="rounded-circle"
-                    style="height: 70px;width: 70px; padding: 5px;">
-                </td>
-              </ng-container>
-
-              <!-- Position Column -->
-              <ng-container matColumnDef="name">
-                <th mat-header-cell mat-sort-header="name" *matHeaderCellDef>
-                  Name
-                </th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-              </ng-container>
-
-              <!-- Name Column -->
-              <ng-container matColumnDef="description">
-                <th mat-header-cell mat-sort-header="description" *matHeaderCellDef
-                    sortActionDescription="Sort by description">
-                  Description
-                </th>
-                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-              </ng-container>
-
-              <!-- Weight Column -->
-              <ng-container matColumnDef="price">
-                <th mat-header-cell mat-sort-header="unitPrice" *matHeaderCellDef sortActionDescription="Sort by price">
-                  Price
-                </th>
-                <td mat-cell *matCellDef="let element"> {{element.unitPrice | currency:'Rp. ':'symbol':'3.0'}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="edit">
-                <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let element">
-                  <button
-                    mat-icon-button
-                    color="primary"
-                    matTooltip="Edit {{element.name}}"
-                    [matTooltipPosition]="'below'"
-                    (click)="onEditButtonClicked(element.id)">
-                    <mat-icon>edit</mat-icon>
-                  </button>
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="delete">
-                <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let element">
-                  <button
-                    mat-icon-button
-                    color="warn"
-                    matTooltip="Delete {{element.name}}"
-                    [matTooltipPosition]="'below'"
-                    (click)="onDeleteButtonClicked(deleteProductModal)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-
-                  <!-- Modal Delete Product -->
-                  <ng-template #deleteProductModal let-modal>
-                    <div class="modal-header" ngbAutofocus>
-                      <h4 class="modal-title" id="deleteProductModal">Delete Product ?</h4>
-                      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <form>
-                        <div class="form-group">
-                          Delete product {{element?.name}} ?
-                        </div>
-                      </form>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
-                      <button type="button" class="btn btn-outline-primary"
-                              (click)="onDeleteButtonConfirmed(element.id)">
-                        Delete
-                      </button>
-
-                    </div>
-                  </ng-template>
-
-                </td>
-              </ng-container>
+        <!--                      <tr mat-header-row *matHeaderRowDef="displayedColumns;  sticky: true"></tr>-->
+        <!--                      <tr-->
+        <!--                        mat-row-->
+        <!--                        *matRowDef="let row;-->
+        <!--        columns: displayedColumns;"></tr>-->
 
 
-            </table>
-            <mat-paginator [length]="pagination?.totalElements"
-                           [pageSize]="pagination?.size"
-                           [pageSizeOptions]="[5, 10, 25, 100]"
-                           (page)="pageEvent = $event; onPaginateChange($event)"
-                           aria-label="Select page">
-            </mat-paginator>
-          </div>
-        </div>
+        <!--                      &lt;!&ndash;      <img&ndash;&gt;-->
+        <!--                      &lt;!&ndash;        [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/user/download/' + user?.imageUrl  "&ndash;&gt;-->
+        <!--                      &lt;!&ndash;        class="img-fluid" alt=""/>&ndash;&gt;-->
+
+        <!--                      &lt;!&ndash; Position Column &ndash;&gt;-->
+        <!--                      <ng-container matColumnDef="image">-->
+        <!--                        <th mat-header-cell *matHeaderCellDef></th>-->
+        <!--                        <td mat-cell *matCellDef="let element">-->
+        <!--                          <img-->
+        <!--                            [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/product/download/' + element?.images[0]?.imageName  "-->
+        <!--                            class="rounded-circle"-->
+        <!--                            style="height: 70px;width: 70px; padding: 5px;">-->
+        <!--                        </td>-->
+        <!--                      </ng-container>-->
+
+        <!--                      &lt;!&ndash; Position Column &ndash;&gt;-->
+        <!--                      <ng-container matColumnDef="name">-->
+        <!--                        <th mat-header-cell mat-sort-header="name" *matHeaderCellDef>-->
+        <!--                          Name-->
+        <!--                        </th>-->
+        <!--                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+        <!--                      </ng-container>-->
+
+        <!--                      &lt;!&ndash; Name Column &ndash;&gt;-->
+        <!--                      <ng-container matColumnDef="description">-->
+        <!--                        <th mat-header-cell mat-sort-header="description" *matHeaderCellDef-->
+        <!--                            sortActionDescription="Sort by description">-->
+        <!--                          Description-->
+        <!--                        </th>-->
+        <!--                        <td mat-cell *matCellDef="let element"> {{element.description}} </td>-->
+        <!--                      </ng-container>-->
+
+        <!--                      &lt;!&ndash; Weight Column &ndash;&gt;-->
+        <!--                      <ng-container matColumnDef="price">-->
+        <!--                        <th mat-header-cell mat-sort-header="unitPrice" *matHeaderCellDef-->
+        <!--                            sortActionDescription="Sort by price">-->
+        <!--                          Price-->
+        <!--                        </th>-->
+        <!--                        <td mat-cell-->
+        <!--                            *matCellDef="let element"> {{element.unitPrice | currency:'Rp. ':'symbol':'3.0'}} </td>-->
+        <!--                      </ng-container>-->
+
+        <!--                      <ng-container matColumnDef="edit">-->
+        <!--                        <th mat-header-cell *matHeaderCellDef></th>-->
+        <!--                        <td mat-cell *matCellDef="let element">-->
+        <!--                          <button-->
+        <!--                            mat-icon-button-->
+        <!--                            color="primary"-->
+        <!--                            matTooltip="Edit {{element.name}}"-->
+        <!--                            [matTooltipPosition]="'below'"-->
+        <!--                            (click)="onEditButtonClicked(element.id)">-->
+        <!--                            <mat-icon>edit</mat-icon>-->
+        <!--                          </button>-->
+        <!--                        </td>-->
+        <!--                      </ng-container>-->
+
+        <!--                      <ng-container matColumnDef="delete">-->
+        <!--                        <th mat-header-cell *matHeaderCellDef></th>-->
+        <!--                        <td mat-cell *matCellDef="let element">-->
+        <!--                          <button-->
+        <!--                            mat-icon-button-->
+        <!--                            color="warn"-->
+        <!--                            matTooltip="Delete {{element.name}}"-->
+        <!--                            [matTooltipPosition]="'below'"-->
+        <!--                            (click)="onDeleteButtonClicked(deleteProductModal)">-->
+        <!--                            <mat-icon>delete</mat-icon>-->
+        <!--                          </button>-->
+
+        <!--                          &lt;!&ndash; Modal Delete Product &ndash;&gt;-->
+        <!--                          <ng-template #deleteProductModal let-modal>-->
+        <!--                            <div class="modal-header" ngbAutofocus>-->
+        <!--                              <h4 class="modal-title" id="deleteProductModal">Delete Product ?</h4>-->
+        <!--                              <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">-->
+        <!--                              </button>-->
+        <!--                            </div>-->
+        <!--                            <div class="modal-body">-->
+        <!--                              <form>-->
+        <!--                                <div class="form-group">-->
+        <!--                                  Delete product {{element?.name}} ?-->
+        <!--                                </div>-->
+        <!--                              </form>-->
+        <!--                            </div>-->
+        <!--                            <div class="modal-footer">-->
+        <!--                              <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>-->
+        <!--                              <button type="button" class="btn btn-outline-primary"-->
+        <!--                                      (click)="onDeleteButtonConfirmed(element.id)">-->
+        <!--                                Delete-->
+        <!--                              </button>-->
+
+        <!--                            </div>-->
+        <!--                          </ng-template>-->
+
+        <!--                        </td>-->
+        <!--                      </ng-container>-->
+
+
+        <!--                    </table>-->
+        <!--                    <mat-paginator [length]="pagination?.totalElements"-->
+        <!--                                   [pageSize]="pagination?.size"-->
+        <!--                                   [pageSizeOptions]="[5, 10, 25, 100]"-->
+        <!--                                   (page)="pageEvent = $event; onPaginateChange($event)"-->
+        <!--                                   aria-label="Select page">-->
+        <!--                    </mat-paginator>-->
+        <!--                  </div>-->
+        <!--                </div>-->
+        <!--              </div>-->
+        <!--            </ng-template>-->
+        <!--          </mat-tab>-->
+        <!--          <mat-tab>-->
+        <!--            <ng-template mat-tab-label>-->
+        <!--              <mat-icon class="me-2">thumb_up</mat-icon>-->
+        <!--              First-->
+        <!--            </ng-template>-->
+        <!--            <ng-template matTabContent>-->
+        <!--              <button class="btn btn-success btn-block" type="button" data-toggle="modal"-->
+        <!--                      routerLink="/int/product/add">New Product>-->
+        <!--              </button>-->
+        <!--              &lt;!&ndash;              Content 2 - Loaded: {{getTimeLoaded(2) | date:'medium'}}&ndash;&gt;-->
+        <!--            </ng-template>-->
+        <!--          </mat-tab>-->
+        <!--          <mat-tab label="Third">-->
+        <!--            <ng-template matTabContent>-->
+        <!--              test 3-->
+        <!--              &lt;!&ndash;              Content 3 - Loaded: {{getTimeLoaded(3) | date:'medium'}}&ndash;&gt;-->
+        <!--            </ng-template>-->
+        <!--          </mat-tab>-->
+        <!--        </mat-tab-group>-->
       </div>
     </div>
   </div>
