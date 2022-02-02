@@ -1,46 +1,20 @@
-//ng autocomplete
-
-.ng-autocomplete {
-  width: 100%;
+//remove modal autofocus
+button[aria-label="Close"]:focus {
+  outline: none;
 }
 
-.ng-autocomplete ::ng-deep .autocomplete-container {
-  box-shadow: none;
+//card shadow
+.card {
+  box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
 }
-
-.ng-autocomplete ::ng-deep .autocomplete-container ::ng-deep .input-container ::ng-deep input {
-  font-size: 0.875rem;
-  display: block;
-  height: 2.1875rem;
-  padding: 0.375rem 1rem;
-  font-weight: 400;
-  line-height: 1.52857143;
-  color: #495057;
-  border: 2px solid #dde6e9;
-  border-radius: 0.25rem;
-}
-
-.ng-autocomplete ::ng-deep .autocomplete-container ::ng-deep .suggestions-container ::ng-deep .item ::ng-deep .row {
-  padding: 0.5rem 1rem;
-}
-
-.ng-autocomplete ::ng-deep .autocomplete-container ::ng-deep .not-found {
-  border: 0;
-}
-
-
-//
 
 //mat icon
-
 .mat-icon{
   height:18px !important;
   width:18px !important;
   font-size:18px !important;
 }
 
-
-//
 
 .page {
   color: white;

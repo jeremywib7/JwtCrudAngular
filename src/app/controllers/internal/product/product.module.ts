@@ -19,13 +19,18 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {UserAuthService} from "../../../_services/user-auth.service";
+import {MatDialogModule} from "@angular/material/dialog";
+import { ProductFormComponent } from './product-form/product-form.component';
+import {MatInputModule} from "@angular/material/input";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 const routes: Routes = [
-  {path: '', component: InternalProductComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}}
+  {path: '', component: InternalProductComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
+  {path: 'add', component: ProductFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}}
 ];
 
 @NgModule({
-  declarations: [InternalProductComponent],
+  declarations: [InternalProductComponent, ProductFormComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -44,7 +49,10 @@ const routes: Routes = [
     AutocompleteLibModule,
     MatButtonModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule,
+    MatInputModule,
+    MatAutocompleteModule
   ],
   providers: [{provide: LAZYLOAD_IMAGE_HOOKS, useClass: InternalProductModule}],
 })

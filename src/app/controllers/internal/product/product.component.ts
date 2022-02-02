@@ -7,6 +7,11 @@ import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {ActivatedRoute, Router} from "@angular/router";
 import {environment} from "../../../../environments/environment";
+import {MatDialog} from "@angular/material/dialog";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ToastrService} from "ngx-toastr";
+import {FormControl} from '@angular/forms';
+import {debounceTime, finalize, switchMap, tap} from 'rxjs';
 
 @Component({
   selector: 'app-product',
@@ -18,10 +23,44 @@ export class InternalProductComponent implements OnInit {
   apiBaseUrl = environment.apiBaseUrl;
   projectName = environment.project;
 
+  fromClearSearch: boolean = false;
+
   constructor(
     private productService: ProductService,
     private router: Router,
-    private _activatedRoute: ActivatedRoute) {
+    private _activatedRoute: ActivatedRoute,
+    private ngbModal: NgbModal,
+    private toastr: ToastrService,
+  ) {
+
+    this.searchProductCtrl.valueChanges
+      .pipe(
+        debounceTime(500),
+        tap(() => {
+          this.errorMsg = "";
+          this.product = [];
+          this.isLoading = true;
+        }),
+        switchMap((value) => {
+
+          return this.productService.loadProductsSearchByName(value)
+            .pipe(
+              finalize(() => {
+                this.isLoading = false;
+              })
+            );
+
+        })
+      )
+      .subscribe(data => {
+        this.dataSource = new MatTableDataSource(data['data']['content']);
+        this.pagination = data['data'];
+        this.dataSource.sort = this.matSort;
+
+        //  for autocomplete
+        this.product = data['data']['content'];
+      });
+
   }
 
   ngOnInit(): void {
@@ -29,6 +68,8 @@ export class InternalProductComponent implements OnInit {
   }
 
   @ViewChild(MatSort) matSort!: MatSort;
+
+  isLoading = false;
 
   dataSource!: MatTableDataSource<Product[]>;
   product: Product[];
@@ -40,7 +81,7 @@ export class InternalProductComponent implements OnInit {
   maxPrice: number = 10000000;
 
   //angular table
-  displayedColumns: string[] = ['image','name', 'description', 'price', 'edit', 'delete'];
+  displayedColumns: string[] = ['image', 'name', 'description', 'price', 'edit', 'delete'];
   //first page
   productsPageNumber: number = 0;
   productsSizeNumber: number = 10;
@@ -49,12 +90,18 @@ export class InternalProductComponent implements OnInit {
 
   params = new HttpParams();
 
+  searchProductCtrl = new FormControl();
+  errorMsg: string;
 
   async onInit(page: number, size: number) {
 
     //reset and set page and size
     await this.getPageAndSize(page, size);
-    await this.loadAllProducts();
+    await this.loadProducts();
+  }
+
+  clearSearch() {
+    this.searchProductCtrl.setValue('');
   }
 
   async onPaginateChange(event: PageEvent) {
@@ -63,10 +110,10 @@ export class InternalProductComponent implements OnInit {
 
     //get current page and size
     await this.getPageAndSize(page, size);
-    await this.loadAllProducts();
+    await this.loadProducts();
   }
 
-  async loadAllProducts() {
+  async loadProducts() {
     await this.productService.loadAllProducts(this.params).subscribe(
       (data: object) => {
         this.dataSource = new MatTableDataSource(data['data']['content']);
@@ -89,6 +136,18 @@ export class InternalProductComponent implements OnInit {
 
   onEditButtonClicked(id: string) {
     console.log(id);
+  }
+
+  onDeleteButtonClicked(content) {
+    this.ngbModal.open(content);
+  }
+
+  onDeleteButtonConfirmed(id: string) {
+    this.productService.deleteProductById(id).subscribe(res => {
+      this.toastr.success('Delete Product Success', 'Success');
+      this.ngbModal.dismissAll();
+      this.loadProducts();
+    });
   }
 
   async getlistProductsNameSearch(item) {

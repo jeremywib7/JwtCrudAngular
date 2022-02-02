@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {map, Observable} from "rxjs";
 import {Product} from "../model/Product";
+import {User} from "../model/User";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,10 @@ export class ProductService {
   private project = environment.project;
 
   constructor(private httpClient: HttpClient) {
+  }
+
+  public deleteProductById(id: string): Observable<Product> {
+    return this.httpClient.delete<Product>(`${this.apiServerUrl}/${this.project}/product/delete/${id}`);
   }
 
   loadAllProducts(params: HttpParams) {
