@@ -1,3 +1,4 @@
+<body>
 <div class="container-xl px-4 mt-4">
   <div class="row">
     <div class="col-xl-4">
@@ -8,90 +9,155 @@
 
           <h6>Main Image</h6>
           <!-- Profile picture image-->
-          <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+          <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png"
+               alt="">
           <!-- Profile picture help block-->
           <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
           <!-- Profile picture upload button-->
           <button class="btn btn-primary" type="button">Upload New Image</button>
 
-<!--          gonna present in modal to pick image-->
+          <!--          gonna present in modal to pick image-->
 
-<!--          <hr class="mt-2 mb-4">-->
+          <!--          <hr class="mt-2 mb-4">-->
 
-<!--          <h6>Secondary Image</h6>-->
-<!--          &lt;!&ndash; Profile picture image&ndash;&gt;-->
-<!--          <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
-<!--          &lt;!&ndash; Profile picture help block&ndash;&gt;-->
-<!--          <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>-->
-<!--          &lt;!&ndash; Profile picture upload button&ndash;&gt;-->
-<!--          <button class="btn btn-primary" type="button">Upload secondary image</button>-->
+          <!--          <h6>Secondary Image</h6>-->
+          <!--          &lt;!&ndash; Profile picture image&ndash;&gt;-->
+          <!--          <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
+          <!--          &lt;!&ndash; Profile picture help block&ndash;&gt;-->
+          <!--          <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>-->
+          <!--          &lt;!&ndash; Profile picture upload button&ndash;&gt;-->
+          <!--          <button class="btn btn-primary" type="button">Upload secondary image</button>-->
 
-<!--          <hr class="mt-2 mb-4">-->
+          <!--          <hr class="mt-2 mb-4">-->
 
-<!--          <h6>Third Image</h6>-->
-<!--          &lt;!&ndash; Profile picture image&ndash;&gt;-->
-<!--          <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
-<!--          &lt;!&ndash; Profile picture help block&ndash;&gt;-->
-<!--          <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>-->
-<!--          &lt;!&ndash; Profile picture upload button&ndash;&gt;-->
-<!--          <button class="btn btn-primary" type="button">Upload third image</button>-->
+          <!--          <h6>Third Image</h6>-->
+          <!--          &lt;!&ndash; Profile picture image&ndash;&gt;-->
+          <!--          <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
+          <!--          &lt;!&ndash; Profile picture help block&ndash;&gt;-->
+          <!--          <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>-->
+          <!--          &lt;!&ndash; Profile picture upload button&ndash;&gt;-->
+          <!--          <button class="btn btn-primary" type="button">Upload third image</button>-->
         </div>
-
       </div>
     </div>
     <div class="col-xl-8">
-      <!-- Account details card-->
       <div class="card mb-4">
         <div class="card-header">Product Details</div>
         <div class="card-body">
-          <form>
+          <form [formGroup]="reactiveForm" (ngSubmit)="submit()">
             <!-- Form Group (username)-->
             <div class="mb-3">
-              <label class="small mb-1" for="inputUsername">Product Name</label>
-              <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" value="username">
+              <div class="form-group">
+                <label class="small mb-1" for="inputUsername">Product Name</label>
+                <input class="form-control" id="inputUsername" type="text" placeholder="Enter product name"
+                       formControlName="name">
+                <div *ngIf="reactiveForm.controls.name.errors && (reactiveForm.controls.name.touched ||
+                           reactiveForm.controls.name.dirty) " style="color: red">
+                  <div *ngIf="reactiveForm.hasError('required','name')">
+                    Product Name is required
+                  </div>
+                  <div *ngIf="reactiveForm.hasError('minlength','name')">
+                    Product Name must be 3 characters or more
+                  </div>
+                </div>
+              </div>
             </div>
             <!-- Form Row-->
             <div class="row gx-3 mb-3">
               <!-- Form Group (first name)-->
               <div class="col-md-6">
-                <label class="small mb-1" for="inputFirstName">Total Calories</label>
-                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" value="Valerie">
+                <label class="small mb-1" for="inputFirstName">Total Calories (Cals)</label>
+                <input class="form-control" id="inputFirstName" type="number" placeholder="Enter total calories"
+                       formControlName="totalCalories">
+                <div *ngIf="reactiveForm.controls.totalCalories.errors && (reactiveForm.controls.totalCalories.touched ||
+                           reactiveForm.controls.totalCalories.dirty) " style="color: red">
+                  <div *ngIf="reactiveForm.hasError('required','totalCalories')">
+                    Total calories is required
+                  </div>
+                  <div *ngIf="reactiveForm.hasError('pattern','totalCalories')">
+                    Total calories format is invalid
+                  </div>
+                  <div *ngIf="reactiveForm.hasError('max','totalCalories')">
+                    Total calories maximum length is 5
+                  </div>
+                </div>
               </div>
               <!-- Form Group (last name)-->
               <div class="col-md-6">
-                <label class="small mb-1" for="inputLastName">Active</label>
-                <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" value="Luna">
+                <div class="form-group">
+                  <label for="editInputRole" class="small mb-1">Discount Status</label>
+                  <select name="rank" id="editInputRole" class="form-select" formControlName="discount">
+                    <option disabled>Select Discount Status</option>
+                    <option value="True">Available</option>
+                    <option value="Available">Not Available</option>
+                  </select>
+                  <div *ngIf="reactiveForm.controls.discount.errors && (reactiveForm.controls.discount.touched ||
+                           reactiveForm.controls.discount.dirty) " style="color: red">
+                    <div *ngIf="reactiveForm.hasError('required', 'discount')">
+                      Discount status is required
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <!-- Form Row        -->
             <div class="row gx-3 mb-3">
               <!-- Form Group (organization name)-->
               <div class="col-md-6">
-                <label class="small mb-1" for="inputOrgName">Discount</label>
-                <input class="form-control" id="inputOrgName" type="text" placeholder="Enter your organization name" value="Start Bootstrap">
+                <label class="small mb-1" for="inputFirstName">Unit Price</label>
+                <input class="form-control" id="inputUnitPrice" type="number" placeholder="Enter total calories"
+                       formControlName="totalCalories">
+                <div *ngIf="reactiveForm.controls.totalCalories.errors && (reactiveForm.controls.totalCalories.touched ||
+                           reactiveForm.controls.totalCalories.dirty) " style="color: red">
+                  <div *ngIf="reactiveForm.hasError('required','totalCalories')">
+                    Total calories is required
+                  </div>
+                  <div *ngIf="reactiveForm.hasError('pattern','totalCalories')">
+                    Total calories format is invalid
+                  </div>
+                  <div *ngIf="reactiveForm.hasError('max','totalCalories')">
+                    Total calories maximum length is 5
+                  </div>
+                </div>
               </div>
               <!-- Form Group (location)-->
               <div class="col-md-6">
-                <label class="small mb-1" for="inputLocation">Discounted Price</label>
-                <input class="form-control" id="inputLocation" type="text" placeholder="Enter your location" value="San Francisco, CA">
+                <label class="small mb-1" for="inputFirstName">Discounted Price</label>
+                <input class="form-control" id="inputFirstName" type="number" placeholder="Enter total calories"
+                       formControlName="totalCalories">
+                <div *ngIf="reactiveForm.controls.totalCalories.errors && (reactiveForm.controls.totalCalories.touched ||
+                           reactiveForm.controls.totalCalories.dirty) " style="color: red">
+                  <div *ngIf="reactiveForm.hasError('required','totalCalories')">
+                    Total calories is required
+                  </div>
+                  <div *ngIf="reactiveForm.hasError('pattern','totalCalories')">
+                    Total calories format is invalid
+                  </div>
+                  <div *ngIf="reactiveForm.hasError('max','totalCalories')">
+                    Total calories maximum length is 5
+                  </div>
+                </div>
               </div>
             </div>
             <!-- Form Group (email address)-->
             <div class="mb-3">
               <label class="small mb-1" for="inputEmailAddress">Email address</label>
-              <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="name@example.com">
+              <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address"
+                     value="name@example.com">
             </div>
             <!-- Form Row-->
             <div class="row gx-3 mb-3">
               <!-- Form Group (phone number)-->
               <div class="col-md-6">
                 <label class="small mb-1" for="inputPhone">Phone number</label>
-                <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" value="555-123-4567">
+                <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number"
+                       value="555-123-4567">
               </div>
               <!-- Form Group (birthday)-->
               <div class="col-md-6">
                 <label class="small mb-1" for="inputBirthday">Birthday</label>
-                <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Enter your birthday" value="06/10/1988">
+                <input class="form-control" id="inputBirthday" type="text" name="birthday"
+                       placeholder="Enter your birthday" value="06/10/1988">
               </div>
             </div>
             <!-- Save changes button-->
@@ -102,3 +168,5 @@
     </div>
   </div>
 </div>
+
+</body>

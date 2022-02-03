@@ -2,6 +2,7 @@ export class Product {
   id: string;
   sku: string;
   name: string;
+  discount: boolean;
   category: {
     id: string;
     categoryName: string;
@@ -9,6 +10,7 @@ export class Product {
   totalCalories: string;
   description: string;
   unitPrice: number;
+  discountedPrice: number;
   imageUrl: string;
   images: [
     imageName: string

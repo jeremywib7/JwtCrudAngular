@@ -34,7 +34,6 @@ export class UserFormComponent implements OnInit {
     private toastr: ToastrService,
     public datepipe: DatePipe,
   ) {
-
   }
 
   ngOnInit(): void {
@@ -92,8 +91,8 @@ export class UserFormComponent implements OnInit {
       phoneNumber: new FormControl(this.user === null ? null : this.user?.phoneNumber,
         {
           validators: [Validators.required, Validators.compose(
-            [Validators.pattern('[0-9+ ]*'), Validators.minLength(10),
-              Validators.maxLength(14)])]
+            [Validators.pattern('[0-9+ ]*'), Validators.min(12345),
+              Validators.max(123456789)])]
         }),
       address: new FormControl(this.user === null ? null : this.user?.address,
         {
@@ -109,7 +108,8 @@ export class UserFormComponent implements OnInit {
       bankAccount: new FormControl(this.user === null ? null : this.user?.bankAccount,
         {
           validators: [Validators.required, Validators.compose(
-            [Validators.pattern('[0-9+ ]*'), Validators.minLength(5), Validators.maxLength(20)])]
+            [Validators.pattern('[0-9+ ]*'), Validators.min(12345),
+              Validators.max(1234567891)])]
         }
       ),
     }, {updateOn: 'change'})
