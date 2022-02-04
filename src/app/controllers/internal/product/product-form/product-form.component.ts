@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {User} from "../../../../model/User";
 import {Product} from "../../../../model/Product";
-import {ReactiveFormConfig, RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
 
 @Component({
   selector: 'app-product-form',
@@ -12,19 +11,14 @@ import {ReactiveFormConfig, RxFormBuilder, RxwebValidators} from "@rxweb/reactiv
 export class ProductFormComponent implements OnInit {
 
   constructor(
-    private fb: RxFormBuilder,
+    private fb: FormBuilder,
   ) {
   }
 
+  unitPrice: number;
+
   ngOnInit(): void {
     this.initForm();
-
-    ReactiveFormConfig.set({
-      validationMessage: {
-        required: 'This field is required',
-        password: 'Input does not fulfil validation parameters',
-      },
-    });
   }
 
   reactiveForm: any = FormGroup;
@@ -33,46 +27,61 @@ export class ProductFormComponent implements OnInit {
   initForm() {
     this.reactiveForm = this.fb.group({
       name: new FormControl(
-        this.product === null ? null : this.product?.name, RxwebValidators.required()),
-      // totalCalories: new FormControl(this.product === null ? null : this.product?.totalCalories, {
-      //   validators: [Validators.required, Validators.compose(
-      //     [Validators.pattern('[0-9+ ]*'), Validators.max(12345)])]
-      // }),
-      // active: new FormControl(this.product === null ? null : this.product?.active, {
-      //   validators: [Validators.required]
-      // }),
-      // unitPrice: new FormControl(this.product === null ? null : this.product?.unitPrice, {
-      //   validators: [Validators.required, Validators.compose(
-      //     [Validators.pattern('[0-9+ ]*'), Validators.minLength(5), Validators.maxLength(20)])]
-      // }),
-      // discount: new FormControl(this.product === null ? null : this.product?.discount, {
-      //   validators: [Validators.required]
-      // }),
-      // discountedPrice: new FormControl(this.product === null ? null : this.product?.discountedPrice, {
-      //   validators: [Validators.required, Validators.compose(
-      //     [Validators.pattern('[0-9+ ]*'), Validators.min(123)])]
-      // }),
-      // description: new FormControl(this.product === null ? null : this.product?.description, {
-      //   validators: [Validators.required]
-      // }),
-      // imageUrlMain: new FormControl(null,
-      //   {
-      //     validators: this.product ? [] : [Validators.required]
-      //   }),
-      // imageUrlSecondary: new FormControl(null,
-      //   {
-      //     validators: this.product ? [] : [Validators.required]
-      //   }
-      // ),
-      // imageUrlThird: new FormControl(null,
-      //   {
-      //     validators: this.product ? [] : [Validators.required]
-      //   }
-      // ),
-    });
+        this.product === null ? null : this.product?.name, {
+          validators: [Validators.required, Validators.compose(
+            [Validators.minLength(3), Validators.maxLength(10)])]
+        }),
+      totalCalories: new FormControl(this.product === null ? null : this.product?.totalCalories, {
+        validators: [Validators.required, Validators.compose(
+          [Validators.pattern('[0-9+ ]*'), Validators.max(12345)])]
+      }),
+      active: new FormControl(this.product === null ? null : this.product?.active, {
+        validators: [Validators.required]
+      }),
+      unitPrice: new FormControl(this.product === null ? null : this.product?.unitPrice, {
+        updateOn: 'change',
+        validators: [Validators.required, Validators.compose(
+          [Validators.pattern('[0-9+ ]*'), Validators.min(1000), Validators.max(1000000)])]
+      }),
+      discount: new FormControl(this.product === null ? null : this.product?.discount, {
+        updateOn: 'change',
+        validators: [Validators.required]
+      }),
+      discountedPrice: new FormControl(this.product === null ? null : this.product?.discountedPrice, {
+        updateOn: 'change',
+        validators: [Validators.required, Validators.compose(
+          [Validators.pattern('[0-9+ ]*'), Validators.min(123),
+            Validators.max(10000000)])]
+      }),
+      description: new FormControl(this.product === null ? null : this.product?.description, {
+        validators: [Validators.required, Validators.compose(
+          [Validators.minLength(20), Validators.maxLength(200)])]
+      }),
+      imageUrlSecondary: new FormControl(null,
+        {
+          validators: this.product ? [] : [Validators.required]
+        }
+      ),
+      imageUrlThird: new FormControl(null,
+        {
+          validators: this.product ? [] : [Validators.required]
+        }
+      ),
+    }, {updateOn: 'blur'});
 
     this.reactiveForm.patchValue({
       discount: "True",
+    });
+
+    //watch for unit price change
+    const unitPrice = <FormControl>this.reactiveForm.get('unitPrice');
+    const discountedPrice = <FormControl>this.reactiveForm.get('discountedPrice');
+
+    unitPrice.valueChanges.subscribe(value => {
+      discountedPrice.setValidators([Validators.required, Validators.compose(
+        [Validators.pattern('[0-9+ ]*'), Validators.min(123),
+          Validators.max(value)])]);
+      discountedPrice.updateValueAndValidity();
     });
 
   }
@@ -91,6 +100,7 @@ export class ProductFormComponent implements OnInit {
       return "-";
     }
   }
+
 
   submit() {
   }

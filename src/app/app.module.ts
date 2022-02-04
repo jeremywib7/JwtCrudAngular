@@ -41,6 +41,7 @@ import {productReducer} from "./store/reducers/product.reducer";
 import {productCategoryReducer} from "./store/reducers/product-category.reducer";
 import { ProductDetailComponent } from './controllers/external/product-detail/product-detail.component';
 import {CurrencyMaskInputMode, NgxCurrencyModule} from "ngx-currency";
+import {RxReactiveFormsModule} from "@rxweb/reactive-form-validators";
 
 
 export const customCurrencyMaskConfig = {
@@ -80,6 +81,7 @@ export const customCurrencyMaskConfig = {
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    RxReactiveFormsModule,
     AngularToastifyModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     ToastrModule.forRoot({

@@ -20,6 +20,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {UserAuthService} from "../../../_services/user-auth.service";
 import {MatDialogModule} from "@angular/material/dialog";
+import {ProductFormComponent} from './product-form/product-form.component';
 import {MatInputModule} from "@angular/material/input";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatTabsModule} from "@angular/material/tabs";
@@ -59,16 +60,11 @@ const routes: Routes = [
     ]
   },
 
-  {
-    path: 'add',
-    loadChildren: () => import('./product-form/product-form.module').then(x => x.ProductFormModule),
-    canActivate: [AuthGuard],
-    data: {roles: 'Admin'}
-  },
+  {path: 'add', component: ProductFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}}
 ];
 
 @NgModule({
-  declarations: [InternalProductComponent, ProductCategoryComponent, ProductTableComponent],
+  declarations: [InternalProductComponent, ProductFormComponent, ProductCategoryComponent, ProductTableComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
