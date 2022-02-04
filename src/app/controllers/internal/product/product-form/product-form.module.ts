@@ -4,8 +4,6 @@ import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {NgxPaginationModule} from "ngx-pagination";
-import {InternalProductComponent} from "./product.component";
-import {AuthGuard} from "../../../_auth/auth.guard";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {OrderModule} from "ngx-order-pipe";
 import {Ng2SearchPipeModule} from "ng2-search-filter";
@@ -18,61 +16,37 @@ import {AutocompleteLibModule} from "angular-ng-autocomplete";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import {UserAuthService} from "../../../_services/user-auth.service";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatTabsModule} from "@angular/material/tabs";
-import {ProductCategoryComponent} from './product-category/product-category.component';
-import { ProductTableComponent } from './product-table/product-table.component';
 import {MatCurrencyFormatModule} from "mat-currency-format";
 import {NgxCurrencyModule} from "ngx-currency";
+import {UserAuthService} from "../../../../_services/user-auth.service";
+import {RxReactiveFormsModule} from "@rxweb/reactive-form-validators";
+import {ProductFormComponent} from "./product-form.component";
+import {AuthGuard} from "../../../../_auth/auth.guard";
 
 const routes: Routes = [
   {
     path: '',
-    component: InternalProductComponent,
+    component: ProductFormComponent,
     canActivate: [AuthGuard],
     data: {
       roles: ['Admin']
     },
-    children:[
-      { path: '', redirectTo: 'table' },
-      {
-        path: 'table',
-        component: ProductTableComponent,
-        canActivate: [AuthGuard],
-        data: {
-          roles: ['Admin'],
-          label: 'Product'
-        }
-      },
-      {
-        path: 'category',
-        component: ProductCategoryComponent,
-        canActivate: [AuthGuard],
-        data: {
-          roles: ['Admin'],
-          label: 'Category'
-        }
-      },
-    ]
   },
 
-  {
-    path: 'add',
-    loadChildren: () => import('./product-form/product-form.module').then(x => x.ProductFormModule),
-    canActivate: [AuthGuard],
-    data: {roles: 'Admin'}
-  },
 ];
 
 @NgModule({
-  declarations: [InternalProductComponent, ProductCategoryComponent, ProductTableComponent],
+  declarations: [ProductFormComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    FormsModule,
     ReactiveFormsModule,
+    RxReactiveFormsModule,
     FormsModule,
     HttpClientModule,
     NgbModule,
@@ -95,11 +69,11 @@ const routes: Routes = [
     MatCurrencyFormatModule,
     NgxCurrencyModule
   ],
-  providers: [{provide: LAZYLOAD_IMAGE_HOOKS, useClass: InternalProductModule}],
+  providers: [{provide: LAZYLOAD_IMAGE_HOOKS, useClass: ProductFormModule}],
 })
 
 
-export class InternalProductModule extends IntersectionObserverHooks {
+export class ProductFormModule extends IntersectionObserverHooks {
 
   constructor(private userAuthService: UserAuthService) {
     super();

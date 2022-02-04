@@ -13,17 +13,35 @@ import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
 import {NgxSliderModule} from "@angular-slider/ngx-slider";
 import {ProductDetailComponent} from "../product-detail/product-detail.component";
 import {BrowserModule} from "@angular/platform-browser";
+import {CurrencyMaskInputMode, NgxCurrencyModule} from "ngx-currency";
 
 const routes: Routes = [
   {path: '', component: ProductByCategoryComponent, canActivate: [AuthGuard], data: {roles: 'Customer'}},
   {path: 'detail', component: ProductDetailComponent, canActivate: [AuthGuard], data: {roles: 'Customer'}},
 ];
 
+export const customCurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  allowZero: true,
+  decimal: ",",
+  precision: 2,
+  prefix: "R$ ",
+  suffix: "",
+  thousands: ".",
+  nullable: true,
+  min: null,
+  max: null,
+  inputMode: CurrencyMaskInputMode.FINANCIAL
+};
+
+
 @NgModule({
   declarations: [ProductByCategoryComponent],
   imports: [
     BrowserModule,
     CommonModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     RouterModule.forChild(routes),
     HttpClientModule,
     FormsModule,

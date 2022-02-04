@@ -39,9 +39,27 @@ import {FooterExternalComponent} from './controllers/ui/footer-external/footer-e
 import {Store, StoreModule} from "@ngrx/store";
 import {productReducer} from "./store/reducers/product.reducer";
 import {productCategoryReducer} from "./store/reducers/product-category.reducer";
-import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
-import {UserAuthService} from "./_services/user-auth.service";
 import { ProductDetailComponent } from './controllers/external/product-detail/product-detail.component';
+import {CurrencyMaskInputMode, NgxCurrencyModule} from "ngx-currency";
+
+
+export const customCurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  allowZero: true,
+  decimal: ",",
+
+  //to set extra decimal
+  precision: 0,
+
+  prefix: "Rp. ",
+  suffix: "",
+  thousands: ".",
+  nullable: true,
+  min: null,
+  max: null,
+  inputMode: CurrencyMaskInputMode.FINANCIAL
+};
 
 @NgModule({
   declarations: [
@@ -63,6 +81,7 @@ import { ProductDetailComponent } from './controllers/external/product-detail/pr
     BrowserAnimationsModule,
     AppRoutingModule,
     AngularToastifyModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     ToastrModule.forRoot({
       timeOut: 5000,
       // positionClass: 'toast-bottom-left',
