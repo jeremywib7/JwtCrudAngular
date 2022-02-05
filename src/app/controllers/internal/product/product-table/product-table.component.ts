@@ -11,11 +11,12 @@ import {Pagination, Product} from "../../../../model/Product";
 import {FormControl} from "@angular/forms";
 import {PageEvent} from "@angular/material/paginator";
 import {HttpParams} from "@angular/common/http";
+import {RxFormBuilder} from "@rxweb/reactive-form-validators";
 
 @Component({
   selector: 'app-product-table',
   templateUrl: './product-table.component.html',
-  styleUrls: ['./product-table.component.css']
+  styleUrls: ['./product-table.component.css'],
 })
 export class ProductTableComponent implements OnInit {
 
@@ -23,6 +24,7 @@ export class ProductTableComponent implements OnInit {
   projectName = environment.project;
 
   constructor(
+    private fb: RxFormBuilder,
     private productService: ProductService,
     private router: Router,
     private _activatedRoute: ActivatedRoute,

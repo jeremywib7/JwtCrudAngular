@@ -55,10 +55,10 @@
                   <div *ngIf="reactiveForm.hasError('required','name')">
                     Product Name is required
                   </div>
-                  <div *ngIf="reactiveForm.hasError('minlength','name')">
+                  <div *ngIf="reactiveForm.hasError('minLength','name')">
                     Product Name must be 3 characters or more
                   </div>
-                  <div *ngIf="reactiveForm.hasError('maxlength','name')">
+                  <div *ngIf="reactiveForm.hasError('maxLength','name')">
                     Product Name maximum length is 10
                   </div>
                 </div>
@@ -68,13 +68,34 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="selectActiveStatus" class="small mb-1">Active Status</label>
-                  <select name="rank" id="selectActiveStatus" class="form-select" formControlName="discount"
-                          (change)="selectDiscountStatus()">
-                    <option value="True">Active</option>
-                    <option value="False">Inactive</option>
+                  <select name="rank" id="selectActiveStatus" class="form-select" formControlName="active">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
                   </select>
                   <div *ngIf="reactiveForm.controls.discount.errors && (reactiveForm.controls.discount.touched ||
                            reactiveForm.controls.discount.dirty) " style="color: red">
+                    <div *ngIf="reactiveForm.hasError('required', 'discount')">
+                      Discount status is required
+                    </div>
+                    <div *ngIf="reactiveForm.hasError('required', 'discount')">
+                      Discount status is required
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="selectCategory" class="small mb-1">Category</label>
+                  <select name="rank" id="selectCategory" class="form-select" formControlName="category">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                  </select>
+                  <div *ngIf="reactiveForm.controls.discount.errors && (reactiveForm.controls.discount.touched ||
+                           reactiveForm.controls.discount.dirty) " style="color: red">
+                    <div *ngIf="reactiveForm.hasError('required', 'discount')">
+                      Discount status is required
+                    </div>
                     <div *ngIf="reactiveForm.hasError('required', 'discount')">
                       Discount status is required
                     </div>
@@ -94,7 +115,7 @@
                   <div *ngIf="reactiveForm.hasError('required','description')">
                     Product description is required
                   </div>
-                  <div *ngIf="reactiveForm.hasError('minlength','description')">
+                  <div *ngIf="reactiveForm.hasError('minLength','description')">
                     Product description minimum length is 20 characters
                   </div>
                   <div *ngIf="reactiveForm.hasError('maxlength','description')">
@@ -115,11 +136,11 @@
                   <div *ngIf="reactiveForm.hasError('required','totalCalories')">
                     Total calories is required
                   </div>
-                  <div *ngIf="reactiveForm.hasError('pattern','totalCalories')">
-                    Total calories format is invalid
+                  <div *ngIf="reactiveForm.hasError('numeric','totalCalories')">
+                    Total calories must be in positive (+)
                   </div>
-                  <div *ngIf="reactiveForm.hasError('max','totalCalories')">
-                    Total calories maximum length is 5
+                  <div *ngIf="reactiveForm.hasError('maxNumber','totalCalories')">
+                    Maximum total calories 10000
                   </div>
                 </div>
               </div>
@@ -129,8 +150,8 @@
                   <label for="editInputRole" class="small mb-1">Discount Status</label>
                   <select name="rank" id="editInputRole" class="form-select" formControlName="discount"
                           (change)="selectDiscountStatus()">
-                    <option value="True">Available</option>
-                    <option value="False">Not Available</option>
+                    <option value="true">Available</option>
+                    <option value="false">Not Available</option>
                   </select>
                   <div *ngIf="reactiveForm.controls.discount.errors && (reactiveForm.controls.discount.touched ||
                            reactiveForm.controls.discount.dirty) " style="color: red">
@@ -154,14 +175,11 @@
                   <div *ngIf="reactiveForm.hasError('required','unitPrice')">
                     Unit price is required
                   </div>
-                  <div *ngIf="reactiveForm.hasError('pattern','unitPrice')">
-                    Unit price format is invalid
+                  <div *ngIf="reactiveForm.hasError('numeric','unitPrice')">
+                    Unit price must be number
                   </div>
-                  <div *ngIf="reactiveForm.hasError('min','unitPrice')">
-                    Unit price minimum is is 4 digits
-                  </div>
-                  <div *ngIf="reactiveForm.hasError('max','unitPrice')">
-                    Unit price maximum length is 7 digits
+                  <div *ngIf="reactiveForm.hasError('greaterThan','unitPrice')">
+                    Unit price must be greater than discounted price
                   </div>
                 </div>
               </div>
@@ -171,8 +189,7 @@
                 <input
                   currencyMask
                   class="form-control" id="inputDiscountedPrice" type="text"
-                  formControlName="discountedPrice" autocomplete="off"
-                  [placeholder]="selectDiscountStatus()">
+                  formControlName="discountedPrice" autocomplete="off">
                 <div *ngIf="reactiveForm.controls.discountedPrice.errors && (reactiveForm.controls.discountedPrice.touched ||
                            reactiveForm.controls.discountedPrice.dirty) " style="color: red">
                   <div *ngIf="reactiveForm.hasError('required','discountedPrice')">
@@ -181,17 +198,19 @@
                   <div *ngIf="reactiveForm.hasError('pattern','discountedPrice')">
                     Discounted price format is invalid
                   </div>
-                  <div *ngIf="reactiveForm.hasError('min','discountedPrice')">
-                    Discounted price min length is 3 digits !
-                  </div>
-                  <div *ngIf="reactiveForm.hasError('max','discountedPrice')">
-                    Discounted price must be lower than unit price !
+                  <div *ngIf="reactiveForm.hasError('lessThan','discountedPrice')">
+                    Discounted price should be less than unit price !
                   </div>
                 </div>
               </div>
             </div>
+
             <!-- Save changes button-->
-            <button class="btn btn-primary" type="button">Save changes</button>
+            <button
+              type="submit"
+              class="btn btn-primary">
+              Add Product
+            </button>
           </form>
         </div>
       </div>

@@ -1,6 +1,5 @@
 export class Product {
   id: string;
-  sku: string;
   name: string;
   discount: boolean;
   category: {

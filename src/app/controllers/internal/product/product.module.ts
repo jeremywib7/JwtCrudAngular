@@ -1,20 +1,16 @@
-import {Injectable, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {NgxPaginationModule} from "ngx-pagination";
 import {InternalProductComponent} from "./product.component";
 import {AuthGuard} from "../../../_auth/auth.guard";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import {OrderModule} from "ngx-order-pipe";
-import {Ng2SearchPipeModule} from "ng2-search-filter";
 import {Attributes, IntersectionObserverHooks, LAZYLOAD_IMAGE_HOOKS, LazyLoadImageModule} from "ng-lazyload-image";
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
 import {MatSelectModule} from "@angular/material/select";
 import {MatPaginatorModule} from "@angular/material/paginator";
-import {AutocompleteLibModule} from "angular-ng-autocomplete";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
@@ -25,8 +21,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatTabsModule} from "@angular/material/tabs";
 import {ProductCategoryComponent} from './product-category/product-category.component';
-import { ProductTableComponent } from './product-table/product-table.component';
-import {MatCurrencyFormatModule} from "mat-currency-format";
+import {ProductTableComponent} from './product-table/product-table.component';
 import {NgxCurrencyModule} from "ngx-currency";
 
 const routes: Routes = [
@@ -37,8 +32,8 @@ const routes: Routes = [
     data: {
       roles: ['Admin']
     },
-    children:[
-      { path: '', redirectTo: 'table' },
+    children: [
+      {path: '', redirectTo: 'table'},
       {
         path: 'table',
         component: ProductTableComponent,
@@ -72,15 +67,11 @@ const routes: Routes = [
     FormsModule,
     HttpClientModule,
     NgbModule,
-    NgxPaginationModule,
-    OrderModule,
-    Ng2SearchPipeModule,
     LazyLoadImageModule,
     MatTableModule,
     MatSortModule,
     MatSelectModule,
     MatPaginatorModule,
-    AutocompleteLibModule,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
@@ -88,10 +79,12 @@ const routes: Routes = [
     MatInputModule,
     MatAutocompleteModule,
     MatTabsModule,
-    MatCurrencyFormatModule,
+    NgbModule,
     NgxCurrencyModule
   ],
-  providers: [{provide: LAZYLOAD_IMAGE_HOOKS, useClass: InternalProductModule}],
+  providers: [
+    {provide: LAZYLOAD_IMAGE_HOOKS, useClass: InternalProductModule},
+  ],
 })
 
 

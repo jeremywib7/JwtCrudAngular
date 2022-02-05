@@ -25,6 +25,7 @@ export class AppComponent {
   }
   ngOnInit(): void {
     this.onInitMethod();
+
   }
 
   onInitMethod(): void {

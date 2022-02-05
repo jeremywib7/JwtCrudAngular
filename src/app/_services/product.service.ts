@@ -1,7 +1,7 @@
 import {Injectable, OnInit} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {map, Observable} from "rxjs";
+import {map, Observable, of, switchMap} from "rxjs";
 import {Product} from "../model/Product";
 import {User} from "../model/User";
 
@@ -16,8 +16,17 @@ export class ProductService {
   constructor(private httpClient: HttpClient) {
   }
 
+  public addProduct(product: Product): Observable<User> {
+    return this.httpClient.post<User>(`${this.apiServerUrl}/${this.project}/product/add`, product);
+  }
+
   public deleteProductById(id: string): Observable<Product> {
     return this.httpClient.delete<Product>(`${this.apiServerUrl}/${this.project}/product/delete/${id}`);
+  }
+
+  loadAllProductCategory() {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/category/all`)
+      .pipe(map((data) => data || []))
   }
 
   loadAllProducts(params: HttpParams) {
@@ -40,7 +49,7 @@ export class ProductService {
       .pipe(map((data) => data || []))
   }
 
-  loadProductsByFilter(params : HttpParams) {
+  loadProductsByFilter(params: HttpParams) {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByCategory`, {params})
       .pipe(map((data) => data || []))
   }

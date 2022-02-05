@@ -12,11 +12,12 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ToastrService} from "ngx-toastr";
 import {FormControl} from '@angular/forms';
 import {debounceTime, finalize, switchMap, tap} from 'rxjs';
+import {RxFormBuilder} from "@rxweb/reactive-form-validators";
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss']
+  styleUrls: ['./product.component.scss'],
 })
 export class InternalProductComponent implements AfterViewInit, OnInit {
   isViewInitialized = false;
