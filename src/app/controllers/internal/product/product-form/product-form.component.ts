@@ -6,8 +6,8 @@ import {NumericValueType, ReactiveFormConfig, RxFormBuilder, RxwebValidators} fr
 import {ProductService} from "../../../../_services/product.service";
 import {Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
-import {MatTableDataSource} from "@angular/material/table";
 import {ProductCategory} from "../../../../model/ProductCategory";
+import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-product-form',
@@ -19,7 +19,9 @@ export class ProductFormComponent implements OnInit {
 
   constructor(
     private formBuilder: RxFormBuilder,
+    private rxFormBuilder: RxFormBuilder,
     private productService: ProductService,
+    private ngbModal: NgbModal,
     private router: Router,
     private toastr: ToastrService,
   ) {
@@ -31,37 +33,80 @@ export class ProductFormComponent implements OnInit {
   }
 
   reactiveForm: any = FormGroup;
-  public product: Product | undefined;
-  public category: ProductCategory | undefined;
+  public products: Product | undefined;
+  public categories: ProductCategory[];
+  modalOption: NgbModalOptions = {}; // not null!
 
   async loadProductCategory() {
     await this.productService.loadAllProductCategory().subscribe(
       (data: object) => {
-        this.category = data['data'];
+        this.categories = data['data'];
+
+        //set default value as first array or true
+        this.reactiveForm.patchValue({
+          active: this.reactiveForm.value.active === null ? "true" : this.reactiveForm.value.active,
+          category: {
+            id: this.reactiveForm.value.category.id === null ? this.categories[0].id : this.reactiveForm.value.category.id
+          },
+          discount: this.reactiveForm.value.discount === null ? "true" : this.reactiveForm.value.discount,
+        });
       },
     );
+  }
+
+  imageSrc: string;
+  imageSrc2: string;
+  imageSrc3: string;
+
+  onImageChange(event: any, image:string): void {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        if (image === "image1") {
+          this.imageSrc = e.target.result;
+        } else if (image === "image2") {
+          this.imageSrc2 = e.target.result;
+        } else {
+          this.imageSrc3 = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  clearImage() {
+    this.imageSrc = null;
   }
 
   initForm() {
     this.reactiveForm = this.formBuilder.group({
       name: new FormControl(
-        this.product === null ? null : this.product?.name, {
-          validators: [RxwebValidators.required(),
-            RxwebValidators.minLength({value: 3}), RxwebValidators.maxLength({value: 10})]
+        this.products === null ? null : this.products?.name, {
+          validators: [
+            RxwebValidators.required(),
+            RxwebValidators.minLength({value: 3}),
+            RxwebValidators.maxLength({value: 10})]
         }),
-      totalCalories: new FormControl(this.product === null ? null : this.product?.totalCalories, {
-        validators: [RxwebValidators.required(), RxwebValidators.numeric({
-          acceptValue: NumericValueType.PositiveNumber
-          , allowDecimal: false
-        }), RxwebValidators.maxNumber({value: 10000})]
+      totalCalories: new FormControl(this.products === null ? null : this.products?.totalCalories, {
+        validators: [
+          RxwebValidators.required(),
+          RxwebValidators.numeric({
+            acceptValue: NumericValueType.PositiveNumber
+            , allowDecimal: false
+          }),
+          RxwebValidators.maxNumber({value: 10000})]
       }),
-      active: new FormControl(this.product === null ? null : this.product?.active, {
+      active: new FormControl(this.products === null ? null : this.products?.active, {
         validators: []
       }),
-      category: new FormControl(this.product === null ? null : this.product?.category, {
-        validators: []
+      category: this.formBuilder.group({
+        id: new FormControl(this.products === null ? null : this.products?.category, {
+          validators: []
+        })
       }),
-      unitPrice: new FormControl(this.product === null ? null : this.product?.unitPrice, {
+      unitPrice: new FormControl(this.products === null ? null : this.products?.unitPrice, {
         validators: [
           RxwebValidators.required(),
           RxwebValidators.numeric({
@@ -72,10 +117,12 @@ export class ProductFormComponent implements OnInit {
         asyncValidators: [
           RxwebValidators.greaterThanAsync({fieldName: 'discountedPrice'})]
       }),
-      discount: new FormControl(this.product === null ? null : this.product?.discount, {
-        validators: [RxwebValidators.required()]
+      discount: new FormControl(this.products === null ? null : this.products?.discount, {
+        validators: [
+          RxwebValidators.required()
+        ]
       }),
-      discountedPrice: new FormControl(this.product === null ? null : this.product?.discountedPrice, {
+      discountedPrice: new FormControl(this.products === null ? null : this.products?.discountedPrice, {
         validators: [
           RxwebValidators.required(),
         ],
@@ -83,9 +130,12 @@ export class ProductFormComponent implements OnInit {
           RxwebValidators.lessThanAsync({fieldName: 'unitPrice'})
         ]
       }),
-      description: new FormControl(this.product === null ? null : this.product?.description, {
+      description: new FormControl(this.products === null ? null : this.products?.description, {
         updateOn: 'blur',
-        validators: [RxwebValidators.required(), RxwebValidators.minLength({value: 20})]
+        validators: [
+          RxwebValidators.required(),
+          RxwebValidators.minLength({value: 20})
+        ]
       }),
       // imageUrlSecondary: new FormControl(null,
       //   {
@@ -108,17 +158,20 @@ export class ProductFormComponent implements OnInit {
       unitPrice.setAsyncValidators([RxwebValidators.greaterThanAsync({fieldName: 'discountedPrice',})]);
       discountedPrice.updateValueAndValidity();
     });
+  }
 
-    //set as true for selec html tag
-    this.reactiveForm.patchValue({
-      active: this.reactiveForm.value.active === null ? "true" : this.reactiveForm.value.active,
-      discount: this.reactiveForm.value.discount === null ? "true" : this.reactiveForm.value.discount,
-    });
+  onSaveImageClicked(content) {
+    //prevent click outside modal and some settings
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.centered = true;
+    this.modalOption.scrollable = true;
+
+    this.ngbModal.open(content, this.modalOption);
   }
 
   submit() {
     if (this.reactiveForm.valid) {
-      console.log("valid");
       this.productService.addProduct(this.reactiveForm.value).subscribe(
         (response: User) => {
           this.router.navigate(['/int/product/table']);
@@ -126,7 +179,6 @@ export class ProductFormComponent implements OnInit {
         },
       );
     } else {
-      console.log("not valid");
       this.validateFormFields(this.reactiveForm);
     }
   }

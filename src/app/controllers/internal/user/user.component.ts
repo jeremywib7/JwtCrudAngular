@@ -63,10 +63,7 @@ export class UserComponent implements OnInit {
     this.userService.getUsers().subscribe(
       (response: User[]) => {
         this.users = response;
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error);
-      },
+      }
     );
   }
 

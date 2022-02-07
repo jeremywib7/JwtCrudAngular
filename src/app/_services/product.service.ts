@@ -4,6 +4,7 @@ import {environment} from "../../environments/environment";
 import {map, Observable, of, switchMap} from "rxjs";
 import {Product} from "../model/Product";
 import {User} from "../model/User";
+import {ProductCategory} from "../model/ProductCategory";
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +25,8 @@ export class ProductService {
     return this.httpClient.delete<Product>(`${this.apiServerUrl}/${this.project}/product/delete/${id}`);
   }
 
-  loadAllProductCategory() {
-    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/category/all`)
-      .pipe(map((data) => data || []))
+  public loadAllProductCategory(): Observable<ProductCategory[]> {
+    return this.httpClient.get<ProductCategory[]>(`${this.apiServerUrl}/${this.project}/category/all`);
   }
 
   loadAllProducts(params: HttpParams) {

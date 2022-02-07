@@ -14,7 +14,50 @@
           <!-- Profile picture help block-->
           <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
           <!-- Profile picture upload button-->
-          <button class="btn btn-primary" type="button">Upload New Image</button>
+          <button class="btn btn-primary" type="button"
+                  (click)="onSaveImageClicked(uploadImageModal)"
+          >Upload New Image
+          </button>
+
+          <!-- Modal Upload Image -->
+          <ng-template #uploadImageModal let-modal>
+            <div class="modal-header" ngbAutofocus>
+              <h4 class="modal-title" id="uploadImageModal">Upload Product Image</h4>
+              <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label class="form-label" for="mainImageInput">Main Image  </label>
+                  <small class="form-text text-info  ">*Required</small>
+                  <input name="profilePicture" type="file" accept="image/*"
+                         class="form-control mb-2" id="mainImageInput" (change)="onImageChange($event, 'image1');">
+                  <img id="image1" class="img-product-upload" [src]="imageSrc || 'http://placehold.it/180'" alt="your image" />
+                  <button *ngIf="imageSrc" class="btn btn-danger ms-2" (click)="clearImage()">Clear</button>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="secondaryImageInput">Secondary Image</label>
+                  <input name="profilePicture" type="file" accept="image/*"
+                         class="form-control" id="secondaryImageInput" (change)="onImageChange($event, 'image2');">
+                  <img id="image2" class="img-product-upload" [src]="imageSrc2 || 'http://placehold.it/180'" alt="your image" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="thirdImageInput">Third Image</label>
+                  <input name="profilePicture" type="file" accept="image/*"
+                         class="form-control" id="thirdImageInput" (change)="onImageChange($event, 'image3');">
+                  <img id="image3" class="img-product-upload" [src]="imageSrc3 || 'http://placehold.it/180'" alt="your image" />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
+              <button type="button" class="btn btn-outline-primary">
+                Save
+              </button>
+
+            </div>
+          </ng-template>
 
           <!--          gonna present in modal to pick image-->
 
@@ -85,23 +128,14 @@
 
               </div>
               <div class="col-md-6">
-                <div class="form-group">
+                <div class="form-group" formGroupName="category">
                   <label for="selectCategory" class="small mb-1">Category</label>
-                  <select name="rank" id="selectCategory" class="form-select" formControlName="category">
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
+                  <select name="rank" id="selectCategory" class="form-select" formControlName="id">
+                    <option *ngFor="let category of categories" [value]="category.id">
+                      {{category?.categoryName}}
+                    </option>
                   </select>
-                  <div *ngIf="reactiveForm.controls.discount.errors && (reactiveForm.controls.discount.touched ||
-                           reactiveForm.controls.discount.dirty) " style="color: red">
-                    <div *ngIf="reactiveForm.hasError('required', 'discount')">
-                      Discount status is required
-                    </div>
-                    <div *ngIf="reactiveForm.hasError('required', 'discount')">
-                      Discount status is required
-                    </div>
-                  </div>
                 </div>
-
               </div>
             </div>
 
