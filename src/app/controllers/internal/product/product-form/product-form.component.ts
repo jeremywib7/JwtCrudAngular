@@ -1,8 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {User} from "../../../../model/User";
-import {Product} from "../../../../model/Product";
-import {NumericValueType, ReactiveFormConfig, RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
+import {Image, Product} from "../../../../model/Product";
+import {
+  NumericValueType,
+  ReactiveFormConfig,
+  RxFormBuilder,
+  RxFormGroup,
+  RxwebValidators
+} from "@rxweb/reactive-form-validators";
 import {ProductService} from "../../../../_services/product.service";
 import {Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
@@ -19,12 +25,12 @@ export class ProductFormComponent implements OnInit {
 
   constructor(
     private formBuilder: RxFormBuilder,
-    private rxFormBuilder: RxFormBuilder,
     private productService: ProductService,
     private ngbModal: NgbModal,
     private router: Router,
     private toastr: ToastrService,
   ) {
+    this.images = [];
   }
 
   ngOnInit(): void {
@@ -36,6 +42,7 @@ export class ProductFormComponent implements OnInit {
   public products: Product | undefined;
   public categories: ProductCategory[];
   modalOption: NgbModalOptions = {}; // not null!
+  images: any[];
 
   async loadProductCategory() {
     await this.productService.loadAllProductCategory().subscribe(
@@ -58,8 +65,9 @@ export class ProductFormComponent implements OnInit {
   imageSrc2: string;
   imageSrc3: string;
 
-  onImageChange(event: any, image:string): void {
+  onImageChange(event: any, image: string): void {
     if (event.target.files && event.target.files[0]) {
+
       const file = event.target.files[0];
 
       const reader = new FileReader();
@@ -82,82 +90,60 @@ export class ProductFormComponent implements OnInit {
 
   initForm() {
     this.reactiveForm = this.formBuilder.group({
-      name: new FormControl(
-        this.products === null ? null : this.products?.name, {
-          validators: [
-            RxwebValidators.required(),
-            RxwebValidators.minLength({value: 3}),
-            RxwebValidators.maxLength({value: 10})]
-        }),
-      totalCalories: new FormControl(this.products === null ? null : this.products?.totalCalories, {
-        validators: [
+      name: [this.products === null ? null : this.products?.name,
+        [
+          RxwebValidators.required(),
+          RxwebValidators.minLength({value: 3}),
+          RxwebValidators.maxLength({value: 10})
+        ]
+      ],
+      totalCalories: [this.products === null ? null : this.products?.totalCalories,
+        [
           RxwebValidators.required(),
           RxwebValidators.numeric({
             acceptValue: NumericValueType.PositiveNumber
             , allowDecimal: false
           }),
           RxwebValidators.maxNumber({value: 10000})]
-      }),
-      active: new FormControl(this.products === null ? null : this.products?.active, {
-        validators: []
-      }),
+      ],
+      active: [this.products === null ? null : this.products?.active],
       category: this.formBuilder.group({
-        id: new FormControl(this.products === null ? null : this.products?.category, {
-          validators: []
-        })
+        id: [this.products === null ? null : this.products?.category]
       }),
-      unitPrice: new FormControl(this.products === null ? null : this.products?.unitPrice, {
-        validators: [
+      unitPrice: [this.products === null ? null : this.products?.unitPrice,
+        [
           RxwebValidators.required(),
           RxwebValidators.numeric({
             acceptValue: NumericValueType.PositiveNumber, allowDecimal: false
           }),
           RxwebValidators.maxNumber({value: 1000000}),
-          RxwebValidators.minNumber({value: 1})],
-        asyncValidators: [
-          RxwebValidators.greaterThanAsync({fieldName: 'discountedPrice'})]
-      }),
-      discount: new FormControl(this.products === null ? null : this.products?.discount, {
-        validators: [
-          RxwebValidators.required()
-        ]
-      }),
-      discountedPrice: new FormControl(this.products === null ? null : this.products?.discountedPrice, {
-        validators: [
-          RxwebValidators.required(),
+          RxwebValidators.minNumber({value: 1}),
+          RxwebValidators.greaterThan({fieldName: 'discountedPrice'})
         ],
-        asyncValidators: [
-          RxwebValidators.lessThanAsync({fieldName: 'unitPrice'})
-        ]
-      }),
-      description: new FormControl(this.products === null ? null : this.products?.description, {
-        updateOn: 'blur',
-        validators: [
+      ],
+      discount: [this.products === null ? null : this.products?.discount],
+      discountedPrice: [this.products === null ? null : this.products?.discountedPrice,
+        [
+          RxwebValidators.required(),
+          RxwebValidators.lessThan({fieldName: 'unitPrice'})
+        ]],
+      description: [this.products === null ? null : this.products?.description,
+        [
           RxwebValidators.required(),
           RxwebValidators.minLength({value: 20})
         ]
-      }),
-      // imageUrlSecondary: new FormControl(null,
-      //   {
-      //     validators: this.product ? [] : [RxwebValidators.required()]
-      //   }
-      // ),
-      // imageUrlThird: new FormControl(null,
-      //   {
-      //     validators: this.product ? [] : [RxwebValidators.required()]
-      //   }
-      // ),
+      ],
+      images: this.formBuilder.array([{
+       imageName: ['']
+      }])
     });
+  }
 
-    const unitPrice = <FormControl>this.reactiveForm.get('unitPrice');
-    const discountedPrice = <FormControl>this.reactiveForm.get('discountedPrice');
-
-    //watch for unit price change
-    unitPrice.valueChanges.subscribe(value => {
-      discountedPrice.setAsyncValidators([RxwebValidators.lessThanAsync({fieldName: 'unitPrice',})]);
-      unitPrice.setAsyncValidators([RxwebValidators.greaterThanAsync({fieldName: 'discountedPrice',})]);
-      discountedPrice.updateValueAndValidity();
-    });
+  addNewProductImage() {
+    const add = this.reactiveForm.get('images') as FormArray;
+    add.push(this.formBuilder.group({
+      imageName: ['', RxwebValidators.required],
+    }))
   }
 
   onSaveImageClicked(content) {

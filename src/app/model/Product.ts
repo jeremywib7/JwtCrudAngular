@@ -11,11 +11,13 @@ export class Product {
   unitPrice: number;
   discountedPrice: number;
   imageUrl: string;
-  images: [
-    imageName: string
-  ];
+  images: Image[];
   active: boolean;
   createdOn: Date;
+}
+
+export interface Image {
+  imageName: string;
 }
 
 export interface Pagination {

@@ -27,27 +27,24 @@
               </button>
             </div>
             <div class="modal-body">
+              <button class="btn btn-primary" (click)="addNewProductImage()">Add</button>
               <form>
-                <div class="mb-3">
-                  <label class="form-label" for="mainImageInput">Main Image  </label>
-                  <small class="form-text text-info  ">*Required</small>
-                  <input name="profilePicture" type="file" accept="image/*"
-                         class="form-control mb-2" id="mainImageInput" (change)="onImageChange($event, 'image1');">
-                  <img id="image1" class="img-product-upload" [src]="imageSrc || 'http://placehold.it/180'" alt="your image" />
-                  <button *ngIf="imageSrc" class="btn btn-danger ms-2" (click)="clearImage()">Clear</button>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label" for="secondaryImageInput">Secondary Image</label>
-                  <input name="profilePicture" type="file" accept="image/*"
-                         class="form-control" id="secondaryImageInput" (change)="onImageChange($event, 'image2');">
-                  <img id="image2" class="img-product-upload" [src]="imageSrc2 || 'http://placehold.it/180'" alt="your image" />
-                </div>
-                <div class="mb-3">
-                  <label class="form-label" for="thirdImageInput">Third Image</label>
-                  <input name="profilePicture" type="file" accept="image/*"
-                         class="form-control" id="thirdImageInput" (change)="onImageChange($event, 'image3');">
-                  <img id="image3" class="img-product-upload" [src]="imageSrc3 || 'http://placehold.it/180'" alt="your image" />
-                </div>
+                <ng-container class="mb-3"
+                              *ngFor="let addressGroup of reactiveForm.get('images').controls;let i = index"
+                              [formGroup]="addressGroup">
+                  <ng-container>
+                    <label class="form-label" for="mainImageInput">Main Image</label>
+                    <small class="form-text text-info" *ngIf="i === 0"> *Required</small>
+                    <input name="profilePicture" type="file" accept="image/*" formControlName="imageName"
+                           class="form-control mb-2" id="mainImageInput" (change)="onImageChange($event, 'image1');">
+                    <img id="image1" class="img-product-upload" [src]="imageSrc || 'http://placehold.it/180'"
+                         alt="your image"/>
+                    <button *ngIf="imageSrc" class="btn btn-danger ms-2" (click)="clearImage()">Clear</button>
+                  </ng-container>
+                </ng-container>
+                <pre>
+                  {{reactiveForm.value | json}}
+                </pre>
               </form>
             </div>
             <div class="modal-footer">
@@ -55,6 +52,7 @@
               <button type="button" class="btn btn-outline-primary">
                 Save
               </button>
+
 
             </div>
           </ng-template>
