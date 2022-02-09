@@ -1,12 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {User} from "../../../../model/User";
-import {Image, Product} from "../../../../model/Product";
+import {Product} from "../../../../model/Product";
 import {
   NumericValueType,
-  ReactiveFormConfig,
   RxFormBuilder,
-  RxFormGroup,
   RxwebValidators
 } from "@rxweb/reactive-form-validators";
 import {ProductService} from "../../../../_services/product.service";
@@ -30,7 +28,6 @@ export class ProductFormComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
   ) {
-    this.images = [];
   }
 
   ngOnInit(): void {
@@ -38,11 +35,14 @@ export class ProductFormComponent implements OnInit {
     this.loadProductCategory();
   }
 
+
   reactiveForm: any = FormGroup;
   public products: Product | undefined;
   public categories: ProductCategory[];
   modalOption: NgbModalOptions = {}; // not null!
-  images: any[];
+
+  imageSrc: string[] = [];
+  selectedImage: File[] = [];
 
   async loadProductCategory() {
     await this.productService.loadAllProductCategory().subscribe(
@@ -59,33 +59,6 @@ export class ProductFormComponent implements OnInit {
         });
       },
     );
-  }
-
-  imageSrc: string;
-  imageSrc2: string;
-  imageSrc3: string;
-
-  onImageChange(event: any, image: string): void {
-    if (event.target.files && event.target.files[0]) {
-
-      const file = event.target.files[0];
-
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        if (image === "image1") {
-          this.imageSrc = e.target.result;
-        } else if (image === "image2") {
-          this.imageSrc2 = e.target.result;
-        } else {
-          this.imageSrc3 = e.target.result;
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  clearImage() {
-    this.imageSrc = null;
   }
 
   initForm() {
@@ -134,16 +107,67 @@ export class ProductFormComponent implements OnInit {
         ]
       ],
       images: this.formBuilder.array([{
-       imageName: ['']
+        imageName: ['', RxwebValidators.required],
       }])
     });
+
   }
 
   addNewProductImage() {
-    const add = this.reactiveForm.get('images') as FormArray;
-    add.push(this.formBuilder.group({
-      imageName: ['', RxwebValidators.required],
-    }))
+    const imageNameArray = this.reactiveForm.get('images') as FormArray;
+    const file = this.imageSrc.slice(-1)[0];
+
+    if (imageNameArray === undefined || imageNameArray.length === 1 ) {
+      const add = this.reactiveForm.get('images') as FormArray;
+      add.push(this.formBuilder.group({
+        imageName: ['', RxwebValidators.required],
+      }))
+    } else {
+
+    }
+
+    // if ((this.reactiveForm.get('images') as FormArray).length < 3 && file)  {
+    //   const add = this.reactiveForm.get('images') as FormArray;
+    //   add.push(this.formBuilder.group({
+    //     imageName: ['', RxwebValidators.required],
+    //   }))
+    // }
+  }
+
+  isFirstImageArray (index:number):boolean {
+    const imageArray = this.reactiveForm.get('images') as FormArray;
+
+    if (index === 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  deleteProductImage(index: number) {
+    const imageArray = this.reactiveForm.get('images') as FormArray;
+    if (imageArray.length > 1 && index != 0) {
+      imageArray.removeAt(index);
+      this.imageSrc.splice(index, 1);
+      this.selectedImage.splice(index, 1);
+    }
+
+  }
+
+  onImageChange(event: any, index: number): void {
+    if (event.target.files && event.target.files[0]) {
+
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imageSrc[index] = e.target.result;
+      };
+      reader.readAsDataURL(file);
+      this.selectedImage[index] = (event.target as HTMLInputElement).files[0];
+
+      ((this.reactiveForm.get('images') as FormArray).at(index) as FormGroup).get('imageName').patchValue(
+        event.target.files[0].name);
+    }
   }
 
   onSaveImageClicked(content) {
@@ -179,6 +203,7 @@ export class ProductFormComponent implements OnInit {
       });
     }
   }
+
 
   public validateFormFields(formGroup: FormGroup) {
 

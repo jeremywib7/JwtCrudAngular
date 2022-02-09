@@ -39,7 +39,6 @@ export const customCurrencyMaskConfig = {
 @NgModule({
   declarations: [ProductByCategoryComponent],
   imports: [
-    BrowserModule,
     CommonModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     RouterModule.forChild(routes),
