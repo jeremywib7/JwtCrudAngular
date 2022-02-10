@@ -2,18 +2,15 @@
 <div class="container-xl px-4 mt-4">
   <div class="row">
     <div class="col-xl-4">
-      <!-- Profile picture card-->
       <div class="card mb-4 mb-xl-0">
         <div class="card-header">Product Picture</div>
         <div class="card-body text-center">
 
           <h6>Main Image</h6>
-          <!-- Profile picture image-->
-          <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png"
+          <img class="img-account-profile mb-2"
+               [src]="this.imageSrc[0] || 'http://placehold.it/180'"
                alt="">
-          <!-- Profile picture help block-->
           <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-          <!-- Profile picture upload button-->
           <button class="btn btn-primary" type="button"
                   (click)="onSaveImageClicked(uploadImageModal)"
           >Upload New Image
@@ -22,35 +19,59 @@
           <!-- Modal Upload Image -->
           <ng-template #uploadImageModal let-modal>
             <div class="modal-header" ngbAutofocus>
-              <h4 class="modal-title" id="uploadImageModal">Upload Product Image</h4>
+              <h4 class="modal-title" id="uploadImageModal">Upload Product Image (Max: 3)</h4>
               <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
               </button>
             </div>
             <div class="modal-body">
-              <button class="btn btn-primary mb-2" (click)="addNewProductImage()">Add</button>
-              <form>
-                <ng-container class="mb-3"
-                              *ngFor="let addressGroup of reactiveForm.get('images').controls;let i = index"
-                              [formGroup]="addressGroup">
-                  <ng-container>
-<!--                    <label class="form-label" for="mainImageInput">Main Image</label>-->
-<!--                    <small class="form-text text-info" *ngIf="i === 0"> *Required</small>-->
-                    <input name="profilePicture" type="file" accept="image/*"
-                           class="form-control mb-2" id="mainImageInput" (change)="onImageChange($event, i);">
-                    <img id="image1" class="img-product-upload mb-2" [src]="this.imageSrc[i] || 'http://placehold.it/180'"
-                         alt="your image"/>
-                    <button
-                      *ngIf="isFirstImageArray(i)"
-                      mat-icon-button
-                      color="warn"
-                      (click)="deleteProductImage(i)">
-                      <mat-icon>delete</mat-icon>
-                    </button>
+              <div class="text-end mb-3 container">
+                <button
+                  mat-mini-fab
+                  class="mat-success"
+                  (click)="addNewProductImage()">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+              <form [formGroup]="reactiveForm">
+                <div formArrayName="images">
+                  <ng-container class="mb-3" *ngFor="let images of reactiveForm.get('images').controls;let i = index"
+                                [formGroupName]="i">
+                    <ng-container>
+                      <div class="row">
+                        <div class="col-auto">
+                          <h5>{{i + 1}}.</h5>
+                        </div>
+                        <div class="col">
+                          <input type="file" accept="image/*"
+                                 class="form-control mb-2"
+                                 id="mainImageInput" (change)="onImageChange($event, i);">
+                        </div>
+                      </div>
+                      <div class="row justify-content-center">
+                        <div class="col-auto p-0 m-0">
+                          <img class="img-product-upload mb-2 form-control"
+                               [src]="this.imageSrc[i] || 'http://placehold.it/180'" alt="Product Image"/>
+                        </div>
+                        <div class="col-auto p-0 m-0">
+                          <button
+                            *ngIf="isFirstImageArray(i)"
+                            mat-icon-button
+                            color="warn"
+                            (click)="deleteProductImage(i)">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                      <input type="text" class="mb-2 form-control text-center" formControlName="imageName" readonly>
+                      <div *ngIf="(images.controls.imageName.invalid)" class="alert alert-danger">
+                        <div *ngIf="images.hasError('required', 'imageName')">
+                          Image is required.
+                        </div>
+                      </div>
+                      <div class="mb-5"></div>
+                    </ng-container>
                   </ng-container>
-                </ng-container>
-                <pre>
-                  {{reactiveForm.value | json}}
-                </pre>
+                </div>
               </form>
             </div>
             <div class="modal-footer">
@@ -58,32 +79,8 @@
               <button type="button" class="btn btn-outline-primary">
                 Save
               </button>
-
-
             </div>
           </ng-template>
-
-          <!--          gonna present in modal to pick image-->
-
-          <!--          <hr class="mt-2 mb-4">-->
-
-          <!--          <h6>Secondary Image</h6>-->
-          <!--          &lt;!&ndash; Profile picture image&ndash;&gt;-->
-          <!--          <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
-          <!--          &lt;!&ndash; Profile picture help block&ndash;&gt;-->
-          <!--          <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>-->
-          <!--          &lt;!&ndash; Profile picture upload button&ndash;&gt;-->
-          <!--          <button class="btn btn-primary" type="button">Upload secondary image</button>-->
-
-          <!--          <hr class="mt-2 mb-4">-->
-
-          <!--          <h6>Third Image</h6>-->
-          <!--          &lt;!&ndash; Profile picture image&ndash;&gt;-->
-          <!--          <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
-          <!--          &lt;!&ndash; Profile picture help block&ndash;&gt;-->
-          <!--          <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>-->
-          <!--          &lt;!&ndash; Profile picture upload button&ndash;&gt;-->
-          <!--          <button class="btn btn-primary" type="button">Upload third image</button>-->
         </div>
       </div>
     </div>
@@ -162,9 +159,7 @@
                 </div>
               </div>
             </div>
-            <!-- Form Row-->
             <div class="row gx-3 mb-3">
-              <!-- Form Group (first name)-->
               <div class="col-md-6">
                 <label class="small mb-1" for="inputFirstName">Total Calories (Cals)</label>
                 <input class="form-control" id="inputFirstName" type="number" placeholder="Enter total calories"
@@ -182,7 +177,6 @@
                   </div>
                 </div>
               </div>
-              <!-- Form Group (last name)-->
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="editInputRole" class="small mb-1">Discount Status</label>
@@ -200,9 +194,7 @@
                 </div>
               </div>
             </div>
-            <!-- Form Row        -->
             <div class="row gx-3 mb-3">
-              <!-- Form Group (organization name)-->
               <div class="col-md-6">
                 <label class="small mb-1" for="inputUnitPrice">Unit Price</label>
                 <input currencyMask
@@ -221,7 +213,6 @@
                   </div>
                 </div>
               </div>
-              <!-- Form Group (location)-->
               <div class="col-md-6">
                 <label class="small mb-1" for="inputDiscountedPrice">Discounted Price</label>
                 <input
@@ -257,3 +248,7 @@
 </div>
 
 </body>
+
+<!--                <pre>-->
+<!--                  {{reactiveForm.value | json}}-->
+<!--                </pre>-->

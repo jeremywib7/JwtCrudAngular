@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {User} from "../../../../model/User";
 import {Product} from "../../../../model/Product";
 import {
@@ -22,7 +22,8 @@ import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 export class ProductFormComponent implements OnInit {
 
   constructor(
-    private formBuilder: RxFormBuilder,
+    private rxFormBuilder: RxFormBuilder,
+    private formBuilder: FormBuilder,
     private productService: ProductService,
     private ngbModal: NgbModal,
     private router: Router,
@@ -35,8 +36,8 @@ export class ProductFormComponent implements OnInit {
     this.loadProductCategory();
   }
 
-
   reactiveForm: any = FormGroup;
+  imageForm: any = FormGroup;
   public products: Product | undefined;
   public categories: ProductCategory[];
   modalOption: NgbModalOptions = {}; // not null!
@@ -62,7 +63,7 @@ export class ProductFormComponent implements OnInit {
   }
 
   initForm() {
-    this.reactiveForm = this.formBuilder.group({
+    this.reactiveForm = this.rxFormBuilder.group({
       name: [this.products === null ? null : this.products?.name,
         [
           RxwebValidators.required(),
@@ -80,7 +81,7 @@ export class ProductFormComponent implements OnInit {
           RxwebValidators.maxNumber({value: 10000})]
       ],
       active: [this.products === null ? null : this.products?.active],
-      category: this.formBuilder.group({
+      category: this.rxFormBuilder.group({
         id: [this.products === null ? null : this.products?.category]
       }),
       unitPrice: [this.products === null ? null : this.products?.unitPrice,
@@ -106,37 +107,34 @@ export class ProductFormComponent implements OnInit {
           RxwebValidators.minLength({value: 20})
         ]
       ],
-      images: this.formBuilder.array([{
-        imageName: ['', RxwebValidators.required],
+      images: this.rxFormBuilder.array([{
+        initialValue: [],
       }])
     });
+    const imageArray = this.reactiveForm.get('images') as FormArray;
+    imageArray.removeAt(0);
 
+    const add = this.reactiveForm.get('images') as FormArray;
+    add.push(this.rxFormBuilder.group({
+      imageName: ['', RxwebValidators.required()],
+    }));
   }
+
 
   addNewProductImage() {
     const imageNameArray = this.reactiveForm.get('images') as FormArray;
-    const file = this.imageSrc.slice(-1)[0];
+    let lastIndex = imageNameArray.length - 1;
+    const lastImageName = imageNameArray.value[lastIndex].imageName;
 
-    if (imageNameArray === undefined || imageNameArray.length === 1 ) {
+    if (imageNameArray.length < 3 && lastImageName) {
       const add = this.reactiveForm.get('images') as FormArray;
-      add.push(this.formBuilder.group({
-        imageName: ['', RxwebValidators.required],
+      add.push(this.rxFormBuilder.group({
+        imageName: ['', RxwebValidators.required()],
       }))
-    } else {
-
     }
-
-    // if ((this.reactiveForm.get('images') as FormArray).length < 3 && file)  {
-    //   const add = this.reactiveForm.get('images') as FormArray;
-    //   add.push(this.formBuilder.group({
-    //     imageName: ['', RxwebValidators.required],
-    //   }))
-    // }
   }
 
-  isFirstImageArray (index:number):boolean {
-    const imageArray = this.reactiveForm.get('images') as FormArray;
-
+  isFirstImageArray(index: number): boolean {
     if (index === 0) {
       return false;
     } else {

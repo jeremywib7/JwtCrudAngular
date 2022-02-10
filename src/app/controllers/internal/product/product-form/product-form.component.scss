@@ -1,28 +1,48 @@
-body{margin-top:20px;
-  background-color:#f2f6fc;
-  color:#69707a;
+body {
+  margin-top: 20px;
+  background-color: #f2f6fc;
+  color: #69707a;
 }
 
+//image config
 .img-product-upload {
   width: auto;
   height: 8em;
 }
 
 .img-account-profile {
+  width: 10rem;
   height: 10rem;
+  min-height: 50px;
+  min-width: 50px;
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 50%;
 }
+
 .rounded-circle {
   border-radius: 50% !important;
 }
+
+.mat-fab.mat-success,
+.mat-mini-fab.mat-success {
+  color: #f0fff3;
+  background-color: #94a3b8;
+}
+
+
 .card {
   box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
 }
+
 .card .card-header {
   font-weight: 500;
 }
+
 .card-header:first-child {
   border-radius: 0.35rem 0.35rem 0 0;
 }
+
 .card-header {
   padding: 1rem 1.35rem;
   margin-bottom: 0;
@@ -34,6 +54,7 @@ body{margin-top:20px;
   color: #0061f2;
   border-bottom-color: #0061f2;
 }
+
 .nav-borders .nav-link {
   color: #69707a;
   border-bottom-width: 0.125rem;
