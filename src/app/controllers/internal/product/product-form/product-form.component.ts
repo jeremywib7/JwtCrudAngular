@@ -215,8 +215,13 @@ s
       const control = formGroup.get(field);
       let invalidFields = [].slice.call(document.getElementsByClassName('ng-invalid'));
       if ((invalidFields).length != 0) {
-        invalidFields[1].focus();
+        if (invalidFields[1]) {
+          invalidFields[1].focus();
+        } else {
+        //  TODO open modal or show toastr
+        }
       }
+
       if (control instanceof FormControl) {
         control.markAsTouched({onlySelf: true});
       } else if (control instanceof FormGroup) {
