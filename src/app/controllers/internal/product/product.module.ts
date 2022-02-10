@@ -23,6 +23,7 @@ import {MatTabsModule} from "@angular/material/tabs";
 import {ProductCategoryComponent} from './product-category/product-category.component';
 import {ProductTableComponent} from './product-table/product-table.component';
 import {NgxCurrencyModule} from "ngx-currency";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 const routes: Routes = [
   {
@@ -71,6 +72,7 @@ const routes: Routes = [
     MatTableModule,
     MatSortModule,
     MatSelectModule,
+    MatSnackBarModule,
     MatPaginatorModule,
     MatButtonModule,
     MatIconModule,

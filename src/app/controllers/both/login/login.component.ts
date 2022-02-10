@@ -3,7 +3,6 @@ import {NgForm} from "@angular/forms";
 import {UserService} from "../../../_services/user.service";
 import {UserAuthService} from "../../../_services/user-auth.service";
 import {Router} from "@angular/router";
-import {retrievedProduct} from "../../../store/actions/product.actions";
 import {Product} from "../../../model/Product";
 import {retrievedProductCategory} from "../../../store/actions/product-category.actions";
 import {ProductCategory} from "../../../model/ProductCategory";
@@ -33,14 +32,6 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getlistProducts() {
-    // this.productService.loadProducts(this.productPageNumber).subscribe(
-    //   (data) => {
-    //     this.store.dispatch(retrievedProduct({allProduct: data['data']['content'] as Product[]}));
-    //   },
-    // );
-  }
-
   getListProductCategories() {
     this.productCategoryService.loadProductCategories().subscribe(
       (data) => {
@@ -58,7 +49,6 @@ export class LoginComponent implements OnInit {
         this.userAuthService.setToken(response.jwtToken);
 
         this.getListProductCategories();
-        this.getlistProducts();
 
         const userRole = response.user.role.roleName;
         // const userRole = response.user.role[0].roleName;

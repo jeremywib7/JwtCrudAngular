@@ -12,6 +12,7 @@ import {Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 import {ProductCategory} from "../../../../model/ProductCategory";
 import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-product-form',
@@ -20,14 +21,14 @@ import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
   providers: [RxFormBuilder]
 })
 export class ProductFormComponent implements OnInit {
-
+s
   constructor(
     private rxFormBuilder: RxFormBuilder,
+    private toastr: ToastrService,
     private formBuilder: FormBuilder,
     private productService: ProductService,
     private ngbModal: NgbModal,
     private router: Router,
-    private toastr: ToastrService,
   ) {
   }
 
@@ -111,6 +112,7 @@ export class ProductFormComponent implements OnInit {
         initialValue: [],
       }])
     });
+
     const imageArray = this.reactiveForm.get('images') as FormArray;
     imageArray.removeAt(0);
 
@@ -131,6 +133,10 @@ export class ProductFormComponent implements OnInit {
       add.push(this.rxFormBuilder.group({
         imageName: ['', RxwebValidators.required()],
       }))
+    } else if (!lastImageName) {
+      this.toastr.warning('Please add current image', 'No Image');
+    } else if (imageNameArray.length > 3) {
+      this.toastr.warning('You can only upload maximum 3 images', 'Maximum Image');
     }
   }
 
