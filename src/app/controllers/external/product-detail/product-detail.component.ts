@@ -3,6 +3,7 @@ import {ActivatedRoute, Route, Router} from "@angular/router";
 import {Product} from "../../../model/Product";
 import {ProductService} from "../../../_services/product.service";
 import {environment} from "../../../../environments/environment";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-product-detail',
@@ -15,7 +16,7 @@ export class ProductDetailComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private router: Router,
     private productService: ProductService
-    ) {
+  ) {
   }
 
   product: Product;
@@ -45,7 +46,10 @@ export class ProductDetailComponent implements OnInit {
   }
 
   async getProductDetail() {
-    await this.productService.loadProductDetailById(this.id).subscribe(
+    let params = new HttpParams();
+    params = params.append('id', this.id);
+
+    await this.productService.loadProductDetailById(params).subscribe(
       (data: Product[]) => {
         this.product = data['data'];
         this.contentLoaded = true;

@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {User} from "../../../../model/User";
+import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {Product} from "../../../../model/Product";
 import {
   NumericValueType,
@@ -8,11 +7,10 @@ import {
   RxwebValidators
 } from "@rxweb/reactive-form-validators";
 import {ProductService} from "../../../../_services/product.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 import {ProductCategory} from "../../../../model/ProductCategory";
 import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
-import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-product-form',
@@ -21,11 +19,11 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   providers: [RxFormBuilder]
 })
 export class ProductFormComponent implements OnInit {
-s
+
   constructor(
     private rxFormBuilder: RxFormBuilder,
     private toastr: ToastrService,
-    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
     private productService: ProductService,
     private ngbModal: NgbModal,
     private router: Router,
@@ -37,11 +35,13 @@ s
     this.loadProductCategory();
   }
 
+  images: FormArray;
   reactiveForm: any = FormGroup;
   imageForm: any = FormGroup;
   public products: Product | undefined;
   public categories: ProductCategory[];
   modalOption: NgbModalOptions = {}; // not null!
+  productId: string;
 
   imageSrc: string[] = [];
   selectedImage: File[] = [];
@@ -64,6 +64,7 @@ s
   }
 
   initForm() {
+
     this.reactiveForm = this.rxFormBuilder.group({
       name: [this.products === null ? null : this.products?.name,
         [
@@ -112,30 +113,38 @@ s
         initialValue: [],
       }])
     });
-
-    const imageArray = this.reactiveForm.get('images') as FormArray;
-    imageArray.removeAt(0);
+    this.images = this.reactiveForm.get('images') as FormArray;
+    this.images.removeAt(0);
 
     const add = this.reactiveForm.get('images') as FormArray;
     add.push(this.rxFormBuilder.group({
       imageName: ['', RxwebValidators.required()],
     }));
+
+    this.activatedRoute.queryParams.subscribe(params => {
+
+      this.productId = params['i'];
+      if (!this.productId === undefined) {
+
+      }
+      // this.productId === undefined || Number.isNaN(this.productId) ? this.productId = "all" : null;
+
+    });
+
   }
 
-
   addNewProductImage() {
-    const imageNameArray = this.reactiveForm.get('images') as FormArray;
-    let lastIndex = imageNameArray.length - 1;
-    const lastImageName = imageNameArray.value[lastIndex].imageName;
+    let lastIndex = this.images.length - 1;
+    const lastImageName = this.images.value[lastIndex].imageName;
 
-    if (imageNameArray.length < 3 && lastImageName) {
-      const add = this.reactiveForm.get('images') as FormArray;
-      add.push(this.rxFormBuilder.group({
+    if (this.images.length < 3 && lastImageName) {
+      this.images.push(this.rxFormBuilder.group({
         imageName: ['', RxwebValidators.required()],
       }))
+
     } else if (!lastImageName) {
       this.toastr.warning('Please add current image', 'No Image');
-    } else if (imageNameArray.length > 3) {
+    } else if (this.images.length === 3) {
       this.toastr.warning('You can only upload maximum 3 images', 'Maximum Image');
     }
   }
@@ -149,21 +158,21 @@ s
   }
 
   deleteProductImage(index: number) {
-    const imageArray = this.reactiveForm.get('images') as FormArray;
-    if (imageArray.length > 1 && index != 0) {
-      imageArray.removeAt(index);
+    if (this.images.length > 1 && index != 0) {
+      this.images.removeAt(index);
       this.imageSrc.splice(index, 1);
       this.selectedImage.splice(index, 1);
     }
-
   }
 
   onImageChange(event: any, index: number): void {
+    // check if image not empty
     if (event.target.files && event.target.files[0]) {
 
       const file = event.target.files[0];
       const reader = new FileReader();
       reader.onload = (e: any) => {
+        // set image preview
         this.imageSrc[index] = e.target.result;
       };
       reader.readAsDataURL(file);
@@ -171,6 +180,7 @@ s
 
       ((this.reactiveForm.get('images') as FormArray).at(index) as FormGroup).get('imageName').patchValue(
         event.target.files[0].name);
+
     }
   }
 
@@ -184,10 +194,21 @@ s
     this.ngbModal.open(content, this.modalOption);
   }
 
-  submit() {
+  async submit() {
     if (this.reactiveForm.valid) {
-      this.productService.addProduct(this.reactiveForm.value).subscribe(
-        (response: User) => {
+      // set image name based on product name in for loop
+      this.images.controls.forEach((element, index) => {
+        const string = element.value.imageName;
+        const dotIndex = string.lastIndexOf('.');
+        const extension = string.substring(dotIndex);
+
+        ((this.images).at(index) as FormGroup).get('imageName').patchValue(
+          this.reactiveForm.value.name + "_" + index + extension);
+      });
+
+      // http post
+      (await this.productService.addProduct(this.reactiveForm.value, this.selectedImage)).subscribe(
+        (response) => {
           this.router.navigate(['/int/product/table']);
           this.toastr.success('Product successfully added', 'Success');
         },
@@ -218,7 +239,7 @@ s
         if (invalidFields[1]) {
           invalidFields[1].focus();
         } else {
-        //  TODO open modal or show toastr
+          //  TODO open modal or show toastr
         }
       }
 

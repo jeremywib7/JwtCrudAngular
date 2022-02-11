@@ -56,7 +56,8 @@ const routes: Routes = [
     ]
   },
 
-  {path: 'add', component: ProductFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}}
+  {path: 'add', component: ProductFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}},
+  {path: 'edit', component: ProductFormComponent, canActivate: [AuthGuard], data: {roles: ['Admin']}}
 ];
 
 @NgModule({

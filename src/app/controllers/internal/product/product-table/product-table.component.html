@@ -83,7 +83,7 @@
                   <th mat-header-cell *matHeaderCellDef></th>
                   <td mat-cell *matCellDef="let element">
                     <img
-                      [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/product/download/' + element?.images[0]?.imageName  "
+                      [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/product/download/' + element?.images[0]?.imageName "
                       class="rounded-circle"
                       style="height: 70px;width: 70px; padding: 5px;">
                   </td>
@@ -121,7 +121,8 @@
                       color="primary"
                       matTooltip="Edit {{element.name}}"
                       [matTooltipPosition]="'below'"
-                      (click)="onEditButtonClicked(element.id)">
+                      routerLink="/int/product/edit"
+                      [queryParams]="{i: element.id}">
                       <mat-icon>edit</mat-icon>
                     </button>
                   </td>

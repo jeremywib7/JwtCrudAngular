@@ -1,9 +1,8 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {map, Observable, of, switchMap} from "rxjs";
 import {Product} from "../model/Product";
-import {User} from "../model/User";
 import {ProductCategory} from "../model/ProductCategory";
 
 @Injectable({
@@ -17,8 +16,31 @@ export class ProductService {
   constructor(private httpClient: HttpClient) {
   }
 
-  public addProduct(product: Product): Observable<User> {
-    return this.httpClient.post<User>(`${this.apiServerUrl}/${this.project}/product/add`, product);
+  public async addProduct(product: Product, imageFiles?: File[]): Promise<Observable<Product>> {
+    let observable = of({});
+
+    imageFiles.forEach((obj, index) => {
+
+      observable = observable.pipe(
+        switchMap(() => {
+
+          const formData: FormData = new FormData();
+          formData.append('file', obj);
+          formData.append('name', product.name + "_" + index);
+
+          return this.httpClient.post(`${this.apiServerUrl}/${this.project}/images/product/upload`, formData, {
+            responseType: 'text'
+          });
+        })
+      )
+    });
+
+    return observable.pipe(
+      switchMap(() => {
+        return this.httpClient.post<Product>(`${this.apiServerUrl}/${this.project}/product/add`, product);
+      })
+    );
+
   }
 
   public deleteProductById(id: string): Observable<Product> {
@@ -44,8 +66,8 @@ export class ProductService {
       .pipe(map((data) => data || []))
   }
 
-  loadProductDetailById(id: string) {
-    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findById?id=` + id)
+  loadProductDetailById(params: HttpParams) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findById`, {params})
       .pipe(map((data) => data || []))
   }
 

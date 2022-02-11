@@ -6,7 +6,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AuthGuard} from "../../../_auth/auth.guard";
 import {NgxPaginationModule} from "ngx-pagination";
-import {UserFormComponent} from './user-form/user-form.component';
 import {OrderModule} from "ngx-order-pipe";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {Ng2SearchPipeModule} from "ng2-search-filter";
