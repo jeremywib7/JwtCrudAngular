@@ -62,7 +62,6 @@ export class UserService implements OnInit {
   }
 
   public updateUser(user: User, selectedImage?: File): Observable<User> {
-    // return this.httpClient.put<User>(`${this.apiServerUrl}/${this.project}/user/update`, user);
     let observable = of({});
 
     const str = user.imageUrl;
@@ -71,10 +70,6 @@ export class UserService implements OnInit {
 
     if (selectedImage) {
       observable = observable.pipe(
-        // switchMap(() => {
-        //   user.imageUrl = user.username + ext;
-        //   return this.httpClient.delete(`${this.apiServerUrl}/${this.project}/images//${user.imageUrl}`)
-        // }),
 
         switchMap(() => {
 

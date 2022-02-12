@@ -11,6 +11,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 import {ProductCategory} from "../../../../model/ProductCategory";
 import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
+import {HttpParams} from "@angular/common/http";
+import {environment} from "../../../../../environments/environment";
 
 @Component({
   selector: 'app-product-form',
@@ -30,10 +32,17 @@ export class ProductFormComponent implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
-    this.initForm();
-    this.loadProductCategory();
+  async ngOnInit(): Promise<void> {
+    await this.initForm();
+    await this.checkParamsExists();
+    await this.loadProductCategory();
   }
+
+  //Main Config
+  apiBaseUrl = environment.apiBaseUrl;
+  projectName = environment.project;
+
+  editMode = true;
 
   images: FormArray;
   reactiveForm: any = FormGroup;
@@ -41,7 +50,6 @@ export class ProductFormComponent implements OnInit {
   public products: Product | undefined;
   public categories: ProductCategory[];
   modalOption: NgbModalOptions = {}; // not null!
-  productId: string;
 
   imageSrc: string[] = [];
   selectedImage: File[] = [];
@@ -63,8 +71,57 @@ export class ProductFormComponent implements OnInit {
     );
   }
 
-  initForm() {
+  checkImagePreview(imagePreview: string, imageName: string) {
+    if (imagePreview) {
+      return false;
+    }
+    return  true;
+  }
 
+  checkParamsExists() {
+    // check if param id exists, then load data if true and set edit mode to true
+    if (this.activatedRoute.snapshot.queryParams['i']) {
+      this.editMode = true;
+      const idParam = this.activatedRoute.snapshot.queryParams['i'];
+
+      let httpParams = new HttpParams();
+      httpParams = httpParams.append('id', idParam);
+
+      this.productService.loadProductDetailById(httpParams).subscribe(
+        (product: Product) => {
+          this.reactiveForm.patchValue({
+
+            name: product['data'].name,
+            discount: product['data'].discount,
+            category: {
+              id: product['data'].category.id
+            },
+            totalCalories: product['data'].totalCalories,
+            description: product['data'].description,
+            unitPrice: product['data'].unitPrice,
+            discountedPrice: product['data'].discountedPrice,
+            active: product['data'].active,
+            createdOn: product['data'].createdOn
+          });
+
+          product['data'].images.forEach((element, index) => {
+            this.images.push(this.rxFormBuilder.group({
+              imageName: [element.imageName, RxwebValidators.required()],
+            }))
+          });
+
+        },
+      );
+    } else {
+      this.editMode = false;
+      // add 1 value to the empty array
+      this.images.push(this.rxFormBuilder.group({
+        imageName: ['', RxwebValidators.required()],
+      }));
+    }
+  }
+
+  async initForm() {
     this.reactiveForm = this.rxFormBuilder.group({
       name: [this.products === null ? null : this.products?.name,
         [
@@ -113,24 +170,9 @@ export class ProductFormComponent implements OnInit {
         initialValue: [],
       }])
     });
+    // clear images name array and add one
     this.images = this.reactiveForm.get('images') as FormArray;
     this.images.removeAt(0);
-
-    const add = this.reactiveForm.get('images') as FormArray;
-    add.push(this.rxFormBuilder.group({
-      imageName: ['', RxwebValidators.required()],
-    }));
-
-    this.activatedRoute.queryParams.subscribe(params => {
-
-      this.productId = params['i'];
-      if (!this.productId === undefined) {
-
-      }
-      // this.productId === undefined || Number.isNaN(this.productId) ? this.productId = "all" : null;
-
-    });
-
   }
 
   addNewProductImage() {
@@ -207,7 +249,7 @@ export class ProductFormComponent implements OnInit {
       });
 
       // http post
-      (await this.productService.addProduct(this.reactiveForm.value, this.selectedImage)).subscribe(
+      (await this.productService.addOrAndUpdateProduct(this.reactiveForm.value, this.selectedImage)).subscribe(
         (response) => {
           this.router.navigate(['/int/product/table']);
           this.toastr.success('Product successfully added', 'Success');

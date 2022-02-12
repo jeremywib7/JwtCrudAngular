@@ -16,7 +16,7 @@ export class ProductService {
   constructor(private httpClient: HttpClient) {
   }
 
-  public async addProduct(product: Product, imageFiles?: File[]): Promise<Observable<Product>> {
+  public async addOrAndUpdateProduct(product: Product, imageFiles?: File[]): Promise<Observable<Product>> {
     let observable = of({});
 
     imageFiles.forEach((obj, index) => {
