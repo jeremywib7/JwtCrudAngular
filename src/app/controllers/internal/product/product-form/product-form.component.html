@@ -7,14 +7,9 @@
         <div class="card-body text-center">
 
           <h6>Main Image</h6>
-          <img *ngIf="!editMode"
-               class="img-account-profile mb-2"
-               [lazyLoad]="this.imageSrc[0] || apiBaseUrl +'/'+ projectName +'/images/product/download/' +
-                                'defaultproduct.jpg'" alt="">
-          <img *ngIf="editMode"
-               class="img-account-profile mb-2"
-               [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/product/download/' + this.images.value[0]?.imageName  "
-               alt="User Image">
+          <img
+            class="img-account-profile mb-2"
+            [lazyLoad]="checkMainImage()" alt="">
           <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
           <button class="btn btn-primary" type="button"
                   (click)="onSaveImageClicked(uploadImageModal)"
@@ -54,20 +49,9 @@
                       </div>
                       <div class="row justify-content-center">
                         <div class="col-auto p-0 m-0">
-                          <!--            Shown preview image after user select image            -->
-                          <img *ngIf="this.imageSrc[i]"
-                               class="img-product-upload mb-2 form-control"
-                               [lazyLoad]="this.imageSrc[i]" alt="Product Image"/>
-                          <!--            Show image from previous add or update             -->
-                          <img *ngIf="!this.imageSrc[i] && this.images.value.imageName"
-                               class="img-product-upload mb-2 form-control"
-                               [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/product/download/' +
-                               this.images.value.imageName"/>
-                          <!--            Show default image when user just clicked add new product button              -->
-                          <img *ngIf="!this.images.value.imageName"
-                               class="img-product-upload mb-2 form-control"
-                               [lazyLoad]="apiBaseUrl +'/'+ projectName +'/images/product/download/' +
-                                'defaultproduct.jpg'"/>
+                          <img
+                            class="img-product-upload mb-2 form-control"
+                            [lazyLoad]="checkAddProductImage(i, this.images.value.imageName)" alt="Product Image"/>
                         </div>
                         <div class="col-auto p-0 m-0">
                           <button
@@ -93,10 +77,10 @@
             </div>
             <div class="modal-footer">
               <!--              <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>-->
-              <button type="button" class="btn btn-outline-primary"
-                      (click)="modal.close()">
-                Save
-              </button>
+<!--              <button type="button" class="btn btn-outline-primary"-->
+<!--                      (click)="modal.close()">-->
+<!--                Save-->
+<!--              </button>-->
             </div>
           </ng-template>
         </div>

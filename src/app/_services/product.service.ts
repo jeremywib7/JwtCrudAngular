@@ -16,7 +16,7 @@ export class ProductService {
   constructor(private httpClient: HttpClient) {
   }
 
-  public async addOrAndUpdateProduct(product: Product, imageFiles?: File[]): Promise<Observable<Product>> {
+  public addOrAndUpdateProduct(product: Product, imageFiles?: File[], editMode?: boolean, id?: string): Observable<Product> {
     let observable = of({});
 
     imageFiles.forEach((obj, index) => {
@@ -35,11 +35,19 @@ export class ProductService {
       )
     });
 
-    return observable.pipe(
-      switchMap(() => {
-        return this.httpClient.post<Product>(`${this.apiServerUrl}/${this.project}/product/add`, product);
-      })
-    );
+    if (editMode === true) {
+      return observable.pipe(
+        switchMap(() => {
+          return this.httpClient.post<Product>(`${this.apiServerUrl}/${this.project}/product/update`, product);
+        })
+      );
+    } else {
+      return observable.pipe(
+        switchMap(() => {
+          return this.httpClient.post<Product>(`${this.apiServerUrl}/${this.project}/product/add`, product);
+        })
+      );
+    }
 
   }
 

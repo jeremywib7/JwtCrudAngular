@@ -15,7 +15,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class HeaderExternalComponent implements OnInit {
 
-  // @ViewChild('appDashboard', { static: false }) productByCat: ExternalProductByCategoryComponent;
 
   //for autocomplete
   data = [];
@@ -35,7 +34,6 @@ export class HeaderExternalComponent implements OnInit {
 
 
   constructor(
-    // private productService: ProductService,
     private store: Store<{ product: Product[], productCategory: ProductCategory[] }>,
     private _activatedRoute: ActivatedRoute,
     private productService: ProductService,
@@ -43,9 +41,7 @@ export class HeaderExternalComponent implements OnInit {
   ) {
   }
 
-  ngOnInit()
-    :
-    void {
+  ngOnInit(): void {
   }
 
   route() {

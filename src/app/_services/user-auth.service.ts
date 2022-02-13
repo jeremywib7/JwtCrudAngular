@@ -32,8 +32,7 @@ export class UserAuthService {
   }
 
   public clear() {
-    this.cookieService.delete('_security_role');
-    this.cookieService.delete('_security_accessToken');
+    this.cookieService.deleteAll('/');
   }
 
   public isLoggedIn() {

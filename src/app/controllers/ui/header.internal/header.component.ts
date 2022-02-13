@@ -26,8 +26,15 @@ export class InternalHeaderComponent implements OnInit {
   }
 
   public logout() {
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
+      this.reset()
+    );
+  }
+
+  reset() {
     this.userAuthService.clear();
     this.router.navigate(['/login']);
+
   }
 
 }

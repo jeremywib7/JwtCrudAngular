@@ -75,7 +75,7 @@ export class ProductFormComponent implements OnInit {
     if (imagePreview) {
       return false;
     }
-    return  true;
+    return true;
   }
 
   checkParamsExists() {
@@ -91,6 +91,7 @@ export class ProductFormComponent implements OnInit {
         (product: Product) => {
           this.reactiveForm.patchValue({
 
+            id: product['data'].id,
             name: product['data'].name,
             discount: product['data'].discount,
             category: {
@@ -123,6 +124,7 @@ export class ProductFormComponent implements OnInit {
 
   async initForm() {
     this.reactiveForm = this.rxFormBuilder.group({
+      id: [this.products === null ? null : this.products?.id],
       name: [this.products === null ? null : this.products?.name,
         [
           RxwebValidators.required(),
@@ -249,7 +251,7 @@ export class ProductFormComponent implements OnInit {
       });
 
       // http post
-      (await this.productService.addOrAndUpdateProduct(this.reactiveForm.value, this.selectedImage)).subscribe(
+      (await this.productService.addOrAndUpdateProduct(this.reactiveForm.value, this.selectedImage, this.editMode)).subscribe(
         (response) => {
           this.router.navigate(['/int/product/table']);
           this.toastr.success('Product successfully added', 'Success');
@@ -258,6 +260,36 @@ export class ProductFormComponent implements OnInit {
     } else {
       this.validateFormFields(this.reactiveForm);
     }
+  }
+
+  checkMainImage() {
+
+    if (!this.editMode && !this.imageSrc[0]) {
+      // setting default image
+      return this.apiBaseUrl + '/' + this.projectName + '/images/product/download/defaultproduct.jpg';
+    } else if (!this.editMode && this.imageSrc[0]) {
+      // setting preview of selected image
+      return this.imageSrc[0];
+    } else if (this.editMode && this.imageSrc[0]) {
+      // setting preview of selected image
+      return this.imageSrc[0];
+    } else if (this.editMode && !this.imageSrc[0]) {
+      // setting preview image of previous session
+      return this.apiBaseUrl + '/' + this.projectName + '/images/product/download/' + this.images.value[0]?.imageName
+    }
+    return null;
+  }
+
+  checkAddProductImage(index, imageName) {
+    if (this.imageSrc[index]) {
+      return this.imageSrc[index];
+    } else if (!this.imageSrc[index] && imageName) {
+      return this.apiBaseUrl + '/' + this.projectName + '/images/product/download/' + imageName;
+    } else if (!imageName) {
+      return this.apiBaseUrl + '/' + this.projectName + '/images/product/download/' +
+        'defaultproduct.jpg'
+    }
+    return null;
   }
 
   selectDiscountStatus() {
