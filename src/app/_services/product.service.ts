@@ -27,7 +27,7 @@ export class ProductService {
 
             const formData: FormData = new FormData();
             formData.append('file', obj);
-            formData.append('name', product.name + "_" + index);
+            formData.append('name', product.id + "_" + index);
 
             return this.httpClient.post(`${this.apiServerUrl}/${this.project}/images/product/upload`, formData, {
               responseType: 'text'
@@ -52,6 +52,10 @@ export class ProductService {
       );
     }
 
+  }
+
+  public getUUID() {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/uuid`);
   }
 
   public deleteProductById(id: string): Observable<Product> {

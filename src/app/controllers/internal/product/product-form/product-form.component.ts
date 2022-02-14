@@ -78,17 +78,18 @@ export class ProductFormComponent implements OnInit {
     return true;
   }
 
-  checkParamsExists() {
+  async checkParamsExists() {
     // check if param id exists, then load data if true and set edit mode to true
     if (this.activatedRoute.snapshot.queryParams['i']) {
       this.editMode = true;
-      const idParam = this.activatedRoute.snapshot.queryParams['i'];
+      const idParam = await this.activatedRoute.snapshot.queryParams['i'];
 
       let httpParams = new HttpParams();
       httpParams = httpParams.append('id', idParam);
 
-      this.productService.loadProductDetailById(httpParams).subscribe(
-        (product: Product) => {
+      this.productService.loadProductDetailById(httpParams).subscribe({
+        next: (product: Product) => {
+          this.products = product;
           this.reactiveForm.patchValue({
 
             id: product['data'].id,
@@ -110,15 +111,33 @@ export class ProductFormComponent implements OnInit {
               imageName: [element.imageName, RxwebValidators.required()],
             }))
           });
-
         },
-      );
+        error: error => {
+          this.router.navigate(['/int/product']);
+        },
+        complete: () => {
+          if (!this.products) {
+            this.router.navigate(['/int/product']);
+          }
+        },
+      });
+
     } else {
       this.editMode = false;
       // add 1 value to the empty array
       this.images.push(this.rxFormBuilder.group({
         imageName: ['', RxwebValidators.required()],
       }));
+
+      // get uuid and path to form
+      this.productService.getUUID().subscribe(
+        (data: object) => {
+          const uuid = data['data']['uuid'];
+          this.reactiveForm.patchValue({
+            id: uuid,
+          });
+        },
+      );
     }
   }
 
@@ -246,14 +265,18 @@ export class ProductFormComponent implements OnInit {
         const extension = string.substring(dotIndex);
 
         ((this.images).at(index) as FormGroup).get('imageName').patchValue(
-          this.reactiveForm.value.name + "_" + index + extension);
+          this.reactiveForm.value.id + "_" + index + extension);
       });
 
       // http post
       (await this.productService.addOrAndUpdateProduct(this.reactiveForm.value, this.selectedImage, this.editMode)).subscribe(
         (response) => {
           this.router.navigate(['/int/product/table']);
-          this.toastr.success('Product successfully added', 'Success');
+          if (!this.editMode) {
+            this.toastr.success('Product successfully added', 'Success');
+          } else {
+            this.toastr.success('Product successfully updated', 'Success');
+          }
         },
       );
     } else {
@@ -313,6 +336,8 @@ export class ProductFormComponent implements OnInit {
           invalidFields[1].focus();
         } else {
           //  TODO open modal or show toastr
+          this.toastr.warning('Please add current image', 'No Image');
+
         }
       }
 
