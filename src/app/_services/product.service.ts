@@ -16,29 +16,32 @@ export class ProductService {
   constructor(private httpClient: HttpClient) {
   }
 
-  public addOrAndUpdateProduct(product: Product, imageFiles?: File[], editMode?: boolean, id?: string): Observable<Product> {
+  public addOrAndUpdateProduct(product: Product, imageFiles?: File[], editMode?: boolean): Observable<Product> {
     let observable = of({});
 
-    imageFiles.forEach((obj, index) => {
+    if (imageFiles) {
+      imageFiles.forEach((obj, index) => {
 
-      observable = observable.pipe(
-        switchMap(() => {
+        observable = observable.pipe(
+          switchMap(() => {
 
-          const formData: FormData = new FormData();
-          formData.append('file', obj);
-          formData.append('name', product.name + "_" + index);
+            const formData: FormData = new FormData();
+            formData.append('file', obj);
+            formData.append('name', product.name + "_" + index);
 
-          return this.httpClient.post(`${this.apiServerUrl}/${this.project}/images/product/upload`, formData, {
-            responseType: 'text'
-          });
-        })
-      )
-    });
+            return this.httpClient.post(`${this.apiServerUrl}/${this.project}/images/product/upload`, formData, {
+              responseType: 'text'
+            });
+          })
+        )
+      });
+
+    }
 
     if (editMode === true) {
       return observable.pipe(
         switchMap(() => {
-          return this.httpClient.post<Product>(`${this.apiServerUrl}/${this.project}/product/update`, product);
+          return this.httpClient.put<Product>(`${this.apiServerUrl}/${this.project}/product/update`, product);
         })
       );
     } else {

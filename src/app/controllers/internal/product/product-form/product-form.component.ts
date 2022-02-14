@@ -224,7 +224,6 @@ export class ProductFormComponent implements OnInit {
 
       ((this.reactiveForm.get('images') as FormArray).at(index) as FormGroup).get('imageName').patchValue(
         event.target.files[0].name);
-
     }
   }
 
@@ -241,7 +240,7 @@ export class ProductFormComponent implements OnInit {
   async submit() {
     if (this.reactiveForm.valid) {
       // set image name based on product name in for loop
-      this.images.controls.forEach((element, index) => {
+      await this.images.controls.forEach((element, index) => {
         const string = element.value.imageName;
         const dotIndex = string.lastIndexOf('.');
         const extension = string.substring(dotIndex);
