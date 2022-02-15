@@ -1,4 +1,7 @@
 export class ProductCategory {
-  id: number;
+  id: string;
   categoryName: string;
+  createdOn: Date;
+  updatedOn: Date;
+  totalProduct; number;
 }

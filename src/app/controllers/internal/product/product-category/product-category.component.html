@@ -24,26 +24,119 @@
   <div class="row">
     <div
       *ngFor="let category of productCategory"
-      class="col-sm-6 col-md-4 col-lg-3">
+      class="col-sm-6 col-md-4 col-lg-4">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">{{category.categoryName}}</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <h5 class="card-title mb-3">{{category.categoryName}}</h5>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <i class="fa fa-upload me-1" style="color:blue!important"></i>
+              Created : {{category.createdOn}}
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-clock me-1" style="color:blue!important"></i>
+              Updated : {{category.updatedOn}}
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-shopping-cart me-1" style="color:blue!important"></i>
+              Total product : {{category.totalProduct}}
+            </li>
+
+          </ul>
           <div class="row float-end me-1">
             <div class="col-auto p-0 m-0">
               <button
                 mat-icon-button
                 color="primary"
-                routerLink="/int/product/edit">
+                (click)="loadProductBasedOnCategory(category.id,editCategoryModal)"
+              >
                 <mat-icon>edit</mat-icon>
               </button>
+
+              <!-- Modal Edit Category -->
+              <ng-template #editCategoryModal let-modal>
+                <div class="modal-header" ngbAutofocus>
+                  <h4 class="modal-title" id="editProductModal">Edit Category ?</h4>
+                  <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group mb-2">
+                      <label class="small mb-1" for="inputUsername">Category Name</label>
+                      <input class="form-control" id="inputUsername" type="text" placeholder="Enter category name">
+                    </div>
+                  </form>
+
+                  <table mat-table matSort [dataSource]="dataSource" class="w-100" >
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns;  sticky: true"></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let row;
+                      columns: displayedColumns;">
+                    </tr>
+
+                    <ng-container matColumnDef="categoryName">
+                      <th mat-header-cell mat-sort-header="name" *matHeaderCellDef>
+                        Product Name
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{element.categoryName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="delete" >
+                      <th mat-header-cell *matHeaderCellDef></th>
+                      <td mat-cell *matCellDef="let element">
+                        <button
+                          mat-icon-button
+                          color="warn">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </td>
+                    </ng-container>
+
+                  </table>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
+                  <button type="button" class="btn btn-outline-primary">
+                    Confirm
+                  </button>
+
+                </div>
+              </ng-template>
             </div>
             <div class="col-auto p-0 m-0">
               <button
                 mat-icon-button
+                (click)="this.ngbModal.open(deleteCategoryModal)"
                 color="warn">
                 <mat-icon>delete</mat-icon>
               </button>
+
+              <!-- Modal Delete Product -->
+              <ng-template #deleteCategoryModal let-modal>
+                <div class="modal-header" ngbAutofocus>
+                  <h4 class="modal-title" id="deleteProductModal">Delete Category ?</h4>
+                  <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                      Delete category {{category?.categoryName}} ?
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
+                  <button type="button" class="btn btn-outline-primary">
+                    Delete
+                  </button>
+
+                </div>
+              </ng-template>
             </div>
           </div>
         </div>

@@ -66,6 +66,7 @@ export class ProductService {
     return this.httpClient.get<ProductCategory[]>(`${this.apiServerUrl}/${this.project}/category/all`);
   }
 
+
   loadAllProducts(params: HttpParams) {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/all`, {params})
       .pipe(map((data) => data || []))
@@ -74,6 +75,11 @@ export class ProductService {
   loadProductsByNameAutoComplete(searchValue: string) {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByNameAutoComplete?name=` + searchValue)
       .pipe(map((data) => data || []))
+  }
+
+  loadProductsNameOnlyByCategory(params: HttpParams) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findNameOnly/byCategory`,
+      {params}).pipe(map((data) => data || []))
   }
 
   loadProductsSearchByName(searchValue: string) {
