@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ProductService} from "../../../../_services/product.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {EMPTY} from "rxjs";
+import {ProductCategory} from "../../../../model/ProductCategory";
 
 @Component({
   selector: 'app-product-category',
@@ -23,6 +24,8 @@ export class ProductCategoryComponent implements OnInit {
   ) {
   }
 
+  public productCategory: ProductCategory[];
+
   ngOnInit(): void {
     this.loadAllCategories().then(r => EMPTY);
   }
@@ -30,11 +33,11 @@ export class ProductCategoryComponent implements OnInit {
 
   async loadAllCategories() {
     await this.productService.loadAllProductCategory().subscribe({
-      next: value => {
-        console.log(value);
+      next: (productCategory) => {
+        this.productCategory = productCategory['data'];
+        console.log(this.productCategory);
       },
       error: error => {
-        this.router.navigate(['/int/product']);
       },
       complete: () => {
       },
