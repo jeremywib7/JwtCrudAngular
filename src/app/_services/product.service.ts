@@ -97,4 +97,9 @@ export class ProductService {
       .pipe(map((data) => data || []))
   }
 
+  getTotalProductByCategory(params: HttpParams) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/count/productByCategory`, {params})
+      .pipe(map((data) => data || []))
+  }
+
 }
