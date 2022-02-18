@@ -10,6 +10,10 @@ import {FormGroup} from "@angular/forms";
 import {MatTableDataSource} from "@angular/material/table";
 import {HttpParams} from "@angular/common/http";
 import {Product} from "../../../../model/Product";
+import {ProductCategoryService} from "../../../../_services/product-category.service";
+import {select, Store} from "@ngrx/store";
+import {allProductCategory} from "../../../../store/selectors/product-category.selector";
+import {retrievedProductCategory} from "../../../../store/actions/product-category.actions";
 
 @Component({
   selector: 'app-product-category',
@@ -21,8 +25,9 @@ export class ProductCategoryComponent implements OnInit {
   constructor(
     private rxFormBuilder: RxFormBuilder,
     private toastr: ToastrService,
+    private store: Store,
     private activatedRoute: ActivatedRoute,
-    private productService: ProductService,
+    private productCategoryService: ProductCategoryService,
     public ngbModal: NgbModal,
   ) {
   }
@@ -31,12 +36,16 @@ export class ProductCategoryComponent implements OnInit {
   displayedColumns: string[] = ['productName', 'delete'];
   dataSource!: MatTableDataSource<Product[]>; // for display data in table with sorting
 
-  public productCategory: ProductCategory[];
-
   centeredStaticModal: NgbModalOptions = {}; // not null!
   reactiveForm: any = FormGroup;
 
   editMode: boolean = false;
+
+  //from ngrx storage
+  allProductCategories$ = this.store.pipe(select(allProductCategory()));
+
+  //array models
+  public productCategory: ProductCategory[];
 
   ngOnInit(): void {
     this.initForm();
@@ -46,7 +55,7 @@ export class ProductCategoryComponent implements OnInit {
 
   initForm() {
     this.reactiveForm = this.rxFormBuilder.group({
-      name: [this.productCategory === null ? null : this.productCategory,
+      categoryName: ['',
         [
           RxwebValidators.required(),
           RxwebValidators.minLength({value: 3}),
@@ -67,17 +76,25 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   submit() {
+    console.log("submited");
+    if (this.editMode) {
 
+    } else {
+      this.productCategoryService.addProductCategory(this.reactiveForm.value).subscribe({
+        next: value => {
+          this.productCategory.push(value['data']);
+        }
+      });
+    }
   }
 
   async loadAllCategories() {
-    this.productService.loadAllProductCategory().subscribe({
-      next: async (productCategory) => {
-        this.productCategory = productCategory['data'];
-        this.productCategory.forEach(productCategory => {
-          this.getTotalProductByCategory(productCategory);
-        });
-      },
+    this.allProductCategories$.subscribe(value => {
+      this.productCategory = value;
+    });
+
+    this.productCategory.forEach(productCategory => {
+      this.getTotalProductByCategory(productCategory);
     });
   }
 
@@ -85,26 +102,27 @@ export class ProductCategoryComponent implements OnInit {
     let params = new HttpParams();
     params = params.append("id", productCategory.id);
 
-    await this.productService.getTotalProductByCategory(params).subscribe({
+    this.productCategoryService.getTotalProductByCategory(params).subscribe({
       next: value => {
-        productCategory.totalProduct = value['data']['totalProduct'].toString();
+        productCategory.totalProduct = value['data']['totalProduct'];
       },
     });
   }
 
   loadProductBasedOnCategory(id?: string, modal?, editMode?: boolean, index?) {
+
     this.editMode = editMode;
     this.ngbModal.open(modal, this.centeredStaticModal);
 
     if (editMode) {
       this.reactiveForm.patchValue({
-        name: this.productCategory[index].categoryName
+        categoryName: this.productCategory[index].categoryName
       });
 
       let params = new HttpParams();
       params = params.append('id', id);
 
-      this.productService.loadProductsNameOnlyByCategory(params).subscribe({
+      this.productCategoryService.loadProductsNameOnlyByCategory(params).subscribe({
         next: (product) => {
           this.dataSource = new MatTableDataSource(product['data']);
         }

@@ -104,7 +104,15 @@ export const customCurrencyMaskConfig = {
     MatListModule,
 
     // NGRX STORE
-    StoreModule.forRoot({product: productReducer, productCategory: productCategoryReducer}),
+    StoreModule.forRoot({product: productReducer, productCategory: productCategoryReducer}
+      , {
+        runtimeChecks: {
+          strictStateImmutability: false  ,
+          strictActionImmutability: false,
+          strictStateSerializability: true,
+          strictActionSerializability: true
+        }
+      }),
   ],
   providers: [
     AuthGuard,

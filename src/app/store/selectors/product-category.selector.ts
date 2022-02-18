@@ -7,7 +7,7 @@ export const productCategoryRootSelector = (state:AppState) => state.productCate
 export const allProductCategory = () =>
   createSelector(productCategoryRootSelector, (product: ProductCategory[]) => {
     return product;
-  })
+  });
 
 
 

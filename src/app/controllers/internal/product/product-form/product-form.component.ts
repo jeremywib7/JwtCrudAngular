@@ -55,7 +55,7 @@ export class ProductFormComponent implements OnInit {
   selectedImage: File[] = [];
 
   async loadProductCategory() {
-    await this.productService.loadAllProductCategory().subscribe(
+    await this.productService.loadProductCategories().subscribe(
       (data: object) => {
         this.categories = data['data'];
 

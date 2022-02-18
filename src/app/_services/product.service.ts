@@ -62,24 +62,20 @@ export class ProductService {
     return this.httpClient.delete<Product>(`${this.apiServerUrl}/${this.project}/product/delete/${id}`);
   }
 
-  public loadAllProductCategory(): Observable<ProductCategory[]> {
-    return this.httpClient.get<ProductCategory[]>(`${this.apiServerUrl}/${this.project}/category/all`);
-  }
-
-
   loadAllProducts(params: HttpParams) {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/all`, {params})
       .pipe(map((data) => data || []))
   }
 
+  loadProductCategories() {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/category/all`)
+      .pipe(map((data: any) => data|| []))
+  }
+
+
   loadProductsByNameAutoComplete(searchValue: string) {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByNameAutoComplete?name=` + searchValue)
       .pipe(map((data) => data || []))
-  }
-
-  loadProductsNameOnlyByCategory(params: HttpParams) {
-    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findNameOnly/byCategory`,
-      {params}).pipe(map((data) => data || []))
   }
 
   loadProductsSearchByName(searchValue: string) {
@@ -94,11 +90,6 @@ export class ProductService {
 
   loadProductsByFilter(params: HttpParams) {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByCategory`, {params})
-      .pipe(map((data) => data || []))
-  }
-
-  getTotalProductByCategory(params: HttpParams) {
-    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/count/productByCategory`, {params})
       .pipe(map((data) => data || []))
   }
 
