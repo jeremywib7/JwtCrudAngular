@@ -6,7 +6,7 @@ import {ProductService} from "../../../../_services/product.service";
 import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {EMPTY} from "rxjs";
 import {ProductCategory} from "../../../../model/ProductCategory";
-import {FormGroup} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 import {MatTableDataSource} from "@angular/material/table";
 import {HttpParams} from "@angular/common/http";
 import {Product} from "../../../../model/Product";
@@ -76,17 +76,42 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   submit() {
-    console.log("submited");
-    if (this.editMode) {
+    if (this.reactiveForm.valid) {
+      if (this.editMode) {
 
+      } else {
+        this.productCategoryService.addProductCategory(this.reactiveForm.value).subscribe({
+          next: value => {
+            this.productCategory.push(value['data']);
+          },
+          complete: () => {
+
+          }
+        });
+      }
     } else {
-      this.productCategoryService.addProductCategory(this.reactiveForm.value).subscribe({
-        next: value => {
-          this.productCategory.push(value['data']);
-        }
-      });
+      this.validateFormFields(this.reactiveForm);
     }
   }
+
+  public validateFormFields(formGroup: FormGroup) {
+
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      let invalidFields = [].slice.call(document.getElementsByClassName('ng-invalid'));
+      if ((invalidFields).length != 0) {
+        if (invalidFields[1]) {
+          invalidFields[1].focus();
+        }
+      }
+      if (control instanceof FormControl) {
+        control.markAsTouched({onlySelf: true});
+      } else if (control instanceof FormGroup) {
+        this.validateFormFields(control);
+      }
+    })
+  }
+
 
   async loadAllCategories() {
     this.allProductCategories$.subscribe(value => {

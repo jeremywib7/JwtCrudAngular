@@ -107,6 +107,18 @@
           <input
             formControlName="categoryName"
             class="form-control" id="inputUsername" type="text" placeholder="Enter category name">
+          <div *ngIf="reactiveForm.controls.categoryName.errors && (reactiveForm.controls.categoryName.touched ||
+                           reactiveForm.controls.categoryName.dirty) " style="color: red">
+            <div *ngIf="reactiveForm.hasError('required','categoryName')">
+              Category Name is required
+            </div>
+            <div *ngIf="reactiveForm.hasError('minLength','categoryName')">
+              Category Name must be 3 characters or more
+            </div>
+            <div *ngIf="reactiveForm.hasError('maxLength','categoryName')">
+              Category Name maximum length is 10
+            </div>
+          </div>
         </div>
         <table
           *ngIf="editMode"
