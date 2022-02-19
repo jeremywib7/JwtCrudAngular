@@ -3,6 +3,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {map, Observable} from "rxjs";
 import {ProductCategory} from "../model/ProductCategory";
+import {Product} from "../model/Product";
 
 @Injectable({
   providedIn: 'root'
@@ -20,14 +21,13 @@ export class ProductCategoryService {
       .pipe(map((data: any) => data|| []))
   }
 
+  deleteProductCategory(id: string) {
+    return this.httpClient.delete(`${this.apiServerUrl}/${this.project}/category/delete/${id}`);
+  }
+
   loadProductCategories() {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/category/all`)
       .pipe(map((data: any) => data|| []))
-  }
-
-  getTotalProductByCategory(params: HttpParams) {
-    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/count/productByCategory`, {params})
-      .pipe(map((data) => data || []))
   }
 
   loadProductsNameOnlyByCategory(params: HttpParams) {

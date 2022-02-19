@@ -83,15 +83,26 @@ export class ProductCategoryComponent implements OnInit {
         this.productCategoryService.addProductCategory(this.reactiveForm.value).subscribe({
           next: value => {
             this.productCategory.push(value['data']);
+            this.toastr.success("Success add category");
+            this.ngbModal.dismissAll();
           },
-          complete: () => {
-
-          }
         });
       }
     } else {
       this.validateFormFields(this.reactiveForm);
     }
+  }
+
+  deleteCategory(categoryId: string, index) {
+    this.productCategoryService.deleteProductCategory(categoryId).subscribe({
+      next: value => {
+        this.productCategory.splice(index,1);
+        this.toastr.success("Delete category success");
+      },
+      complete: () => {
+        this.ngbModal.dismissAll();
+      }
+    })
   }
 
   public validateFormFields(formGroup: FormGroup) {
@@ -112,25 +123,17 @@ export class ProductCategoryComponent implements OnInit {
     })
   }
 
-
   async loadAllCategories() {
-    this.allProductCategories$.subscribe(value => {
-      this.productCategory = value;
-    });
-
-    this.productCategory.forEach(productCategory => {
-      this.getTotalProductByCategory(productCategory);
-    });
-  }
-
-  async getTotalProductByCategory(productCategory) {
-    let params = new HttpParams();
-    params = params.append("id", productCategory.id);
-
-    this.productCategoryService.getTotalProductByCategory(params).subscribe({
-      next: value => {
-        productCategory.totalProduct = value['data']['totalProduct'];
+    this.productCategoryService.loadProductCategories().subscribe({
+      next: data => {
+        this.store.dispatch(retrievedProductCategory({allProductCategory: data['data'] as ProductCategory[]}));
       },
+    });
+
+    this.allProductCategories$.subscribe({
+      next: value => {
+        this.productCategory = value;
+      }
     });
   }
 

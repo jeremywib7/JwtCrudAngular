@@ -10,29 +10,31 @@ export class UserAuthService {
 
   secretKey = "nih71h8dh1j2spaksnjabx1092k1osom1inu1b27y17u2e9109io1ksoj2ih1udubfkkvk12j819291kd00k[pkajkncwniq";
 
-  constructor(private cookieService: CookieService) {
+  constructor() {
   }
 
   public setRoles(roles: []) {
-    this.cookieService.set('_security_role',
-      CryptoJS.AES.encrypt(roles['roleName'].toString(), this.secretKey.trim()).toString());
+    localStorage.setItem('_security_role', JSON.stringify(roles['roleName'].toString())
+    );
   }
 
   public getRoles() {
-    return CryptoJS.AES.decrypt(this.cookieService.get('_security_role'), this.secretKey.trim()).toString(CryptoJS.enc.Utf8);
+    return JSON.parse(
+      localStorage.getItem('_security_role'));
   }
 
   public setToken(accessToken: string) {
-    this.cookieService.set('_security_accessToken',
-      CryptoJS.AES.encrypt(accessToken, this.secretKey.trim()).toString());
+    localStorage.setItem('_security_accessToken',
+      JSON.stringify(accessToken)
+    );
   }
 
   public getToken() {
-    return CryptoJS.AES.decrypt(this.cookieService.get('_security_accessToken'), this.secretKey.trim()).toString(CryptoJS.enc.Utf8);
+    return JSON.parse(localStorage.getItem('_security_accessToken'));
   }
 
   public clear() {
-    this.cookieService.deleteAll('/');
+    localStorage.clear();
   }
 
   public isLoggedIn() {

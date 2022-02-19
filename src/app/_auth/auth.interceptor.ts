@@ -4,9 +4,13 @@ import {UserAuthService} from "../_services/user-auth.service";
 import {Router} from "@angular/router";
 import {Injectable} from "@angular/core";
 import {ToastrService} from "ngx-toastr";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+
+  private apiServerUrl = environment.apiBaseUrl;
+  private project = environment.project;
 
   constructor(private userAuthService: UserAuthService, private router: Router, private toastr: ToastrService) {
   }
@@ -32,10 +36,11 @@ export class AuthInterceptor implements HttpInterceptor {
             this.router.navigate(['/forbidden']);
           } else {
             this.toastr.error(err.error.message, 'Error');
-            // return next.handle(req.clone());
           }
+          console.clear();
           return EMPTY;
         }
+
       ),
     );
   }

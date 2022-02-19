@@ -58,6 +58,7 @@
               <mat-icon>edit</mat-icon>
             </button>
             <button
+              *ngIf="category.categoryName != 'Unassigned'"
               mat-icon-button
               (click)="this.ngbModal.open(deleteCategoryModal)"
               color="warn">
@@ -80,7 +81,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
-                <button type="button" class="btn btn-outline-primary">
+                <button type="button" (click)="deleteCategory(category.id, i)" class="btn btn-outline-primary">
                   Delete
                 </button>
 
