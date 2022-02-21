@@ -1,4 +1,4 @@
-<div class="container-fluid mt-4">
+<div class="container h-100 mt-4">
   <div class="mb-3">
     <div class="col mb-3">
       <div class="card">
@@ -13,6 +13,7 @@
                 <i [class]="!isDescOrder ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'"></i>
               </button>
               <input [(ngModel)]="searchCategory"
+                     (ngModelChange)="p = 1"
                      class="form-control me-2" type="search" placeholder="Search"
                      aria-label="Search">
             </div>
@@ -21,52 +22,62 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div
-      *ngFor="let category of productCategory |
+  <div class="row h-100">
+    <ng-container *ngIf="productCategory | filter: searchCategory  as result" class="h-100">
+      <div *ngFor="let category of result |
                   orderBy: orderHeader: isDescOrder |
-                  filter:searchCategory |
-                  paginate: { itemsPerPage: 6, currentPage: p } ; let i=index;"
-      class="col-sm-6 col-md-4 col-lg-4 mb-4">
-      <div class="card h-100">
-        <div class="card-header">
-          {{category.categoryName}}
-        </div>
-        <div class="card-body">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <i class="fa fa-upload me-1" style="color:blue!important"></i>
-              Created : {{category.createdOn}}
-            </li>
-            <li class="list-group-item">
-              <i class="fa fa-clock me-1" style="color:blue!important"></i>
-              Updated : {{category.updatedOn}}
-            </li>
-            <li class="list-group-item">
-              <i class="fa fa-shopping-cart me-1" style="color:blue!important"></i>
-              Total product : {{category?.totalProduct}}
-            </li>
-          </ul>
-        </div>
-        <div class="card-footer">
-          <div class="d-flex justify-content-end">
-            <button
-              mat-icon-button
-              color="primary"
-              (click)="openAddOrEditModal(category.id, addOrEditModal,true)">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button
-              *ngIf="category.categoryName != 'Unassigned'"
-              mat-icon-button
-              (click)="openDeleteModal(deleteCategoryModal, category?.id)"
-              color="warn">
-              <mat-icon>delete</mat-icon>
-            </button>
+                  paginate: { itemsPerPage: 6, currentPage: p }  ; let i=index;"
+           class="col-sm-6 col-md-4 col-lg-4 mb-4">
+        <div class="card h-100">
+          <div class="card-header">
+            {{category.categoryName}}
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <i class="fa fa-upload me-1" style="color:blue!important"></i>
+                Created : {{category.createdOn}}
+              </li>
+              <li class="list-group-item">
+                <i class="fa fa-clock me-1" style="color:blue!important"></i>
+                Updated : {{category.updatedOn}}
+              </li>
+              <li class="list-group-item">
+                <i class="fa fa-shopping-cart me-1" style="color:blue!important"></i>
+                Total product : {{category?.totalProduct}}
+              </li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <div class="d-flex justify-content-end">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="openAddOrEditModal(category.id, addOrEditModal,true)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                *ngIf="category.categoryName != 'Unassigned'"
+                mat-icon-button
+                (click)="openDeleteModal(deleteCategoryModal, category?.id)"
+                color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <div *ngIf="result.length === 0" class="text-center mt-5">
+        No category Found
+      </div>
+      <div
+        *ngIf="result.length != 0"
+        class="text-center">
+        <pagination-controls
+          (pageChange)="p = $event"
+        ></pagination-controls>
+      </div>
+    </ng-container>
   </div>
 
   <!-- Modal Add or Edit Category -->
@@ -126,6 +137,7 @@
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element">
               <button
+                (click)="openRemoveProductModal(removeProductModal, addOrEditModal, element.name)"
                 type="button"
                 mat-icon-button
                 color="warn">
@@ -145,21 +157,33 @@
     </form>
 
   </ng-template>
-  <div class="text-center fixed-bottom">
-    <style>
-      .my-pagination /deep/ .ngx-pagination .current {
-        background: red;
-      }
-    </style>
-
-    <pagination-controls
-      (pageChange)="p = $event"
-      class="my-pagination"
-    ></pagination-controls>
-  </div>
 </div>
 
-<!-- Modal Delete Product -->
+<!-- Modal Remove Product In Categort -->
+<ng-template #removeProductModal let-modal>
+  <div class="modal-header" ngbAutofocus>
+    <h4 class="modal-title" id="yesOrNoCategoryModal">Remove Product ?</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()">
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        Remove product "{{productName}}" from category "{{this.reactiveForm.value.categoryName}}" ?
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel
+    </button>
+    <button type="button" (click)="deleteCategory()" class="btn btn-outline-primary">
+      Delete
+    </button>
+
+  </div>
+</ng-template>
+
+<!-- Modal Delete Category -->
 <ng-template #deleteCategoryModal let-modal>
   <div class="modal-header" ngbAutofocus>
     <h4 class="modal-title" id="deleteProductModal">Delete Category ?</h4>

@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChildren, ViewEncapsulation} from '@angular/core';
 import {NumericValueType, RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
 import {ToastrService} from "ngx-toastr";
 import {ActivatedRoute, Router} from "@angular/router";
-import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
+import {NgbActiveModal, NgbModal, NgbModalOptions, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {EMPTY} from "rxjs";
 import {ProductCategory} from "../../../../model/ProductCategory";
 import {FormControl, FormGroup} from "@angular/forms";
@@ -17,8 +17,9 @@ import {retrievedProductCategory} from "../../../../store/actions/product-catego
 @Component({
   selector: 'app-product-category',
   templateUrl: './product-category.component.html',
-  styleUrls: ['./product-category.component.css']
+  styleUrls: ['./product-category.component.css'],
 })
+
 export class ProductCategoryComponent implements OnInit {
 
   //modal
@@ -28,7 +29,7 @@ export class ProductCategoryComponent implements OnInit {
   modalCategoryId: string;
   modalCategoryName: string;
   //
-ase
+
   //for search
   searchCategory: any;
   //for filter sort asc or desc
@@ -44,7 +45,7 @@ ase
     private store: Store,
     private activatedRoute: ActivatedRoute,
     private productCategoryService: ProductCategoryService,
-    public ngbModal: NgbModal,
+    public ngbModal: NgbModal
   ) {
   }
 
@@ -52,6 +53,9 @@ ase
   displayedColumns: string[] = ['productName', 'delete'];
   dataSource!: MatTableDataSource<Product[]>; // for display data in table with sorting
   //
+
+  //modal reference
+  modalRef: any;
 
   reactiveForm: any = FormGroup;
 
@@ -158,7 +162,7 @@ ase
     this.modalIndex = itemIndex;
 
     this.editMode = editMode;
-    this.ngbModal.open(modal, this.centeredStaticModal);
+    this.modalRef = this.ngbModal.open(modal, this.centeredStaticModal);
 
     if (editMode) {
       this.reactiveForm.patchValue({
@@ -187,10 +191,14 @@ ase
   }
 
   openDeleteModal(modal?, categoryId?: string) {
-    let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id == categoryId);
-    this.modalIndex = itemIndex;
-    this.modalCategoryId = categoryId;
-    this.modalCategoryName = this.productCategory[itemIndex].categoryName;
+
+    if (categoryId) {
+      let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id == categoryId);
+      this.modalIndex = itemIndex;
+      this.modalCategoryId = categoryId;
+      this.modalCategoryName = this.productCategory[itemIndex].categoryName;
+
+    }
 
     this.ngbModal.open(modal);
   }
@@ -205,6 +213,22 @@ ase
         this.ngbModal.dismissAll();
       }
     })
+  }
+
+  productName: string;
+  openRemoveProductModal(removeProductModal, addOrEditModal, productName: string) {
+    this.productName = productName;
+    this.modalRef.close();
+
+    this.modalRef = this.ngbModal.open(removeProductModal, {centered: true});
+
+    this.modalRef.result.then((data) => {
+      // on close
+      this.modalRef = this.ngbModal.open(addOrEditModal, {centered: true});
+    }, (reason) => {
+      //on dismiss
+      this.modalRef = this.ngbModal.open(addOrEditModal, {centered: true});
+    });
   }
 
 }
