@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChildren, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewChildren, ViewEncapsulation} from '@angular/core';
 import {NumericValueType, RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
 import {ToastrService} from "ngx-toastr";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -13,6 +13,7 @@ import {ProductCategoryService} from "../../../../_services/product-category.ser
 import {select, Store} from "@ngrx/store";
 import {allProductCategory} from "../../../../store/selectors/product-category.selector";
 import {retrievedProductCategory} from "../../../../store/actions/product-category.actions";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-product-category',
@@ -52,6 +53,8 @@ export class ProductCategoryComponent implements OnInit {
   // angular table
   displayedColumns: string[] = ['productName', 'delete'];
   dataSource!: MatTableDataSource<Product[]>; // for display data in table with sorting
+  //for sorting table
+  @ViewChild(MatSort) matSort!: MatSort;
   //
 
   //modal reference
@@ -177,6 +180,8 @@ export class ProductCategoryComponent implements OnInit {
       this.productCategoryService.loadProductsNameOnlyByCategory(params).subscribe({
         next: (product) => {
           this.dataSource = new MatTableDataSource(product['data']);
+          this.dataSource.sort = this.matSort;
+
         }
       })
     } else {
@@ -215,9 +220,16 @@ export class ProductCategoryComponent implements OnInit {
     })
   }
 
+  productId: string;
   productName: string;
-  openRemoveProductModal(removeProductModal, addOrEditModal, productName: string) {
+  productIndex: number;
+
+  async openRemoveProductModal(removeProductModal, addOrEditModal, productId: string, productName: string, index: number) {
+
+    this.productId = productId;
     this.productName = productName;
+    this.productIndex = index;
+
     this.modalRef.close();
 
     this.modalRef = this.ngbModal.open(removeProductModal, {centered: true});
@@ -229,6 +241,19 @@ export class ProductCategoryComponent implements OnInit {
       //on dismiss
       this.modalRef = this.ngbModal.open(addOrEditModal, {centered: true});
     });
+  }
+
+
+  removeProductInCategory() {
+    this.productCategoryService.removeProductInCategory(this.productId).subscribe({
+      next: value => {
+        this.dataSource['filteredData'].splice(this.productIndex, 1);
+        this.toastr.success("Remove product in category success");
+      },
+      complete: () => {
+        this.ngbModal.dismissAll();
+      }
+    })
   }
 
 }

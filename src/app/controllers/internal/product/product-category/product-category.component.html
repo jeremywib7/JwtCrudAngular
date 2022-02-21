@@ -127,7 +127,7 @@
           </tr>
 
           <ng-container matColumnDef="productName">
-            <th mat-header-cell mat-sort-header="name" *matHeaderCellDef>
+            <th mat-header-cell mat-sort-header="productName" *matHeaderCellDef>
               Product Name
             </th>
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
@@ -135,9 +135,9 @@
 
           <ng-container matColumnDef="delete">
             <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
+            <td mat-cell *matCellDef="let element;let i = index">
               <button
-                (click)="openRemoveProductModal(removeProductModal, addOrEditModal, element.name)"
+                (click)="openRemoveProductModal(removeProductModal, addOrEditModal, element.id ,element.name, i)"
                 type="button"
                 mat-icon-button
                 color="warn">
@@ -159,7 +159,7 @@
   </ng-template>
 </div>
 
-<!-- Modal Remove Product In Categort -->
+<!-- Modal Remove Product In Category -->
 <ng-template #removeProductModal let-modal>
   <div class="modal-header" ngbAutofocus>
     <h4 class="modal-title" id="yesOrNoCategoryModal">Remove Product ?</h4>
