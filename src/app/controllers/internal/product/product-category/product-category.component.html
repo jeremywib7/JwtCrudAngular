@@ -1,32 +1,32 @@
-<div class="container mt-4">
+<div class="container-fluid mt-4">
   <div class="mb-3">
     <div class="col mb-3">
       <div class="card">
         <nav class="navbar">
           <div class="container-fluid">
             <button
-              (click)="loadProductBasedOnCategory(null, addOrEditModal, false)"
+              (click)="openAddOrEditModal(null, addOrEditModal, false)"
               class="btn btn-primary">Add Category
             </button>
             <div class="d-flex">
-              <!--          (click)="sort('userFirstName')"-->
-              <button class="btn btn-dark me-2">
-                <!--            <i *ngIf="!isDescOrder" class="fa fa-sort-alpha-desc"></i>-->
-                <!--            <i *ngIf="isDescOrder" class="fa fa-sort-alpha-asc"></i>-->
+              <button (click)="sort('categoryName')" class="btn btn-dark me-2">
+                <i [class]="!isDescOrder ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'"></i>
               </button>
-              <!--          [(ngModel)]="term"-->
-              <input class="form-control me-2" type="search" placeholder="Search"
+              <input [(ngModel)]="searchCategory"
+                     class="form-control me-2" type="search" placeholder="Search"
                      aria-label="Search">
             </div>
           </div>
         </nav>
-
       </div>
     </div>
   </div>
   <div class="row">
     <div
-      *ngFor="let category of productCategory; let i = index;"
+      *ngFor="let category of productCategory |
+                  orderBy: orderHeader: isDescOrder |
+                  filter:searchCategory |
+                  paginate: { itemsPerPage: 6, currentPage: p } ; let i=index;"
       class="col-sm-6 col-md-4 col-lg-4 mb-4">
       <div class="card h-100">
         <div class="card-header">
@@ -53,40 +53,16 @@
             <button
               mat-icon-button
               color="primary"
-              (click)="loadProductBasedOnCategory(category.id,addOrEditModal, true, i)"
-            >
+              (click)="openAddOrEditModal(category.id, addOrEditModal,true)">
               <mat-icon>edit</mat-icon>
             </button>
             <button
               *ngIf="category.categoryName != 'Unassigned'"
               mat-icon-button
-              (click)="this.ngbModal.open(deleteCategoryModal)"
+              (click)="openDeleteModal(deleteCategoryModal, category?.id)"
               color="warn">
               <mat-icon>delete</mat-icon>
             </button>
-
-            <!-- Modal Delete Product -->
-            <ng-template #deleteCategoryModal let-modal>
-              <div class="modal-header" ngbAutofocus>
-                <h4 class="modal-title" id="deleteProductModal">Delete Category ?</h4>
-                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
-                </button>
-              </div>
-              <div class="modal-body">
-                <form>
-                  <div class="form-group">
-                    Delete category {{category?.categoryName}} ?
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
-                <button type="button" (click)="deleteCategory(category.id, i)" class="btn btn-outline-primary">
-                  Delete
-                </button>
-
-              </div>
-            </ng-template>
           </div>
         </div>
       </div>
@@ -104,10 +80,11 @@
 
       <div class="modal-body h-100">
         <div class="form-group mb-2">
-          <label class="small mb-1" for="inputUsername">Category Name</label>
+          <label class="small mb-1" for="inputCategoryName">Category Name</label>
           <input
             formControlName="categoryName"
-            class="form-control" id="inputUsername" type="text" placeholder="Enter category name">
+            class="form-control" id="inputCategoryName" type="text" placeholder="Enter category name"
+            [readOnly]="this.reactiveForm.value.categoryName === 'Unassigned'">
           <div *ngIf="reactiveForm.controls.categoryName.errors && (reactiveForm.controls.categoryName.touched ||
                            reactiveForm.controls.categoryName.dirty) " style="color: red">
             <div *ngIf="reactiveForm.hasError('required','categoryName')">
@@ -156,7 +133,6 @@
               </button>
             </td>
           </ng-container>
-
         </table>
       </div>
 
@@ -169,6 +145,41 @@
     </form>
 
   </ng-template>
+  <div class="text-center fixed-bottom">
+    <style>
+      .my-pagination /deep/ .ngx-pagination .current {
+        background: red;
+      }
+    </style>
+
+    <pagination-controls
+      (pageChange)="p = $event"
+      class="my-pagination"
+    ></pagination-controls>
+  </div>
 </div>
+
+<!-- Modal Delete Product -->
+<ng-template #deleteCategoryModal let-modal>
+  <div class="modal-header" ngbAutofocus>
+    <h4 class="modal-title" id="deleteProductModal">Delete Category ?</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        Delete category {{modalCategoryName}} ?
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
+    <button type="button" (click)="deleteCategory()" class="btn btn-outline-primary">
+      Delete
+    </button>
+
+  </div>
+</ng-template>
 
 

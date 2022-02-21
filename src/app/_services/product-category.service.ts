@@ -21,6 +21,11 @@ export class ProductCategoryService {
       .pipe(map((data: any) => data|| []))
   }
 
+  updateProductCategory(productCategory: ProductCategory) {
+    return this.httpClient.put(`${this.apiServerUrl}/${this.project}/category/update`, productCategory)
+      .pipe(map((data: any) => data|| []))
+  }
+
   deleteProductCategory(id: string) {
     return this.httpClient.delete(`${this.apiServerUrl}/${this.project}/category/delete/${id}`);
   }

@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {NumericValueType, RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
 import {ToastrService} from "ngx-toastr";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ProductService} from "../../../../_services/product.service";
 import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {EMPTY} from "rxjs";
 import {ProductCategory} from "../../../../model/ProductCategory";
@@ -22,6 +21,23 @@ import {retrievedProductCategory} from "../../../../store/actions/product-catego
 })
 export class ProductCategoryComponent implements OnInit {
 
+  //modal
+  centeredStaticModal: NgbModalOptions = {}; // not null!
+
+  modalIndex: number = 0;
+  modalCategoryId: string;
+  modalCategoryName: string;
+  //
+ase
+  //for search
+  searchCategory: any;
+  //for filter sort asc or desc
+  orderHeader: String = 'categoryName';
+  isDescOrder: boolean = false;
+  //for pagination
+  p: number = 1;
+
+
   constructor(
     private rxFormBuilder: RxFormBuilder,
     private toastr: ToastrService,
@@ -35,11 +51,12 @@ export class ProductCategoryComponent implements OnInit {
   // angular table
   displayedColumns: string[] = ['productName', 'delete'];
   dataSource!: MatTableDataSource<Product[]>; // for display data in table with sorting
+  //
 
-  centeredStaticModal: NgbModalOptions = {}; // not null!
   reactiveForm: any = FormGroup;
 
   editMode: boolean = false;
+  removeMode: boolean = false;
 
   //from ngrx storage
   allProductCategories$ = this.store.pipe(select(allProductCategory()));
@@ -55,6 +72,7 @@ export class ProductCategoryComponent implements OnInit {
 
   initForm() {
     this.reactiveForm = this.rxFormBuilder.group({
+      id: [''],
       categoryName: ['',
         [
           RxwebValidators.required(),
@@ -62,8 +80,9 @@ export class ProductCategoryComponent implements OnInit {
           RxwebValidators.maxLength({value: 10})
         ]
       ],
+      createdOn: [''],
+      totalProduct: ['']
     });
-
   }
 
   setModalSettings() {
@@ -79,6 +98,13 @@ export class ProductCategoryComponent implements OnInit {
     if (this.reactiveForm.valid) {
       if (this.editMode) {
 
+        this.productCategoryService.updateProductCategory(this.reactiveForm.value).subscribe({
+          next: value => {
+            this.productCategory[this.modalIndex] = value['data'];
+            this.toastr.success("Success updated category");
+            this.ngbModal.dismissAll();
+          },
+        });
       } else {
         this.productCategoryService.addProductCategory(this.reactiveForm.value).subscribe({
           next: value => {
@@ -88,21 +114,10 @@ export class ProductCategoryComponent implements OnInit {
           },
         });
       }
+
     } else {
       this.validateFormFields(this.reactiveForm);
     }
-  }
-
-  deleteCategory(categoryId: string, index) {
-    this.productCategoryService.deleteProductCategory(categoryId).subscribe({
-      next: value => {
-        this.productCategory.splice(index,1);
-        this.toastr.success("Delete category success");
-      },
-      complete: () => {
-        this.ngbModal.dismissAll();
-      }
-    })
   }
 
   public validateFormFields(formGroup: FormGroup) {
@@ -137,14 +152,19 @@ export class ProductCategoryComponent implements OnInit {
     });
   }
 
-  loadProductBasedOnCategory(id?: string, modal?, editMode?: boolean, index?) {
+  openAddOrEditModal(id?: string, modal?, editMode?: boolean) {
+
+    let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id == id);
+    this.modalIndex = itemIndex;
 
     this.editMode = editMode;
     this.ngbModal.open(modal, this.centeredStaticModal);
 
     if (editMode) {
       this.reactiveForm.patchValue({
-        categoryName: this.productCategory[index].categoryName
+        id: id,
+        categoryName: this.productCategory[itemIndex].categoryName,
+        createdOn: this.productCategory[itemIndex].createdOn
       });
 
       let params = new HttpParams();
@@ -160,4 +180,31 @@ export class ProductCategoryComponent implements OnInit {
     }
 
   }
+
+  public sort(headerName: String): void {
+    this.isDescOrder = !this.isDescOrder;
+    this.orderHeader = headerName;
+  }
+
+  openDeleteModal(modal?, categoryId?: string) {
+    let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id == categoryId);
+    this.modalIndex = itemIndex;
+    this.modalCategoryId = categoryId;
+    this.modalCategoryName = this.productCategory[itemIndex].categoryName;
+
+    this.ngbModal.open(modal);
+  }
+
+  deleteCategory() {
+    this.productCategoryService.deleteProductCategory(this.modalCategoryId).subscribe({
+      next: value => {
+        this.productCategory.splice(this.modalIndex, 1);
+        this.toastr.success("Delete category success");
+      },
+      complete: () => {
+        this.ngbModal.dismissAll();
+      }
+    })
+  }
+
 }

@@ -24,6 +24,9 @@ import {ProductCategoryComponent} from './product-category/product-category.comp
 import {ProductTableComponent} from './product-table/product-table.component';
 import {NgxCurrencyModule} from "ngx-currency";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {OrderModule} from "ngx-order-pipe";
+import {Ng2SearchPipeModule} from "ng2-search-filter";
+import {NgxPaginationModule} from "ngx-pagination";
 
 const routes: Routes = [
   {
@@ -62,29 +65,32 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [InternalProductComponent, ProductFormComponent, ProductCategoryComponent, ProductTableComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    ReactiveFormsModule,
-    FormsModule,
-    HttpClientModule,
-    NgbModule,
-    LazyLoadImageModule,
-    MatTableModule,
-    MatSortModule,
-    MatSelectModule,
-    MatSnackBarModule,
-    MatPaginatorModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatDialogModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatTabsModule,
-    NgbModule,
-    NgxCurrencyModule
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        ReactiveFormsModule,
+        FormsModule,
+        HttpClientModule,
+        NgbModule,
+        LazyLoadImageModule,
+        MatTableModule,
+        MatSortModule,
+        MatSelectModule,
+        MatSnackBarModule,
+        MatPaginatorModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        MatDialogModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatTabsModule,
+        NgbModule,
+        NgxCurrencyModule,
+        OrderModule,
+        Ng2SearchPipeModule,
+        NgxPaginationModule
+    ],
   providers: [
     {provide: LAZYLOAD_IMAGE_HOOKS, useClass: InternalProductModule},
   ],

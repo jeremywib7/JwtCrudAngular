@@ -37,7 +37,6 @@ export class AuthInterceptor implements HttpInterceptor {
           } else {
             this.toastr.error(err.error.message, 'Error');
           }
-          console.clear();
           return EMPTY;
         }
 
