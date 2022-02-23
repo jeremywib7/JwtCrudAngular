@@ -111,6 +111,8 @@ export class ProductFormComponent implements OnInit {
               imageName: [element.imageName, RxwebValidators.required()],
             }))
           });
+
+          this.selectDiscountStatus();
         },
         error: error => {
           this.router.navigate(['/int/product']);
@@ -141,7 +143,7 @@ export class ProductFormComponent implements OnInit {
     }
   }
 
-  async initForm() {
+  initForm() {
     this.reactiveForm = this.rxFormBuilder.group({
       id: [this.products === null ? null : this.products?.id],
       name: [this.products === null ? null : this.products?.name,
@@ -155,10 +157,11 @@ export class ProductFormComponent implements OnInit {
         [
           RxwebValidators.required(),
           RxwebValidators.numeric({
-            acceptValue: NumericValueType.PositiveNumber
-            , allowDecimal: false
+            acceptValue: NumericValueType.PositiveNumber,
+            allowDecimal: false
           }),
-          RxwebValidators.maxNumber({value: 10000})]
+          RxwebValidators.maxNumber({value: 10000})
+        ]
       ],
       active: [this.products === null ? null : this.products?.active],
       category: this.rxFormBuilder.group({
@@ -194,6 +197,7 @@ export class ProductFormComponent implements OnInit {
     // clear images name array and add one
     this.images = this.reactiveForm.get('images') as FormArray;
     this.images.removeAt(0);
+
   }
 
   addNewProductImage() {
@@ -315,7 +319,7 @@ export class ProductFormComponent implements OnInit {
   }
 
   selectDiscountStatus() {
-    if (this.reactiveForm.value.discount === "true") {
+    if (this.reactiveForm.value.discount === true) {
       this.reactiveForm.get("discountedPrice").enable();
     } else {
       this.reactiveForm.get("discountedPrice").disable();

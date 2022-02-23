@@ -69,9 +69,8 @@ export class ProductService {
 
   loadProductCategories() {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/category/all`)
-      .pipe(map((data: any) => data|| []))
+      .pipe(map((data: any) => data || []))
   }
-
 
   loadProductsByNameAutoComplete(searchValue: string) {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findByNameAutoComplete?name=` + searchValue)

@@ -14,6 +14,7 @@ import {select, Store} from "@ngrx/store";
 import {allProductCategory} from "../../../../store/selectors/product-category.selector";
 import {retrievedProductCategory} from "../../../../store/actions/product-category.actions";
 import {MatSort} from "@angular/material/sort";
+import {UnassignedProduct} from "../../../../model/UnassignedProduct";
 
 @Component({
   selector: 'app-product-category',
@@ -70,6 +71,7 @@ export class ProductCategoryComponent implements OnInit {
 
   //array models
   public productCategory: ProductCategory[];
+  public unassignedProduct: UnassignedProduct[] = [];
 
   ngOnInit(): void {
     this.initForm();
@@ -161,33 +163,42 @@ export class ProductCategoryComponent implements OnInit {
 
   openAddOrEditModal(id?: string, modal?, editMode?: boolean) {
 
-    let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id == id);
-    this.modalIndex = itemIndex;
-
     this.editMode = editMode;
-    this.modalRef = this.ngbModal.open(modal, this.centeredStaticModal);
 
     if (editMode) {
+      let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id === id);
+      this.modalIndex = itemIndex;
+
       this.reactiveForm.patchValue({
         id: id,
         categoryName: this.productCategory[itemIndex].categoryName,
         createdOn: this.productCategory[itemIndex].createdOn
       });
-
-      let params = new HttpParams();
-      params = params.append('id', id);
-
-      this.productCategoryService.loadProductsNameOnlyByCategory(params).subscribe({
-        next: (product) => {
-          this.dataSource = new MatTableDataSource(product['data']);
-          this.dataSource.sort = this.matSort;
-
-        }
-      })
     } else {
       this.reactiveForm.reset();
     }
 
+    this.modalRef = this.ngbModal.open(modal, this.centeredStaticModal);
+
+  }
+
+  openProductOnCatModal(id: string, modal) {
+    let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id === id);
+    this.reactiveForm.patchValue({
+      categoryName: this.productCategory[itemIndex].categoryName,
+    });
+
+    let params = new HttpParams();
+    params = params.append('id', id);
+
+    this.productCategoryService.loadProductsNameOnlyByCategory(params).subscribe({
+      next: (product) => {
+        this.dataSource = new MatTableDataSource(product['data']);
+        this.dataSource.sort = this.matSort;
+      }
+    });
+
+    this.modalRef = this.ngbModal.open(modal, this.centeredStaticModal);
   }
 
   public sort(headerName: String): void {
@@ -236,24 +247,36 @@ export class ProductCategoryComponent implements OnInit {
 
     this.modalRef.result.then((data) => {
       // on close
-      this.modalRef = this.ngbModal.open(addOrEditModal, {centered: true});
+      this.modalRef = this.ngbModal.open(addOrEditModal, this.centeredStaticModal);
     }, (reason) => {
       //on dismiss
-      this.modalRef = this.ngbModal.open(addOrEditModal, {centered: true});
+      this.modalRef = this.ngbModal.open(addOrEditModal, this.centeredStaticModal);
     });
   }
 
 
   removeProductInCategory() {
-    this.productCategoryService.removeProductInCategory(this.productId).subscribe({
+    let params = new HttpParams();
+    params = params.append('pId', this.productId);
+
+    this.productCategoryService.removeProductInCategory(params).subscribe({
       next: value => {
         this.dataSource['filteredData'].splice(this.productIndex, 1);
+        this.loadAllCategories().then(r => EMPTY);
         this.toastr.success("Remove product in category success");
       },
       complete: () => {
         this.ngbModal.dismissAll();
       }
     })
+  }
+
+  saveUnassignedProduct() {
+    this.dataSource.data.forEach((product, index) => {
+      this.unassignedProduct.push({"productName": product['name'], "categoryName": ''})
+      // this.unassignedProduct[index]['productName'] = product['name'];
+    });
+    console.log(this.unassignedProduct);
   }
 
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {map, Observable} from "rxjs";
@@ -18,12 +18,12 @@ export class ProductCategoryService {
 
   addProductCategory(productCategory: ProductCategory) {
     return this.httpClient.post(`${this.apiServerUrl}/${this.project}/category/add`, productCategory)
-      .pipe(map((data: any) => data|| []))
+      .pipe(map((data: any) => data || []))
   }
 
   updateProductCategory(productCategory: ProductCategory) {
     return this.httpClient.put(`${this.apiServerUrl}/${this.project}/category/update`, productCategory)
-      .pipe(map((data: any) => data|| []))
+      .pipe(map((data: any) => data || []))
   }
 
   deleteProductCategory(id: string) {
@@ -31,13 +31,13 @@ export class ProductCategoryService {
   }
 
   //aka set to unassigned
-  removeProductInCategory(id: string) {
-    return this.httpClient.delete(`${this.apiServerUrl}/${this.project}/category/remove/${id}`);
+  removeProductInCategory(params: HttpParams) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/category/remove/product/`, {params});
   }
 
   loadProductCategories() {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/category/all`)
-      .pipe(map((data: any) => data|| []))
+      .pipe(map((data: any) => data || []))
   }
 
   loadProductsNameOnlyByCategory(params: HttpParams) {

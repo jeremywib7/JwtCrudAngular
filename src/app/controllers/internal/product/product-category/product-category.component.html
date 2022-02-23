@@ -51,10 +51,17 @@
           <div class="card-footer">
             <div class="d-flex justify-content-end">
               <button
+                *ngIf="category.categoryName != 'Unassigned'"
                 mat-icon-button
                 color="primary"
                 (click)="openAddOrEditModal(category.id, addOrEditModal,true)">
                 <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="openProductOnCatModal(category.id, removeProductModal)">
+                <mat-icon>shopping_cart</mat-icon>
               </button>
               <button
                 *ngIf="category.categoryName != 'Unassigned'"
@@ -83,6 +90,7 @@
   <!-- Modal Add or Edit Category -->
   <ng-template #addOrEditModal let-modal>
     <form [formGroup]="reactiveForm" (ngSubmit)="submit()">
+
       <div class="modal-header" ngbAutofocus>
         <h4 class="modal-title" id="addOrEditProductModal">{{editMode ? "Edit" : "Add"}} Category ?</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
@@ -109,43 +117,8 @@
             </div>
           </div>
         </div>
-        <table
-          *ngIf="editMode"
-          mat-table matSort [dataSource]="dataSource" class="w-100">
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns;  sticky: true"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row;
-                      columns: displayedColumns;">
-          </tr>
 
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" colspan="9999">
-              No data found
-            </td>
-          </tr>
-
-          <ng-container matColumnDef="productName">
-            <th mat-header-cell mat-sort-header="productName" *matHeaderCellDef>
-              Product Name
-            </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="delete">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element;let i = index">
-              <button
-                (click)="openRemoveProductModal(removeProductModal, addOrEditModal, element.id ,element.name, i)"
-                type="button"
-                mat-icon-button
-                color="warn">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-        </table>
       </div>
 
       <div class="modal-footer">
@@ -156,13 +129,82 @@
       </div>
     </form>
 
+
   </ng-template>
 </div>
 
 <!-- Modal Remove Product In Category -->
 <ng-template #removeProductModal let-modal>
+  <form>
+    <div class="modal-header" ngbAutofocus>
+      <h4 class="modal-title" id="removeProductModal">{{this.reactiveForm.value?.categoryName}} Product</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+      </button>
+    </div>
+
+    <div class="modal-body h-100">
+      <table
+        mat-table matSort [dataSource]="dataSource" class="w-100">
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;  sticky: true"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row;
+                      columns: displayedColumns;">
+        </tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="9999">
+            No data found
+          </td>
+        </tr>
+
+        <ng-container matColumnDef="productName">
+          <th mat-header-cell mat-sort-header="productName" *matHeaderCellDef>
+            Product Name
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element;let i = index">
+            <button
+              *ngIf="this.reactiveForm.value.categoryName != 'Unassigned'"
+              (click)="openRemoveProductModal(confirmationRemoveProductModal, removeProductModal, element.id ,element.name, i)"
+              type="button"
+              mat-icon-button
+              color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button
+              *ngIf="this.reactiveForm.value.categoryName === 'Unassigned'"
+              (click)="openRemoveProductModal(confirmationRemoveProductModal, removeProductModal, element.id ,element.name, i)"
+              type="button"
+              mat-icon-button
+              color="warn">
+              <mat-icon>add</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+      </table>
+    </div>
+    <div
+      *ngIf="this.reactiveForm.value.categoryName === 'Unassigned'"
+      class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
+      <button type="submit" (click)="saveUnassignedProduct()" class="btn btn-outline-primary">
+        Confirm
+      </button>
+    </div>
+  </form>
+
+</ng-template>
+
+<!-- Modal Remove Product In Category -->
+<ng-template #confirmationRemoveProductModal let-modal>
   <div class="modal-header" ngbAutofocus>
-    <h4 class="modal-title" id="yesOrNoCategoryModal">Remove Product ?</h4>
+    <h4 class="modal-title" id="yesOrNoCategoryModal">Confirm Remove Product ?</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()">
     </button>
   </div>
@@ -176,7 +218,7 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel
     </button>
-    <button type="button" (click)="deleteCategory()" class="btn btn-outline-primary">
+    <button type="button" (click)="removeProductInCategory()" class="btn btn-outline-primary">
       Delete
     </button>
 
