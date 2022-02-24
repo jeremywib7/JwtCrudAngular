@@ -4,6 +4,7 @@ import {environment} from "../../environments/environment";
 import {map, Observable, of, switchMap} from "rxjs";
 import {Product} from "../model/Product";
 import {ProductCategory} from "../model/ProductCategory";
+import {UnassignedProduct} from "../model/UnassignedProduct";
 
 @Injectable({
   providedIn: 'root'
@@ -60,6 +61,15 @@ export class ProductService {
 
   public deleteProductById(id: string): Observable<Product> {
     return this.httpClient.delete<Product>(`${this.apiServerUrl}/${this.project}/product/delete/${id}`);
+  }
+
+  //aka set to unassigned
+  removeProductInCategory(params: HttpParams) {
+    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/remove`, {params});
+  }
+
+  updateUnassignedProduct(unassignedProduct: UnassignedProduct) {
+    return this.httpClient.post(`${this.apiServerUrl}/${this.project}/product/unassigned/update`, unassignedProduct);
   }
 
   loadAllProducts(params: HttpParams) {

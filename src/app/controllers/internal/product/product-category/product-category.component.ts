@@ -15,6 +15,8 @@ import {allProductCategory} from "../../../../store/selectors/product-category.s
 import {retrievedProductCategory} from "../../../../store/actions/product-category.actions";
 import {MatSort} from "@angular/material/sort";
 import {UnassignedProduct} from "../../../../model/UnassignedProduct";
+import {TableProduct} from "../../../../model/TableProduct";
+import {ProductService} from "../../../../_services/product.service";
 
 @Component({
   selector: 'app-product-category',
@@ -47,15 +49,17 @@ export class ProductCategoryComponent implements OnInit {
     private store: Store,
     private activatedRoute: ActivatedRoute,
     private productCategoryService: ProductCategoryService,
+    private productService: ProductService,
     public ngbModal: NgbModal
   ) {
   }
 
   // angular table
-  displayedColumns: string[] = ['productName', 'delete'];
-  dataSource!: MatTableDataSource<Product[]>; // for display data in table with sorting
+  displayedColumns: string[] = ['name', 'delete'];
+  dataSource: MatTableDataSource<TableProduct[]>; // for display data in table with sorting
+
   //for sorting table
-  @ViewChild(MatSort) matSort!: MatSort;
+  @ViewChild(MatSort) matSort: MatSort;
   //
 
   //modal reference
@@ -71,7 +75,8 @@ export class ProductCategoryComponent implements OnInit {
 
   //array models
   public productCategory: ProductCategory[];
-  public unassignedProduct: UnassignedProduct[] = [];
+  public tableProducts: TableProduct[] = [];
+  public unassignedProducts: UnassignedProduct[] = [];
 
   //set unassigned as selected iin mat option
   selected = 'akisjasas-asajek-ajsoaks-ejakjenafe';
@@ -195,10 +200,11 @@ export class ProductCategoryComponent implements OnInit {
     params = params.append('id', id);
 
     this.productCategoryService.loadProductsNameOnlyByCategory(params).subscribe({
-      next: (product) => {
-        this.dataSource = new MatTableDataSource(product['data']);
-        this.dataSource.sort = this.matSort;
-      }
+      next: (data) => {
+        this.tableProducts = data['data'];
+        // this.dataSource = new MatTableDataSource(data['data']);
+        // this.dataSource.sort = this.matSort;
+      },
     });
 
     this.modalRef = this.ngbModal.open(modal, this.centeredStaticModal);
@@ -262,7 +268,7 @@ export class ProductCategoryComponent implements OnInit {
     let params = new HttpParams();
     params = params.append('pId', this.productId);
 
-    this.productCategoryService.removeProductInCategory(params).subscribe({
+    this.productService.removeProductInCategory(params).subscribe({
       next: value => {
         this.dataSource['filteredData'].splice(this.productIndex, 1);
         this.loadAllCategories().then(r => EMPTY);
@@ -274,18 +280,23 @@ export class ProductCategoryComponent implements OnInit {
     })
   }
 
-  onCategorySelection(event) {
-    console.log(event.value);
+  onCategorySelection(categoryId: string, productId: string) {
+    let itemIndex = this.dataSource['filteredData'].findIndex(product => product['id'] === productId);
+    this.dataSource['filteredData'][itemIndex]['categoryId'] = categoryId;
   }
 
   saveUnassignedProduct() {
-    this.dataSource.data.forEach((product, index) => {
-      if (product['category.categoryName'] === undefined) {
-        product['category.categoryName'] = 'Unassigned';
+    this.unassignedProducts = [];
+    this.dataSource.data.forEach((tableProductNCategory, index) => {
+      if (tableProductNCategory['categoryId'] != undefined &&
+        tableProductNCategory['categoryId'] != "akisjasas-asajek-ajsoaks-ejakjenafe") {
+        this.unassignedProducts.push({
+          productId: tableProductNCategory['id'],
+          categoryId: tableProductNCategory['categoryId']
+        })
       }
-      this.unassignedProduct.push({productName: product['name'], categoryName: product['category.categoryName']})
     });
-    console.log(this.unassignedProduct);
+    console.log(this.unassignedProducts);
   }
 
 }

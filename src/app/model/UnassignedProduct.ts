@@ -1,5 +1,4 @@
 export class UnassignedProduct {
-
-  productName: string;
-  categoryName: string;
+  productId: string;
+  categoryId: string;
 }

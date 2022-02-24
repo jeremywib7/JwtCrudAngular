@@ -30,11 +30,6 @@ export class ProductCategoryService {
     return this.httpClient.delete(`${this.apiServerUrl}/${this.project}/category/delete/${id}`);
   }
 
-  //aka set to unassigned
-  removeProductInCategory(params: HttpParams) {
-    return this.httpClient.get(`${this.apiServerUrl}/${this.project}/category/remove/product/`, {params});
-  }
-
   loadProductCategories() {
     return this.httpClient.get(`${this.apiServerUrl}/${this.project}/category/all`)
       .pipe(map((data: any) => data || []))
