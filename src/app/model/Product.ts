@@ -14,6 +14,7 @@ export class Product {
   images: Image[];
   active: boolean;
   createdOn: Date;
+
 }
 
 export interface Image {

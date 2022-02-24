@@ -73,6 +73,9 @@ export class ProductCategoryComponent implements OnInit {
   public productCategory: ProductCategory[];
   public unassignedProduct: UnassignedProduct[] = [];
 
+  //set unassigned as selected iin mat option
+  selected = 'akisjasas-asajek-ajsoaks-ejakjenafe';
+
   ngOnInit(): void {
     this.initForm();
     this.loadAllCategories().then(r => EMPTY);
@@ -271,10 +274,16 @@ export class ProductCategoryComponent implements OnInit {
     })
   }
 
+  onCategorySelection(event) {
+    console.log(event.value);
+  }
+
   saveUnassignedProduct() {
     this.dataSource.data.forEach((product, index) => {
-      this.unassignedProduct.push({"productName": product['name'], "categoryName": ''})
-      // this.unassignedProduct[index]['productName'] = product['name'];
+      if (product['category.categoryName'] === undefined) {
+        product['category.categoryName'] = 'Unassigned';
+      }
+      this.unassignedProduct.push({productName: product['name'], categoryName: product['category.categoryName']})
     });
     console.log(this.unassignedProduct);
   }

@@ -12,3 +12,7 @@ h3 {
   font-family: 'Roboto Mono', serif;
 }
 
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+  z-index: 99999 !important;
+}
+

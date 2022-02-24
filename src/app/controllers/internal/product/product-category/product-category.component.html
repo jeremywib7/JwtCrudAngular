@@ -177,14 +177,20 @@
               color="warn">
               <mat-icon>delete</mat-icon>
             </button>
-            <button
+
+            <mat-form-field
               *ngIf="this.reactiveForm.value.categoryName === 'Unassigned'"
-              (click)="openRemoveProductModal(confirmationRemoveProductModal, removeProductModal, element.id ,element.name, i)"
-              type="button"
-              mat-icon-button
-              color="warn">
-              <mat-icon>add</mat-icon>
-            </button>
+              appearance="standard">
+              <mat-label>Category</mat-label>
+              <mat-select
+                (selectionChange)="onCategorySelection($event)"
+                value="akisjasas-asajek-ajsoaks-ejakjenafe">
+                <mat-option *ngFor="let category of productCategory" [value]="category.id">
+                  {{category?.categoryName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
           </td>
         </ng-container>
       </table>
