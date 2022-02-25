@@ -28,6 +28,9 @@ import {OrderModule} from "ngx-order-pipe";
 import {Ng2SearchPipeModule} from "ng2-search-filter";
 import {NgxPaginationModule} from "ngx-pagination";
 import {TableModule} from "primeng/table";
+import {DropdownModule} from "primeng/dropdown";
+import {DialogModule} from "primeng/dialog";
+import {ButtonModule} from "primeng/button";
 
 const routes: Routes = [
   {
@@ -91,7 +94,10 @@ const routes: Routes = [
     NgxCurrencyModule,
     OrderModule,
     Ng2SearchPipeModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    DropdownModule,
+    DialogModule,
+    ButtonModule
   ],
   providers: [
     {provide: LAZYLOAD_IMAGE_HOOKS, useClass: InternalProductModule},

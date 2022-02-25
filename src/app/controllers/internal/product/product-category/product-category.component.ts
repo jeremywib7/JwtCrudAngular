@@ -42,6 +42,7 @@ export class ProductCategoryComponent implements OnInit {
   //for pagination
   p: number = 1;
 
+  displayRemoveProductModal: boolean = false;
 
   constructor(
     private rxFormBuilder: RxFormBuilder,
@@ -78,8 +79,7 @@ export class ProductCategoryComponent implements OnInit {
   public tableProducts: TableProduct[] = [];
   public unassignedProducts: UnassignedProduct[] = [];
 
-  //set unassigned as selected iin mat option
-  selected = 'akisjasas-asajek-ajsoaks-ejakjenafe';
+  selectedCategory: string = "Unassigned"; //Id value of the City to be selected
 
   ngOnInit(): void {
     this.initForm();
@@ -190,6 +190,8 @@ export class ProductCategoryComponent implements OnInit {
 
   }
 
+  unassignedModal: boolean = false;
+
   openProductOnCatModal(id: string, modal) {
     let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id === id);
     this.reactiveForm.patchValue({
@@ -202,12 +204,13 @@ export class ProductCategoryComponent implements OnInit {
     this.productCategoryService.loadProductsNameOnlyByCategory(params).subscribe({
       next: (data) => {
         this.tableProducts = data['data'];
-        // this.dataSource = new MatTableDataSource(data['data']);
-        // this.dataSource.sort = this.matSort;
       },
     });
 
-    this.modalRef = this.ngbModal.open(modal, this.centeredStaticModal);
+    this.displayRemoveProductModal = true;
+
+
+    // this.modalRef = this.ngbModal.open(modal, {centered: true, scrollable: false});
   }
 
   public sort(headerName: String): void {
@@ -244,22 +247,23 @@ export class ProductCategoryComponent implements OnInit {
   productName: string;
   productIndex: number;
 
-  async openRemoveProductModal(removeProductModal, addOrEditModal, productId: string, productName: string, index: number) {
+  openRemoveProductModal(removeProductModal, addOrEditModal, productId: string) {
+    let index = this.tableProducts.findIndex(product => product['id'] === productId);
+    this.productName = this.tableProducts[index].name;
 
     this.productId = productId;
-    this.productName = productName;
-    this.productIndex = index;
-
-    this.modalRef.close();
+    this.displayRemoveProductModal = false;
 
     this.modalRef = this.ngbModal.open(removeProductModal, {centered: true});
 
     this.modalRef.result.then((data) => {
-      // on close
-      this.modalRef = this.ngbModal.open(addOrEditModal, this.centeredStaticModal);
+      // on closex
+      this.displayRemoveProductModal = true;
+      // this.modalRef = this.ngbModal.open(addOrEditModal, this.centeredStaticModal);
     }, (reason) => {
       //on dismiss
-      this.modalRef = this.ngbModal.open(addOrEditModal, this.centeredStaticModal);
+      this.displayRemoveProductModal = true;
+      // this.modalRef = this.ngbModal.open(addOrEditModal, this.centeredStaticModal);
     });
   }
 
@@ -270,7 +274,7 @@ export class ProductCategoryComponent implements OnInit {
 
     this.productService.removeProductInCategory(params).subscribe({
       next: value => {
-        this.dataSource['filteredData'].splice(this.productIndex, 1);
+        this.tableProducts.splice(this.productIndex, 1);
         this.loadAllCategories().then(r => EMPTY);
         this.toastr.success("Remove product in category success");
       },
@@ -280,14 +284,15 @@ export class ProductCategoryComponent implements OnInit {
     })
   }
 
-  onCategorySelection(categoryId: string, productId: string) {
-    let itemIndex = this.dataSource['filteredData'].findIndex(product => product['id'] === productId);
-    this.dataSource['filteredData'][itemIndex]['categoryId'] = categoryId;
+  onCategorySelection(event, productId: string) {
+    console.log(event);
+    let itemIndex = this.tableProducts.findIndex(product => product['id'] === productId);
+    this.tableProducts[itemIndex]['categoryId'] = event.value.id;
   }
 
   saveUnassignedProduct() {
     this.unassignedProducts = [];
-    this.dataSource.data.forEach((tableProductNCategory, index) => {
+    this.tableProducts.forEach((tableProductNCategory, index) => {
       if (tableProductNCategory['categoryId'] != undefined &&
         tableProductNCategory['categoryId'] != "akisjasas-asajek-ajsoaks-ejakjenafe") {
         this.unassignedProducts.push({
