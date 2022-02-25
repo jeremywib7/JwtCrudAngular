@@ -42,6 +42,8 @@ import {productCategoryReducer} from "./store/reducers/product-category.reducer"
 import { ProductDetailComponent } from './controllers/external/product-detail/product-detail.component';
 import {CurrencyMaskInputMode, NgxCurrencyModule} from "ngx-currency";
 import {RxReactiveFormsModule} from "@rxweb/reactive-form-validators";
+import {SidebarModule} from "primeng/sidebar";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
 
 
 export const customCurrencyMaskConfig = {
@@ -107,12 +109,14 @@ export const customCurrencyMaskConfig = {
     StoreModule.forRoot({product: productReducer, productCategory: productCategoryReducer}
       , {
         runtimeChecks: {
-          strictStateImmutability: false  ,
+          strictStateImmutability: false,
           strictActionImmutability: false,
           strictStateSerializability: true,
           strictActionSerializability: true
         }
       }),
+    SidebarModule,
+    ConfirmDialogModule,
   ],
   providers: [
     AuthGuard,

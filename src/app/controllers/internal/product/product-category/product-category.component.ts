@@ -1,38 +1,29 @@
-import {Component, OnInit, ViewChild, ViewChildren, ViewEncapsulation} from '@angular/core';
-import {NumericValueType, RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
 import {ToastrService} from "ngx-toastr";
-import {ActivatedRoute, Router} from "@angular/router";
-import {NgbActiveModal, NgbModal, NgbModalOptions, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
+import {ActivatedRoute} from "@angular/router";
+import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {EMPTY} from "rxjs";
 import {ProductCategory} from "../../../../model/ProductCategory";
 import {FormControl, FormGroup} from "@angular/forms";
-import {MatTableDataSource} from "@angular/material/table";
 import {HttpParams} from "@angular/common/http";
-import {Product} from "../../../../model/Product";
 import {ProductCategoryService} from "../../../../_services/product-category.service";
 import {select, Store} from "@ngrx/store";
 import {allProductCategory} from "../../../../store/selectors/product-category.selector";
 import {retrievedProductCategory} from "../../../../store/actions/product-category.actions";
-import {MatSort} from "@angular/material/sort";
 import {UnassignedProduct} from "../../../../model/UnassignedProduct";
 import {TableProduct} from "../../../../model/TableProduct";
 import {ProductService} from "../../../../_services/product.service";
+import {ConfirmationService, MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-product-category',
   templateUrl: './product-category.component.html',
   styleUrls: ['./product-category.component.css'],
+  providers: [ConfirmationService, MessageService]
 })
 
 export class ProductCategoryComponent implements OnInit {
-
-  //modal
-  centeredStaticModal: NgbModalOptions = {}; // not null!
-
-  modalIndex: number = 0;
-  modalCategoryId: string;
-  modalCategoryName: string;
-  //
 
   //for search
   searchCategory: any;
@@ -42,7 +33,9 @@ export class ProductCategoryComponent implements OnInit {
   //for pagination
   p: number = 1;
 
-  displayRemoveProductModal: boolean = false;
+  showProductListModal: boolean = false;
+  showAddOrEditCatModal: boolean = false;
+  private modalIndex: number;
 
   constructor(
     private rxFormBuilder: RxFormBuilder,
@@ -51,20 +44,11 @@ export class ProductCategoryComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private productCategoryService: ProductCategoryService,
     private productService: ProductService,
-    public ngbModal: NgbModal
+    public ngbModal: NgbModal,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ) {
   }
-
-  // angular table
-  displayedColumns: string[] = ['name', 'delete'];
-  dataSource: MatTableDataSource<TableProduct[]>; // for display data in table with sorting
-
-  //for sorting table
-  @ViewChild(MatSort) matSort: MatSort;
-  //
-
-  //modal reference
-  modalRef: any;
 
   reactiveForm: any = FormGroup;
 
@@ -74,17 +58,16 @@ export class ProductCategoryComponent implements OnInit {
   //from ngrx storage
   allProductCategories$ = this.store.pipe(select(allProductCategory()));
 
+  position: string;
+
   //array models
   public productCategory: ProductCategory[];
   public tableProducts: TableProduct[] = [];
   public unassignedProducts: UnassignedProduct[] = [];
 
-  selectedCategory: string = "Unassigned"; //Id value of the City to be selected
-
   ngOnInit(): void {
     this.initForm();
     this.loadAllCategories().then(r => EMPTY);
-    this.setModalSettings();
   }
 
   initForm() {
@@ -100,15 +83,6 @@ export class ProductCategoryComponent implements OnInit {
       createdOn: [''],
       totalProduct: ['']
     });
-  }
-
-  setModalSettings() {
-    //centered modal
-    //prevent click outside modal and some settings
-    this.centeredStaticModal.backdrop = 'static';
-    this.centeredStaticModal.keyboard = false;
-    this.centeredStaticModal.centered = true;
-    this.centeredStaticModal.scrollable = true;
   }
 
   submit() {
@@ -172,10 +146,10 @@ export class ProductCategoryComponent implements OnInit {
   openAddOrEditModal(id?: string, modal?, editMode?: boolean) {
 
     this.editMode = editMode;
+    this.showAddOrEditCatModal = true;
 
     if (editMode) {
       let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id === id);
-      this.modalIndex = itemIndex;
 
       this.reactiveForm.patchValue({
         id: id,
@@ -185,14 +159,14 @@ export class ProductCategoryComponent implements OnInit {
     } else {
       this.reactiveForm.reset();
     }
-
-    this.modalRef = this.ngbModal.open(modal, this.centeredStaticModal);
+    // this.modalRef = this.ngbModal.open(modal, this.centeredStaticModal);
 
   }
 
   unassignedModal: boolean = false;
 
-  openProductOnCatModal(id: string, modal) {
+  openProductOnCatModal(id: string) {
+
     let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id === id);
     this.reactiveForm.patchValue({
       categoryName: this.productCategory[itemIndex].categoryName,
@@ -206,11 +180,7 @@ export class ProductCategoryComponent implements OnInit {
         this.tableProducts = data['data'];
       },
     });
-
-    this.displayRemoveProductModal = true;
-
-
-    // this.modalRef = this.ngbModal.open(modal, {centered: true, scrollable: false});
+    this.showProductListModal = true;
   }
 
   public sort(headerName: String): void {
@@ -218,71 +188,50 @@ export class ProductCategoryComponent implements OnInit {
     this.orderHeader = headerName;
   }
 
-  openDeleteModal(modal?, categoryId?: string) {
+  openConfirmRemoveModal(productId: string, position: string) {
+    this.position = position;
 
-    if (categoryId) {
-      let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id == categoryId);
-      this.modalIndex = itemIndex;
-      this.modalCategoryId = categoryId;
-      this.modalCategoryName = this.productCategory[itemIndex].categoryName;
-
-    }
-
-    this.ngbModal.open(modal);
-  }
-
-  deleteCategory() {
-    this.productCategoryService.deleteProductCategory(this.modalCategoryId).subscribe({
-      next: value => {
-        this.productCategory.splice(this.modalIndex, 1);
-        this.toastr.success("Delete category success");
-      },
-      complete: () => {
-        this.ngbModal.dismissAll();
-      }
-    })
-  }
-
-  productId: string;
-  productName: string;
-  productIndex: number;
-
-  openRemoveProductModal(removeProductModal, addOrEditModal, productId: string) {
     let index = this.tableProducts.findIndex(product => product['id'] === productId);
-    this.productName = this.tableProducts[index].name;
+    let params = new HttpParams();
+    params = params.append('pId', productId);
 
-    this.productId = productId;
-    this.displayRemoveProductModal = false;
-
-    this.modalRef = this.ngbModal.open(removeProductModal, {centered: true});
-
-    this.modalRef.result.then((data) => {
-      // on closex
-      this.displayRemoveProductModal = true;
-      // this.modalRef = this.ngbModal.open(addOrEditModal, this.centeredStaticModal);
-    }, (reason) => {
-      //on dismiss
-      this.displayRemoveProductModal = true;
-      // this.modalRef = this.ngbModal.open(addOrEditModal, this.centeredStaticModal);
+    this.confirmationService.confirm({
+      message: 'Remove product ' + this.tableProducts[index].name + ' ?',
+      header: 'Confirm Removal',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.productService.removeProductInCategory(params).subscribe({
+          next: value => {
+            this.tableProducts.splice(index, 1);
+            this.loadAllCategories().then(r => EMPTY);
+            this.messageService.add({severity: 'success', summary: 'Success', detail: 'Remove product success!'});
+          },
+        });
+      },
+      reject: (type) => {
+      }
     });
   }
 
+  openConfirmDeleteModal(categoryId?: string) {
+    let itemIndex = this.productCategory.findIndex(productCategory => productCategory.id == categoryId);
 
-  removeProductInCategory() {
-    let params = new HttpParams();
-    params = params.append('pId', this.productId);
-
-    this.productService.removeProductInCategory(params).subscribe({
-      next: value => {
-        this.tableProducts.splice(this.productIndex, 1);
-        this.loadAllCategories().then(r => EMPTY);
-        this.toastr.success("Remove product in category success");
+    this.confirmationService.confirm({
+      message: 'Delete category ' + this.productCategory[itemIndex].categoryName + ' ?',
+      header: 'Confirm Delete',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.productCategoryService.deleteProductCategory(categoryId).subscribe({
+          next: value => {
+            this.productCategory.splice(this.modalIndex, 1);
+            this.loadAllCategories().then(r => EMPTY);
+            this.messageService.add({severity: 'success', summary: 'Success', detail: 'Remove product success!'});
+          },
+        });
       },
-      complete: () => {
-        this.ngbModal.dismissAll();
-      }
-    })
+    });
   }
+
 
   onCategorySelection(event, productId: string) {
     console.log(event);

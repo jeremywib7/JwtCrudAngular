@@ -31,6 +31,9 @@ import {TableModule} from "primeng/table";
 import {DropdownModule} from "primeng/dropdown";
 import {DialogModule} from "primeng/dialog";
 import {ButtonModule} from "primeng/button";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {ToastModule} from "primeng/toast";
+import {InputTextModule} from "primeng/inputtext";
 
 const routes: Routes = [
   {
@@ -69,36 +72,39 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [InternalProductComponent, ProductFormComponent, ProductCategoryComponent, ProductTableComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    ReactiveFormsModule,
-    FormsModule,
-    HttpClientModule,
-    NgbModule,
-    TableModule,
-    LazyLoadImageModule,
-    MatTableModule,
-    MatSortModule,
-    MatSelectModule,
-    MatSnackBarModule,
-    MatPaginatorModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatDialogModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatTabsModule,
-    NgbModule,
-    NgxCurrencyModule,
-    OrderModule,
-    Ng2SearchPipeModule,
-    NgxPaginationModule,
-    DropdownModule,
-    DialogModule,
-    ButtonModule
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        ReactiveFormsModule,
+        FormsModule,
+        HttpClientModule,
+        NgbModule,
+        TableModule,
+        LazyLoadImageModule,
+        MatTableModule,
+        MatSortModule,
+        MatSelectModule,
+        MatSnackBarModule,
+        MatPaginatorModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        MatDialogModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatTabsModule,
+        NgbModule,
+        NgxCurrencyModule,
+        OrderModule,
+        Ng2SearchPipeModule,
+        NgxPaginationModule,
+        DropdownModule,
+        DialogModule,
+        ButtonModule,
+        ConfirmDialogModule,
+        ToastModule,
+        InputTextModule,
+    ],
   providers: [
     {provide: LAZYLOAD_IMAGE_HOOKS, useClass: InternalProductModule},
   ],

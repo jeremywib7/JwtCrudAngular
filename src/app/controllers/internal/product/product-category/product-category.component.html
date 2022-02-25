@@ -60,13 +60,13 @@
               <button
                 mat-icon-button
                 color="primary"
-                (click)="openProductOnCatModal(category.id, removeProductModal)">
+                (click)="openProductOnCatModal(category.id)">
                 <mat-icon>shopping_cart</mat-icon>
               </button>
               <button
                 *ngIf="category.categoryName != 'Unassigned'"
                 mat-icon-button
-                (click)="openDeleteModal(deleteCategoryModal, category?.id)"
+                (click)="openConfirmDeleteModal(category?.id)"
                 color="warn">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -88,8 +88,14 @@
   </div>
 
   <!-- Modal Remove Product In Category -->
-  <p-dialog header="Unassigned Product" [(visible)]="displayRemoveProductModal" [modal]="true" [style]="{width: '50vw'}"
-            [draggable]="false" [resizable]="false" [baseZIndex]="10000">
+  <p-dialog
+    header="{{this.reactiveForm.value.categoryName}} Product"
+    [blockScroll]="false"
+    [(visible)]="showProductListModal"
+    [modal]="true"
+    [style]="{width: '50vw'}"
+    [draggable]="false"
+    [resizable]="false">
     <p-table [value]="tableProducts" responsiveLayout="scroll">
       <ng-template pTemplate="header">
         <tr>
@@ -103,7 +109,7 @@
           <td>
             <button
               *ngIf="this.reactiveForm.value.categoryName != 'Unassigned'"
-              (click)="openRemoveProductModal(confirmationRemoveProductModal, removeProductModal, product.id)"
+              (click)="openConfirmRemoveModal(product.id, 'top')"
               type="button"
               mat-icon-button
               color="warn">
@@ -116,147 +122,48 @@
               *ngIf="this.reactiveForm.value.categoryName === 'Unassigned'"
               [options]="productCategory" (onChange)="onCategorySelection($event, product.id)"
               optionLabel="categoryName"></p-dropdown>
-
-            <!--                <mat-form-field-->
-            <!--                  appearance="standard">-->
-            <!--                  <mat-label>Category</mat-label>-->
-            <!--                  <mat-select-->
-            <!--                    value="akisjasas-asajek-ajsoaks-ejakjenafe">-->
-            <!--                    <mat-option *ngFor="let category of productCategory"-->
-            <!--                                (click)="onCategorySelection(category.id, product.id)"-->
-            <!--                                [value]="category.id"> -->
-            <!--                      {{category?.categoryName}}-->
-            <!--                    </mat-option>-->
-            <!--                  </mat-select>-->
-            <!--                </mat-form-field>-->
           </td>
         </tr>
       </ng-template>
     </p-table>
 
-    <ng-template pTemplate="footer">
-      <p-button icon="pi pi-check" (click)="saveUnassignedProduct()" label="Ok"
-                styleClass="p-button-text"></p-button>
+    <ng-template
+      pTemplate="footer">
+      <p-button
+        *ngIf="this.reactiveForm.value.categoryName === 'Unassigned'"
+        icon="pi pi-check" (click)="saveUnassignedProduct()" label="Ok"
+        styleClass="p-button-text"></p-button>
     </ng-template>
   </p-dialog>
 
-  <ng-template #removeProductModal let-modal>
-    <form>xs
-      <div class="modal-header" ngbAutofocus>
-        <h4 class="modal-title" id="removeProductModal">{{this.reactiveForm.value?.categoryName}} Product</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
-        </button>
-      </div>
-
-      <div class="modal-body h-100">
-
-        <p-table [value]="tableProducts" responsiveLayout="scroll">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Product Name</th>
-              <th></th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-product>
-            <tr>
-              <td>{{product.name}}</td>
-              <td>
-                <button
-                  *ngIf="this.reactiveForm.value.categoryName != 'Unassigned'"
-                  (click)="openRemoveProductModal(confirmationRemoveProductModal, removeProductModal, product.id)"
-                  type="button"
-                  mat-icon-button
-                  color="warn">
-                  <mat-icon>delete</mat-icon>
-                </button>
-
-                <p-dropdown
-                  *ngIf="this.reactiveForm.value.categoryName === 'Unassigned'"
-                  [options]="productCategory" optionLabel="name"></p-dropdown>
-
-                <!--                <mat-form-field-->
-                <!--                  appearance="standard">-->
-                <!--                  <mat-label>Category</mat-label>-->
-                <!--                  <mat-select-->
-                <!--                    value="akisjasas-asajek-ajsoaks-ejakjenafe">-->
-                <!--                    <mat-option *ngFor="let category of productCategory"-->
-                <!--                                (click)="onCategorySelection(category.id, product.id)"-->
-                <!--                                [value]="category.id"> -->
-                <!--                      {{category?.categoryName}}-->
-                <!--                    </mat-option>-->
-                <!--                  </mat-select>-->
-                <!--                </mat-form-field>-->
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-
-        <!--        <table-->
-        <!--          mat-table [dataSource]="dataSource" matSort class="w-100">-->
-        <!--          <tr mat-header-row *matHeaderRowDef="displayedColumns;  sticky: true"></tr>-->
-        <!--          <tr-->
-        <!--            mat-row-->
-        <!--            *matRowDef="let row;-->
-        <!--                      columns: displayedColumns;">-->
-        <!--          </tr>-->
-
-        <!--          <tr class="mat-row" *matNoDataRow>-->
-        <!--            <td class="mat-cell" colspan="9999">-->
-        <!--              No data found-->
-        <!--            </td>-->
-        <!--          </tr>-->
-
-        <!--          <ng-container matColumnDef="name">-->
-        <!--            <th mat-header-cell mat-sort-header="name" *matHeaderCellDef sortActionDescription="Sort by name">-->
-        <!--              Product Name-->
-        <!--            </th>-->
-        <!--            <td mat-cell *matCellDef="let product"> {{product.name}} </td>-->
-        <!--          </ng-container>-->
-
-        <!--          <ng-container matColumnDef="delete">-->
-        <!--            <th mat-header-cell *matHeaderCellDef></th>-->
-        <!--            <td mat-cell *matCellDef="let product;let i = index">-->
-        <!--              <button-->
-        <!--                *ngIf="this.reactiveForm.value.categoryName != 'Unassigned'"-->
-        <!--                (click)="openRemoveProductModal(confirmationRemoveProductModal, removeProductModal, product.id ,product.name, i)"-->
-        <!--                type="button"-->
-        <!--                mat-icon-button-->
-        <!--                color="warn">-->
-        <!--                <mat-icon>delete</mat-icon>-->
-        <!--              </button>-->
-
-        <!--              <mat-form-field-->
-        <!--                *ngIf="this.reactiveForm.value.categoryName === 'Unassigned'"-->
-        <!--                appearance="standard">-->
-        <!--                <mat-label>Category</mat-label>-->
-        <!--                <mat-select-->
-        <!--                  value="akisjasas-asajek-ajsoaks-ejakjenafe">-->
-        <!--                  <mat-option *ngFor="let category of productCategory"-->
-        <!--                              (click)="onCategorySelection(category.id, product.id)"-->
-        <!--                              [value]="category.id">-->
-        <!--                    {{category?.categoryName}}-->
-        <!--                  </mat-option>-->
-        <!--                </mat-select>-->
-        <!--              </mat-form-field>-->
-
-        <!--            </td>-->
-        <!--          </ng-container>-->
-        <!--        </table>-->
-      </div>
-      <div
-        *ngIf="this.reactiveForm.value.categoryName === 'Unassigned'"
-        class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
-        <button type="submit" (click)="saveUnassignedProduct()" class="btn btn-outline-primary">
-          Confirm
-        </button>
-      </div>
-    </form>
-
-  </ng-template>
-
-
   <!-- Modal Add or Edit Category -->
+  <p-dialog
+    header="{{editMode ? 'Edit' : 'Add'}} Category ?"
+    [blockScroll]="false"
+    [(visible)]="showAddOrEditCatModal"
+    [modal]="true"
+    [style]="{width: '50vw'}"
+    [draggable]="false"
+    [resizable]="false">
+    <!-- content -->
+    <div class="card">
+      <input type="text" pInputText>
+
+
+    </div>
+
+    <!--    -->
+
+    <ng-template
+      pTemplate="footer">
+      <p-button
+        *ngIf="this.reactiveForm.value.categoryName === 'Unassigned'"
+        icon="pi pi-check" (click)="saveUnassignedProduct()" label="Ok"
+        styleClass="p-button-text"></p-button>
+    </ng-template>
+  </p-dialog>
+
+
   <ng-template #addOrEditModal let-modal>
     <form [formGroup]="reactiveForm" (ngSubmit)="submit()">
 
@@ -302,52 +209,13 @@
   </ng-template>
 </div>
 
+<p-confirmDialog
+  [style]="{width: '50vw'}"
+  [blockScroll]="false"
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 
-<!-- Modal Remove Product In Category -->
-<ng-template #confirmationRemoveProductModal let-modal>
-  <div class="modal-header" ngbAutofocus>
-    <h4 class="modal-title" id="yesOrNoCategoryModal">Confirm Remove Product ?</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()">
-    </button>
-  </div>
-  <div class="modal-body">
-    <form>
-      <div class="form-group">
-        Remove product "{{productName}}" from category "{{this.reactiveForm.value.categoryName}}" ?
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel
-    </button>
-    <button type="button" (click)="removeProductInCategory()" class="btn btn-outline-primary">
-      Delete
-    </button>
+<p-toast></p-toast>
 
-  </div>
-</ng-template>
-
-<!-- Modal Delete Category -->
-<ng-template #deleteCategoryModal let-modal>
-  <div class="modal-header" ngbAutofocus>
-    <h4 class="modal-title" id="deleteProductModal">Delete Category ?</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
-    </button>
-  </div>
-  <div class="modal-body">
-    <form>
-      <div class="form-group">
-        Delete category {{modalCategoryName}} ?
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cancel</button>
-    <button type="button" (click)="deleteCategory()" class="btn btn-outline-primary">
-      Delete
-    </button>
-
-  </div>
-</ng-template>
 
 

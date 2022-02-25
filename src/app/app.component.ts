@@ -13,8 +13,9 @@ import {Store} from "@ngrx/store";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  sideBarOpen: any = true;
+
   productsPageNumber: number = 0;
+  display: any;
 
   constructor(
     private userAuthService: UserAuthService,
@@ -30,18 +31,8 @@ export class AppComponent {
 
   onInitMethod(): void {
     if (this.userAuthService.isLoggedIn()) {
-      this.getlistProducts();
+      this.getListProductCategories();
     }
-  }
-
-  getlistProducts() {
-    // this.productService.loadProducts(this.productsPageNumber).subscribe(
-    //   (data) => {
-    //     this.store.dispatch(retrievedProduct({allProduct: data['data']['content'] as Product[]}));
-    //   },
-    // );
-    this.getListProductCategories();
-
   }
 
   getListProductCategories() {
@@ -57,7 +48,7 @@ export class AppComponent {
   }
 
   public sideBarToggler() {
-    this.sideBarOpen = !this.sideBarOpen;
+    this.display = true;
   }
 
   public roleExternal() {

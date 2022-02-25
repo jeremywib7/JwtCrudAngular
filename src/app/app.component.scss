@@ -5,15 +5,10 @@
   bottom: 0px;
   top: 0px;
 }
-mat-drawer {
-  width: 260px;
-}
-mat-drawer-container {
-  flex: 1 1 auto;
-  height: 100%;
-}
 
-mat-drawer {
+:host ::ng-deep .p-sidebar {
   background: #0f172a;
 }
+
+
 
