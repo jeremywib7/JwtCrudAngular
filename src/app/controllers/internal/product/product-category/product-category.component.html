@@ -89,6 +89,7 @@
 
   <!-- Modal Remove Product In Category -->
   <p-dialog
+    appendTo="body"
     header="{{this.reactiveForm.value.categoryName}} Product"
     [blockScroll]="false"
     [(visible)]="showProductListModal"
@@ -138,6 +139,7 @@
 
   <!-- Modal Add or Edit Category -->
   <p-dialog
+    appendTo="body"
     header="{{editMode ? 'Edit' : 'Add'}} Category ?"
     [blockScroll]="false"
     [(visible)]="showAddOrEditCatModal"
@@ -207,15 +209,18 @@
 
 
   </ng-template>
+
+  <p-confirmDialog
+    appendTo="body"
+    [style]="{width: '50vw'}"
+    [blockScroll]="false"
+    [baseZIndex]="10000"
+    rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+
+  <p-toast></p-toast>
 </div>
 
-<p-confirmDialog
-  [style]="{width: '50vw'}"
-  [blockScroll]="false"
-  [baseZIndex]="10000"
-  rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 
-<p-toast></p-toast>
 
 
 

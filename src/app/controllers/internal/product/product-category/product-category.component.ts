@@ -178,9 +178,9 @@ export class ProductCategoryComponent implements OnInit {
     this.productCategoryService.loadProductsNameOnlyByCategory(params).subscribe({
       next: (data) => {
         this.tableProducts = data['data'];
+        this.showProductListModal = true;
       },
     });
-    this.showProductListModal = true;
   }
 
   public sort(headerName: String): void {
@@ -219,6 +219,7 @@ export class ProductCategoryComponent implements OnInit {
     this.confirmationService.confirm({
       message: 'Delete category ' + this.productCategory[itemIndex].categoryName + ' ?',
       header: 'Confirm Delete',
+      blockScroll: true,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.productCategoryService.deleteProductCategory(categoryId).subscribe({
@@ -229,6 +230,8 @@ export class ProductCategoryComponent implements OnInit {
           },
         });
       },
+      reject: (type) => {
+      }
     });
   }
 
