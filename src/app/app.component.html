@@ -1,12 +1,29 @@
-<p-sidebar [(visible)]="display" *ngIf="roleInternal()" styleClass="p-sidebar-sm">
-  <app-sidenav (toggleSidebarForMe)="display = false"></app-sidenav>
-</p-sidebar>
+<!--<p-sidebar [(visible)]="display" *ngIf="roleInternal()" styleClass="p-sidebar-sm">-->
+<!--  <app-menu (toggleSidebarForMe)="display = false"></app-menu>-->
+<!--</p-sidebar>-->
 
-<mat-drawer-container>
-  <mat-drawer-content>
-    <app-header-internal *ngIf="roleInternal()" (toggleSidebarForMe)="display = true"></app-header-internal>
-    <app-header-external *ngIf="roleExternal()"></app-header-external>
+<!--<app-header-internal *ngIf="roleInternal()" (toggleSidebarForMe)="display = true"></app-header-internal>-->
+<!--<app-header-external *ngIf="roleExternal()"></app-header-external>-->
+<!--<mat-drawer class="layout-sidebar">-->
+<!--  <app-menu></app-menu>-->
+<!--</mat-drawer>-->
+<!--<mat-drawer-container class="layout-main-container full-height">-->
+<!--  <mat-drawer-content class="layout-main">-->
+<!--    <router-outlet></router-outlet>-->
+<!--  </mat-drawer-content>-->
+<!--  <app-footer-external *ngIf="roleExternal()"></app-footer-external>-->
+<!--</mat-drawer-container>-->
+
+
+<app-header-internal *ngIf="roleInternal()" (toggleSidebarForMe)="sideBarToggler()"></app-header-internal>
+<app-header-external *ngIf="roleExternal()" ></app-header-external>
+<mat-drawer-container autosize class="full-height" style="background-color: aliceblue">
+  <mat-drawer class="layout-sidebar" mode="side" [opened]="sideBarOpen" *ngIf="roleInternal()">
+    <app-menu></app-menu>
+  </mat-drawer>
+  <mat-drawer-content style="top: 2rem">
     <router-outlet></router-outlet>
     <app-footer-external *ngIf="roleExternal()"></app-footer-external>
   </mat-drawer-content>
 </mat-drawer-container>
+

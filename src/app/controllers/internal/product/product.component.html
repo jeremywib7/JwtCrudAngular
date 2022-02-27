@@ -2,17 +2,19 @@
   <div class="row flex-lg-nowrap">
     <div class="col">
       <div class="e-tabs mb-3 px-3">
-        <nav mat-tab-nav-bar>
-          <a mat-tab-link
-             *ngFor="let link of navLinks"
-             [routerLink]="link.path"
-             routerLinkActive #rla="routerLinkActive"
-             [active]="rla.isActive">
-            {{link.label}}
-          </a>
-        </nav>
+        <p-card>
+          <nav mat-tab-nav-bar>
+            <a mat-tab-link
+               *ngFor="let link of navLinks"
+               [routerLink]="link.path"
+               routerLinkActive #rla="routerLinkActive"
+               [active]="rla.isActive">
+              {{link.label}}
+            </a>
+          </nav>
+          <router-outlet></router-outlet>
+        </p-card>
 
-        <router-outlet></router-outlet>
       </div>
     </div>
   </div>

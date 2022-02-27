@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Renderer2} from '@angular/core';
 import {UserAuthService} from "./_services/user-auth.service";
 import {Product} from "./model/Product";
 import {retrievedProductCategory} from "./store/actions/product-category.actions";
@@ -6,6 +6,7 @@ import {ProductCategory} from "./model/ProductCategory";
 import {ProductService} from "./_services/product.service";
 import {ProductCategoryService} from "./_services/product-category.service";
 import {Store} from "@ngrx/store";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -13,17 +14,19 @@ import {Store} from "@ngrx/store";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-
+  sideBarOpen: any = true;
   productsPageNumber: number = 0;
   display: any;
 
   constructor(
+    public renderer: Renderer2,
     private userAuthService: UserAuthService,
     private productService: ProductService,
     private productCategoryService: ProductCategoryService,
     private store: Store<{ product: Product[] }>
   ) {
   }
+
   ngOnInit(): void {
     this.onInitMethod();
 
@@ -48,10 +51,12 @@ export class AppComponent {
   }
 
   public sideBarToggler() {
-    this.display = true;
+    this.sideBarOpen = !this.sideBarOpen;
   }
 
   public roleExternal() {
     return this.userAuthService.isLoggedIn() && this.userAuthService.getRoles() === 'Customer';
   }
+
+
 }

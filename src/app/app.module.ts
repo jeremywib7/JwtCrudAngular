@@ -39,11 +39,15 @@ import {FooterExternalComponent} from './controllers/ui/footer-external/footer-e
 import {Store, StoreModule} from "@ngrx/store";
 import {productReducer} from "./store/reducers/product.reducer";
 import {productCategoryReducer} from "./store/reducers/product-category.reducer";
-import { ProductDetailComponent } from './controllers/external/product-detail/product-detail.component';
+import {ProductDetailComponent} from './controllers/external/product-detail/product-detail.component';
 import {CurrencyMaskInputMode, NgxCurrencyModule} from "ngx-currency";
 import {RxReactiveFormsModule} from "@rxweb/reactive-form-validators";
 import {SidebarModule} from "primeng/sidebar";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {CheckboxModule} from "primeng/checkbox";
+import {InputTextModule} from "primeng/inputtext";
+import {RippleModule} from "primeng/ripple";
+import {ToastModule} from "primeng/toast";
 
 
 export const customCurrencyMaskConfig = {
@@ -117,6 +121,10 @@ export const customCurrencyMaskConfig = {
       }),
     SidebarModule,
     ConfirmDialogModule,
+    CheckboxModule,
+    InputTextModule,
+    RippleModule,
+    ToastModule,
   ],
   providers: [
     AuthGuard,

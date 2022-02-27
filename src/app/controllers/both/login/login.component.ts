@@ -9,11 +9,13 @@ import {ProductCategory} from "../../../model/ProductCategory";
 import {ProductService} from "../../../_services/product.service";
 import {ProductCategoryService} from "../../../_services/product-category.service";
 import {Store} from "@ngrx/store";
+import {ConfirmationService, MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  providers: [ConfirmationService, MessageService]
 })
 export class LoginComponent implements OnInit {
 
@@ -26,6 +28,7 @@ export class LoginComponent implements OnInit {
     private productCategoryService: ProductCategoryService,
     private store: Store<{ product: Product[] }>,
     private router: Router,
+    private messageService: MessageService
   ) {
   }
 
@@ -63,8 +66,7 @@ export class LoginComponent implements OnInit {
 
       },
       (error) => {
-        alert("Wrong credentials");
-        console.log(error);
+        this.messageService.add({severity: 'error', summary: 'Sign In Failed', detail: 'Wrong credentials'});
       }
     );
   }
